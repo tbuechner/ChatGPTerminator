@@ -379,8 +379,6 @@ class GPTerminator:
             self.printError(f"OpenAI API request exceeded rate limit: {e}")
             sys.exit()
 
-        collected_chunks = []
-        collected_messages = []
         subtitle_str = f"[bright_black]Tokens:[/] [bold red]{0}[/] | "
         subtitle_str += f"[bright_black]Time Elapsed:[/][bold yellow] {0.0}s [/]"
         md = Panel(
@@ -400,7 +398,6 @@ class GPTerminator:
         with Live(md, console=self.console, transient=True) as live:
             for chunk in resp:
                 if len(chunk.choices) > 0:
-                    collected_chunks.append(chunk)  # save the event response
                     first_choice = chunk.choices[0]
 
                     chunk_message = first_choice.delta  # extract the message
@@ -415,12 +412,8 @@ class GPTerminator:
                                 function_name_2_arguments[function_name] = function_call_arguments
                             full_reply_content += "".join(function_call_arguments)
                     else:
-                        collected_messages.append(chunk_message)  # save the message
-                        content_chunks = []
-                        for m in collected_messages:
-                            if m.content is not None:
-                                content_chunks.append(m.content)
-                        full_reply_content += "".join(content_chunks)
+                        if chunk_message.content is not None:
+                            full_reply_content += "".join(chunk_message.content)
 
                     encoding = tiktoken.encoding_for_model(self.model)
                     num_tokens = len(encoding.encode(full_reply_content))
