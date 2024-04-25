@@ -10,7 +10,6 @@ import openai
 import pyperclip
 import requests
 import tiktoken
-from openai import error
 from prompt_toolkit import prompt
 from rich.columns import Columns
 from rich.console import Console
@@ -18,6 +17,9 @@ from rich.live import Live
 from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.syntax import Syntax
+
+from openai.lib.azure import AzureOpenAI
+
 
 
 class GPTerminator:
@@ -49,6 +51,14 @@ class GPTerminator:
         self.save_path = ""
         self.console = Console()
 
+        with open("system_prompt.txt", "r") as file:
+            self.system_prompt = file.read()
+
+        with open("json-schema.json", "r") as file:
+            self.json_schema = file.read()
+            self.generate_data_model_schema = json.loads(self.json_schema)
+
+
     def getConfigPath(self):
         if "APPDATA" in os.environ:
             confighome = os.environ["APPDATA"]
@@ -57,6 +67,7 @@ class GPTerminator:
         else:
             confighome = os.path.join(os.environ["HOME"], ".config")
         configpath = os.path.join(confighome, "gpterminator", "config.ini")
+        print("configpath: " + configpath)
         self.config_path = configpath
 
     def loadConfig(self):
@@ -72,6 +83,10 @@ class GPTerminator:
         self.presence_penalty = config[self.config_selected]["PresencePenalty"]
         self.frequency_penalty = config[self.config_selected]["FrequencyPenalty"]
         self.code_theme = config[self.config_selected]["CodeTheme"]
+        self.azure_openai_api_key = config[self.config_selected]["AZURE_OPENAI_API_KEY"]
+        self.azure_openai_endpoint = config[self.config_selected]["AZURE_OPENAI_ENDPOINT"]
+        self.azure_deployment = config[self.config_selected]["AZURE_DEPLOYMENT"]
+        self.api_version = config[self.config_selected]["ApiVersion"]
 
     def printError(self, msg):
         self.console.print(Panel(f"[bold red]ERROR: [/]{msg}", border_style="red"))
@@ -319,33 +334,48 @@ class GPTerminator:
     def getResponse(self, usr_prompt):
         self.msg_hist.append({"role": "user", "content": usr_prompt})
         try:
-            resp = openai.ChatCompletion.create(
+            client = AzureOpenAI(
+                api_version = self.api_version,
+                azure_endpoint = self.azure_openai_endpoint,
+                azure_deployment = self.azure_deployment,
+                api_key = "9772ae8a8d464227b1f719d238adc338"
+            )
+
+            # resp = openai.ChatCompletion.create(
+            resp = client.chat.completions.create(
                 model=self.model,
                 messages=self.msg_hist,
                 stream=True,
                 temperature=float(self.temperature),
                 presence_penalty=float(self.presence_penalty),
                 frequency_penalty=float(self.frequency_penalty),
+                tools=[{
+                    "type": "function",
+                    "function" :     {
+                        'name': 'generate_data_model',
+                        'description': 'Generate a data model from the body of the input text',
+                        'parameters': self.generate_data_model_schema
+                    }}]
             )
-        except error.Timeout as e:
+        except openai.APITimeoutError as e:
             self.printError(f"OpenAI API request timed out: {e}")
             sys.exit()
-        except error.APIError as e:
+        except openai.APIError as e:
             self.printError(f"OpenAI API returned an API Error: {e}")
             sys.exit()
-        except error.APIConnectionError as e:
+        except openai.APIConnectionError as e:
             self.printError(f"OpenAI API request failed to connect: {e}")
             sys.exit()
-        except error.InvalidRequestError as e:
+        except openai.InvalidRequestError as e:
             self.printError(f"OpenAI API request was invalid: {e}")
             sys.exit()
-        except error.AuthenticationError as e:
+        except openai.AuthenticationError as e:
             self.printError(f"OpenAI API request was not authorized: {e}")
             sys.exit()
-        except error.PermissionError as e:
+        except openai.PermissionError as e:
             self.printError(f"OpenAI API request was not permitted: {e}")
             sys.exit()
-        except error.RateLimitError as e:
+        except openai.RateLimitError as e:
             self.printError(f"OpenAI API request exceeded rate limit: {e}")
             sys.exit()
 
@@ -364,28 +394,56 @@ class GPTerminator:
 
         start_time = time.time()
 
+        function_name_2_arguments = {}
+        full_reply_content = ""
+
         with Live(md, console=self.console, transient=True) as live:
             for chunk in resp:
-                collected_chunks.append(chunk)  # save the event response
-                chunk_message = chunk["choices"][0]["delta"]  # extract the message
-                collected_messages.append(chunk_message)  # save the message
-                full_reply_content = "".join([m.get("content", "") for m in collected_messages])
-                encoding = tiktoken.encoding_for_model(self.model)
-                num_tokens = len(encoding.encode(full_reply_content))
-                time_elapsed_s = time.time() - start_time
-                subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/] | "
-                subtitle_str += (
-                    f"[bright_black]Time Elapsed:[/][bold yellow] {time_elapsed_s:.1f}s [/]"
-                )
-                md = Panel(
-                    Markdown(full_reply_content, self.code_theme),
-                    border_style="bright_black",
-                    title="[bright_black]Assistant[/]",
-                    title_align="left",
-                    subtitle=subtitle_str,
-                    subtitle_align="right",
-                )
-                live.update(md)
+                if len(chunk.choices) > 0:
+                    collected_chunks.append(chunk)  # save the event response
+                    first_choice = chunk.choices[0]
+
+                    chunk_message = first_choice.delta  # extract the message
+
+                    if(chunk_message.tool_calls):
+                        for tool_call in chunk_message.tool_calls:
+                            function_call_arguments = tool_call.function.arguments
+                            function_name = tool_call.function.name
+                            if function_name in function_name_2_arguments:
+                                function_name_2_arguments[function_name] = function_name_2_arguments[function_name] + function_call_arguments
+                            else:
+                                function_name_2_arguments[function_name] = function_call_arguments
+                            full_reply_content += "".join(function_call_arguments)
+                    else:
+                        collected_messages.append(chunk_message)  # save the message
+                        content_chunks = []
+                        for m in collected_messages:
+                            if m.content is not None:
+                                content_chunks.append(m.content)
+                        full_reply_content += "".join(content_chunks)
+
+                    encoding = tiktoken.encoding_for_model(self.model)
+                    num_tokens = len(encoding.encode(full_reply_content))
+                    time_elapsed_s = time.time() - start_time
+                    subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/] | "
+                    subtitle_str += (
+                        f"[bright_black]Time Elapsed:[/][bold yellow] {time_elapsed_s:.1f}s [/]"
+                    )
+                    md = Panel(
+                        Markdown(full_reply_content, self.code_theme),
+                        border_style="bright_black",
+                        title="[bright_black]Assistant[/]",
+                        title_align="left",
+                        subtitle=subtitle_str,
+                        subtitle_align="right",
+                    )
+                    live.update(md)
+
+        # if function_name_2_arguments:
+        #     for function_name, arguments in function_name_2_arguments.items():
+        #         print(f"Function name: {function_name}")
+        #         print(f"Argument: {arguments}\n")
+
         self.console.print(md)
         self.console.print()
         self.msg_hist.append({"role": "assistant", "content": full_reply_content})
