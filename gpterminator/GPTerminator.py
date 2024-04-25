@@ -236,58 +236,6 @@ class GPTerminator:
         pyperclip.copy(last_resp)
         self.console.print(f"[bright_black]Copied text to keyboard...[/]")
 
-    def useDalle(self):
-        while True:
-            self.console.print(
-                f"[yellow]|{self.prompt_count}|[/][bold green] Image Prompt [/bold green][bold gray]> [/bold gray]",
-                end="",
-            )
-            user_in = prompt()
-            if len(user_in) > 10:
-                break
-            else:
-                self.printError("the image prompt should be at least 10 characters")
-        with self.console.status("", spinner="bouncingBar", spinner_style="bold red") as status:
-            status.update(status="[bright_black]Generating image...[/]")
-            img_response = openai.Image.create(prompt=user_in, n=1, size="1024x1024")
-            image_url = img_response["data"][0]["url"]
-            resp = requests.get(image_url, stream=True)
-            cli_image = climage.convert(resp.raw, is_unicode=True)
-        self.console.print(f"[bold green]Image preview:[/]")
-        print(cli_image)
-        self.console.print(f"[bold green]Link: [/][bright_black]{image_url}[/]")
-        pyperclip.copy(image_url)
-        self.console.print(f"[bright_black]Image link copied to clipboard![/]")
-
-    def analyzeFile(self):
-        while True:
-            self.console.print(
-                f"[yellow]|!|[/][bold green] Provide the file path to analyze [/bold green][bold gray]> [/bold gray]",
-                end="",
-            )
-            user_in = prompt().strip()
-            if os.path.exists(user_in):
-                with open(user_in, "r") as file:
-                    file_content = file.read()
-                break
-            else:
-                self.printError(f"{user_in} cannot be found")
-
-        while True:
-            self.console.print(
-                f"[yellow]|{self.prompt_count}|[/][bold green] Prompt for {user_in} [/bold green][bold gray]> [/bold gray]",
-                end="",
-            )
-            user_prmt = prompt().strip()
-            if user_prmt != "":
-                break
-            else:
-                self.printError(f"you cannot have an empty prompt")
-
-        msg = f"{user_prmt}: '{file_content}'"
-        self.prompt_count += 1
-        self.getResponse(msg)
-
     def queryUser(self):
         self.console.print(
             f"[yellow]|{self.prompt_count}|[/][bold green] Input [/bold green][bold gray]> [/bold gray]",
@@ -327,10 +275,6 @@ class GPTerminator:
                     self.setConfig()
                 elif cmd == "cpyall" or cmd == "ca":
                     self.copyAll()
-                elif cmd == "dalle":
-                    self.useDalle()
-                elif cmd == "ifile":
-                    self.analyzeFile()
                 elif cmd == "new" or cmd == "n":
                     self.msg_hist = self.msg_hist[:1]
                     self.prompt_count = 0
