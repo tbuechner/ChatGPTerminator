@@ -42,8 +42,7 @@ class GPTerminator:
             "save": ["s", "saves the chat history"],
             "ifile": [None, "allows the user to analyze files with a prompt"],
             "cpyall": ["ca", "copies all raw text from the previous response"],
-            "ccpy": ["cc", "copies code blocks from the last response"],
-            "dalle": [None, "generates images and provides a link for download"],
+            "ccpy": ["cc", "copies code blocks from the last response"]
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -236,6 +235,35 @@ class GPTerminator:
         pyperclip.copy(last_resp)
         self.console.print(f"[bright_black]Copied text to keyboard...[/]")
 
+    def analyzeFile(self):
+        while True:
+            self.console.print(
+                f"[yellow]|!|[/][bold green] Provide the file path to analyze [/bold green][bold gray]> [/bold gray]",
+                end="",
+            )
+            user_in = prompt().strip()
+            if os.path.exists(user_in):
+                with open(user_in, "r") as file:
+                    file_content = file.read()
+                break
+            else:
+                self.printError(f"{user_in} cannot be found")
+
+        while True:
+            self.console.print(
+                f"[yellow]|{self.prompt_count}|[/][bold green] Prompt for {user_in} [/bold green][bold gray]> [/bold gray]",
+                end="",
+            )
+            user_prmt = prompt().strip()
+            if user_prmt != "":
+                break
+            else:
+                self.printError(f"you cannot have an empty prompt")
+
+        msg = f"{user_prmt}: '{file_content}'"
+        self.prompt_count += 1
+        self.getResponse(msg)
+
     def queryUser(self):
         self.console.print(
             f"[yellow]|{self.prompt_count}|[/][bold green] Input [/bold green][bold gray]> [/bold gray]",
@@ -275,6 +303,8 @@ class GPTerminator:
                     self.setConfig()
                 elif cmd == "cpyall" or cmd == "ca":
                     self.copyAll()
+                elif cmd == "ifile":
+                    self.analyzeFile()
                 elif cmd == "new" or cmd == "n":
                     self.msg_hist = self.msg_hist[:1]
                     self.prompt_count = 0
