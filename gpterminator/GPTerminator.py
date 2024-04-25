@@ -405,7 +405,10 @@ class GPTerminator:
                     if(chunk_message.tool_calls):
                         for tool_call in chunk_message.tool_calls:
                             function_call_arguments = tool_call.function.arguments
-                            function_name = tool_call.function.name
+                            if tool_call.function.name is not None:
+                                function_name = tool_call.function.name
+                                full_reply_content += "Function: " + function_name + "\n"
+                                full_reply_content += "```json\n"
                             if function_name in function_name_2_arguments:
                                 function_name_2_arguments[function_name] = function_name_2_arguments[function_name] + function_call_arguments
                             else:
@@ -432,6 +435,8 @@ class GPTerminator:
                     )
                     live.update(md)
 
+        self.save_data_model(function_name_2_arguments)
+
         # if function_name_2_arguments:
         #     for function_name, arguments in function_name_2_arguments.items():
         #         print(f"Function name: {function_name}")
@@ -440,6 +445,31 @@ class GPTerminator:
         self.console.print(md)
         self.console.print()
         self.msg_hist.append({"role": "assistant", "content": full_reply_content})
+
+
+    def save_data_model(self, function_name_2_arguments):
+        if function_name_2_arguments:
+            for function_name, arguments in function_name_2_arguments.items():
+                if function_name is not None and arguments is not None:
+                    if function_name == "generate_data_model":
+                        # find all files with name "data_model_xxxx.json" - xxxx is a number starting with 0000 - find the highest number
+                        max_file_number = 0
+                        for idx, file_name in enumerate(os.listdir(f"{self.save_path}")):
+                            if file_name.startswith("data_model_"):
+                                file_str = file_name.split(".")[0]
+                                file_number = file_str.split("_")[2]
+                                if idx == 0:
+                                    max_file_number = file_number
+                                else:
+                                    if file_number > max_file_number:
+                                        max_file_number = file_number
+                        # increment the number by 1
+                        new_file_number = int(max_file_number) + 1
+                        # write to a file with the name "data_model_xxxx.json"
+                        file_name = f"data_model_{new_file_number:04d}"
+                        with open(Path(self.save_path) / f"{file_name}.json", "w") as f:
+                            # parse the arguments to json
+                            json.dump(json.loads(arguments), f, indent=4)
 
     def setApiKey(self):
         self.api_key = os.getenv("OPENAI_API_KEY")
