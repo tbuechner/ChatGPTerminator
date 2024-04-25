@@ -5,6 +5,8 @@ import sys
 import time
 from pathlib import Path
 
+
+import jsonschema
 import climage
 import openai
 import pyperclip
@@ -435,7 +437,7 @@ class GPTerminator:
                     )
                     live.update(md)
 
-        self.save_data_model(function_name_2_arguments)
+        self.saveDataModel(function_name_2_arguments)
 
         # if function_name_2_arguments:
         #     for function_name, arguments in function_name_2_arguments.items():
@@ -447,7 +449,7 @@ class GPTerminator:
         self.msg_hist.append({"role": "assistant", "content": full_reply_content})
 
 
-    def save_data_model(self, function_name_2_arguments):
+    def saveDataModel(self, function_name_2_arguments):
         if function_name_2_arguments:
             for function_name, arguments in function_name_2_arguments.items():
                 if function_name is not None and arguments is not None:
@@ -467,9 +469,21 @@ class GPTerminator:
                         new_file_number = int(max_file_number) + 1
                         # write to a file with the name "data_model_xxxx.json"
                         file_name = f"data_model_{new_file_number:04d}"
+                        json_object = json.loads(arguments)
                         with open(Path(self.save_path) / f"{file_name}.json", "w") as f:
                             # parse the arguments to json
-                            json.dump(json.loads(arguments), f, indent=4)
+                            json.dump(json_object, f, indent=4)
+
+                        # validate arguments against the schema
+                        # q: how to validate a json against a schema in python programatically
+
+                        schema = json.loads(self.json_schema)
+                        try:
+                            jsonschema.validate(instance=json_object, schema=schema)
+                            print("JSON object is valid")
+                        except jsonschema.exceptions.ValidationError as ve:
+                            print("JSON object is not valid. Details:", ve)
+
 
     def setApiKey(self):
         self.api_key = os.getenv("OPENAI_API_KEY")
