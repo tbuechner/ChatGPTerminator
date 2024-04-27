@@ -5,7 +5,7 @@
     "package": {
       "type": "object",
       "properties": {
-        "name": {
+        "localizedName": {
           "type": "object",
           "properties": {
             "de": {
@@ -17,12 +17,12 @@
           },
           "additionalProperties": false
         },
-        "slot": {
+        "slots": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "name": {
+              "localizedName": {
                 "type": "object",
                 "properties": {
                   "de": {
@@ -40,7 +40,7 @@
               "workspaceName": {
                 "type": "string"
               },
-              "type": {
+              "types": {
                 "type": "array",
                 "items": {
                   "type": "object",
@@ -172,7 +172,7 @@
                                   "defaultValues": {
                                     "type": "string"
                                   },
-                                  "element": {
+                                  "elements": {
                                     "type": "array",
                                     "items": {
                                       "type": "object",
@@ -280,7 +280,7 @@
                                   "localizedTextAfterSupplier": {
                                     "type": "null"
                                   },
-                                  "element": {
+                                  "elements": {
                                     "type": "array",
                                     "items": {
                                       "type": "object",
@@ -353,10 +353,10 @@
             },
             "additionalProperties": false,
             "required": [
-              "name",
+              "localizedName",
               "internalName",
               "workspaceName",
-              "type"
+              "types"
             ]
           }
         },

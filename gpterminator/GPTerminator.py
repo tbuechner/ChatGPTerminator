@@ -482,7 +482,7 @@ class GPTerminator:
                             jsonschema.validate(instance=json_object, schema=schema)
                             print("JSON object is valid")
                         except jsonschema.exceptions.ValidationError as ve:
-                            print("JSON object is not valid. Details:", ve)
+                            print("JSON object is not valid.")
 
 
     def setApiKey(self):
