@@ -53,13 +53,6 @@ class GPTerminator:
         self.save_path = ""
         self.console = Console()
 
-        with open("system_prompt.txt", "r") as file:
-            self.system_prompt = file.read()
-
-        with open("json-schema.json", "r") as file:
-            self.json_schema = file.read()
-            self.generate_data_model_schema = json.loads(self.json_schema)
-
 
     def getConfigPath(self):
         if "APPDATA" in os.environ:
@@ -89,6 +82,36 @@ class GPTerminator:
         self.azure_openai_endpoint = config[self.config_selected]["AZURE_OPENAI_ENDPOINT"]
         self.azure_deployment = config[self.config_selected]["AZURE_DEPLOYMENT"]
         self.api_version = config[self.config_selected]["ApiVersion"]
+
+
+    def init(self):
+        if not os.path.exists(self.save_path):
+            os.makedirs(self.save_path)
+        self.setApiKey()
+        self.msg_hist.append({"role": "system", "content": self.sys_prmpt})
+
+        self.client = AzureOpenAI(
+            api_version = self.api_version,
+            azure_endpoint = self.azure_openai_endpoint,
+            azure_deployment = self.azure_deployment,
+            api_key = self.azure_openai_api_key
+        )
+
+        with open("system_prompt.txt", "r") as file:
+            self.system_prompt = file.read()
+
+        with open("json-schema.json", "r") as file:
+            self.json_schema = file.read()
+            self.generate_data_model_schema = json.loads(self.json_schema)
+
+        self.tools = [{
+            "type": "function",
+            "function" :     {
+                'name': 'generate_data_model',
+                'description': 'Generate a data model from the body of the input text',
+                'parameters': self.generate_data_model_schema
+            }}]
+
 
     def printError(self, msg):
         self.console.print(Panel(f"[bold red]ERROR: [/]{msg}", border_style="red"))
@@ -218,32 +241,6 @@ class GPTerminator:
             else:
                 pass
 
-    def setConfig(self):
-        config = configparser.ConfigParser()
-        config.read(self.config_path)
-        config_dict = {}
-        config_num = 1
-        for section in config:
-            if str(section) != "DEFAULT" and str(section) != "SELECTED_CONFIG":
-                config_dict[config_num] = str(section)
-                self.console.print(f"[bright_black]({config_num}) > [/][red]{str(section)}[/]")
-                config_num += 1
-        while True:
-            self.console.print(
-                f"[yellow]|{self.cmd_init}|[/][bold green] Select which config you want [/bold green][bold gray]> [/bold gray]",
-                end="",
-            )
-            sel_config = input()
-            if sel_config.isdigit() == True and int(sel_config) in config_dict:
-                break
-            else:
-                self.printError("invalid selection, please try again")
-        config["SELECTED_CONFIG"]["ConfigName"] = f"{config_dict[int(sel_config)]}"
-        with open(self.config_path, "w") as configfile:
-            config.write(configfile)
-        self.loadConfig()
-        self.printConfig()
-
     def copyAll(self):
         if self.prompt_count == 0:
             self.printError("cannot run cpyall when there are no responses")
@@ -316,8 +313,6 @@ class GPTerminator:
                     self.printConfig()
                 elif cmd == "load" or cmd == "l":
                     self.loadChatlog()
-                elif cmd == "setconf":
-                    self.setConfig()
                 elif cmd == "cpyall" or cmd == "ca":
                     self.copyAll()
                 elif cmd == "ifile":
@@ -336,28 +331,15 @@ class GPTerminator:
     def getResponse(self, usr_prompt):
         self.msg_hist.append({"role": "user", "content": usr_prompt})
         try:
-            client = AzureOpenAI(
-                api_version = self.api_version,
-                azure_endpoint = self.azure_openai_endpoint,
-                azure_deployment = self.azure_deployment,
-                api_key = "9772ae8a8d464227b1f719d238adc338"
-            )
-
             # resp = openai.ChatCompletion.create(
-            resp = client.chat.completions.create(
+            resp = self.client.chat.completions.create(
                 model=self.model,
                 messages=self.msg_hist,
                 stream=True,
                 temperature=float(self.temperature),
                 presence_penalty=float(self.presence_penalty),
                 frequency_penalty=float(self.frequency_penalty),
-                tools=[{
-                    "type": "function",
-                    "function" :     {
-                        'name': 'generate_data_model',
-                        'description': 'Generate a data model from the body of the input text',
-                        'parameters': self.generate_data_model_schema
-                    }}]
+                tools=self.tools
             )
         except openai.APITimeoutError as e:
             self.printError(f"OpenAI API request timed out: {e}")
@@ -552,10 +534,7 @@ class GPTerminator:
     def run(self, passed_input=None):
         self.checkDirs()
         self.loadConfig()
-        if not os.path.exists(self.save_path):
-            os.makedirs(self.save_path)
-        self.setApiKey()
-        self.msg_hist.append({"role": "system", "content": self.sys_prmpt})
+        self.init()
         self.printBanner()
 
         if passed_input is not None:
