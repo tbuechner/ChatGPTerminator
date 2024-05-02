@@ -101,8 +101,7 @@ class GPTerminator:
             self.system_prompt = file.read()
 
         with open("json-schema.json", "r") as file:
-            self.json_schema = file.read()
-            self.generate_data_model_schema = json.loads(self.json_schema)
+            self.generate_data_model_schema = json.loads(file.read())
 
         self.tools = [{
             "type": "function",
@@ -459,12 +458,12 @@ class GPTerminator:
                         # validate arguments against the schema
                         # q: how to validate a json against a schema in python programatically
 
-                        schema = json.loads(self.json_schema)
-                        try:
-                            jsonschema.validate(instance=json_object, schema=schema)
-                            print("JSON object is valid")
-                        except jsonschema.exceptions.ValidationError as ve:
-                            print("JSON object is not valid.")
+                        # schema = json.loads(self.json_schema)
+                        # try:
+                        #     jsonschema.validate(instance=json_object, schema=schema)
+                        #     print("JSON object is valid")
+                        # except jsonschema.exceptions.ValidationError as ve:
+                        #     print("JSON object is not valid.")
 
 
     def setApiKey(self):
