@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "internalName": {
+      "type": "string",
+      "description": "The internal name of the type, which is used in the database. Internal names usually contain only lowercase and uppercase letters and dots. They are similar to java package names."
+    },
+    "localizedNameSingular": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "de": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "localizedNamePlural": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "de": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "iconName": {
+      "type": "string",
+      "description": "The name of the icon that represents the type in the user interface. It is a Font Awesome icon name."
+    }
+  },
+  "additionalProperties": false
+}

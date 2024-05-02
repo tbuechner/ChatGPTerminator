@@ -97,19 +97,124 @@ class GPTerminator:
             api_key = self.azure_openai_api_key
         )
 
-        with open("system_prompt.txt", "r") as file:
-            self.system_prompt = file.read()
+        # with open("system_prompt.txt", "r") as file:
+        #     self.system_prompt = file.read()
+        #
+        # with open("json-schema.json", "r") as file:
+        #     self.generate_data_model_schema = json.loads(file.read())
 
-        with open("json-schema.json", "r") as file:
-            self.generate_data_model_schema = json.loads(file.read())
+        with open("../json-schemas/just-types/type-schema.json", "r") as file:
+            self.add_type_schema = json.loads(file.read())
 
-        self.tools = [{
-            "type": "function",
-            "function" :     {
-                'name': 'generate_data_model',
-                'description': 'Generate a data model from the body of the input text',
-                'parameters': self.generate_data_model_schema
-            }}]
+        with open("../json-schemas/attributes/boolean-schema.json", "r") as file:
+            self.add_boolean_attribute_schema = json.loads(file.read())
+        with open("../json-schemas/attributes/date-schema.json", "r") as file:
+            self.add_date_attribute_schema = json.loads(file.read())
+        with open("../json-schemas/attributes/long-text-schema.json", "r") as file:
+            self.add_long_text_attribute_schema = json.loads(file.read())
+        with open("../json-schemas/attributes/number-enumeration-schema.json", "r") as file:
+            self.add_number_enumeration_attribute_schema = json.loads(file.read())
+        with open("../json-schemas/attributes/number-schema.json", "r") as file:
+            self.add_number_attribute_schema = json.loads(file.read())
+        with open("../json-schemas/attributes/reference-schema.json", "r") as file:
+            self.add_reference_attribute_schema = json.loads(file.read())
+        with open("../json-schemas/attributes/rich-string-schema.json", "r") as file:
+            self.add_rich_string_attribute_schema = json.loads(file.read())
+        with open("../json-schemas/attributes/string-enumeration-schema.json", "r") as file:
+            self.add_string_enumeration_attribute_schema = json.loads(file.read())
+        with open("../json-schemas/attributes/string-schema.json", "r") as file:
+            self.add_string_attribute_schema = json.loads(file.read())
+
+        self.tools = [
+            # {
+            #     "type": "function",
+            #     "function": {
+            #         'name': 'generate_data_model',
+            #         'description': 'Generate a data model from the body of the input text',
+            #         'parameters': self.generate_data_model_schema
+            #     }
+            # },
+            {
+                "type": "function",
+                "function": {
+                    'name': 'add_type',
+                    'description': 'Add a new type to the data model. This is similar to adding a new table to a SQL database.',
+                    'parameters': self.add_type_schema
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    'name': 'add_boolean_attribute',
+                    'description': 'Add a new boolean attribute to a type. Values of boolean attributes are either true or false.',
+                    'parameters': self.add_boolean_attribute_schema
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    'name': 'add_date_attribute',
+                    'description': 'Add a new date attribute to a type.',
+                    'parameters': self.add_date_attribute_schema
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    'name': 'add_long_text_attribute',
+                    'description': 'Add a new long text attribute to a type. Long text attributes are used for large amounts of text.',
+                    'parameters': self.add_long_text_attribute_schema
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    'name': 'add_number_enumeration_attribute',
+                    'description': 'Add a new number enumeration attribute to a type. Number enumeration attributes are used if there is a given set of allowed numbers.',
+                    'parameters': self.add_number_enumeration_attribute_schema
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    'name': 'add_number_attribute',
+                    'description': 'Add a new number attribute to a type. Number attributes are used for numerical values.',
+                    'parameters': self.add_number_attribute_schema
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    'name': 'add_reference_attribute',
+                    'description': 'Add a new reference attribute to a type. Reference attributes are used to reference another type. Similar to a foreign key in a SQL database.',
+                    'parameters': self.add_reference_attribute_schema
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    'name': 'add_rich_string_attribute',
+                    'description': 'Add a new rich string attribute to a type. A rich string attribute is a string that can contain rich text such as bold, italic, and underline, tables, images, ...',
+                    'parameters': self.add_rich_string_attribute_schema
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    'name': 'add_string_enumeration_attribute',
+                    'description': 'Add a new text enumeration attribute to a type. String enumeration attributes are used if there is a given set of allowed strings.',
+                    'parameters': self.add_string_enumeration_attribute_schema
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    'name': 'add_string_attribute',
+                    'description': 'Add a new string attribute to a type.',
+                    'parameters': self.add_string_attribute_schema
+                }
+            }
+        ]
 
 
     def printError(self, msg):
@@ -418,7 +523,7 @@ class GPTerminator:
                     )
                     live.update(md)
 
-        self.saveDataModel(function_name_2_arguments)
+        # self.saveDataModel(function_name_2_arguments)
 
         # if function_name_2_arguments:
         #     for function_name, arguments in function_name_2_arguments.items():
