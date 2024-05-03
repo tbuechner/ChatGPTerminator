@@ -7,8 +7,8 @@
   },
   "constraint": {
     "attributeType": "reference",
-    "entityClass": "cf.cplace.platform.assets.file.Page",
-    "internalTypeNames": [
+    "targetEntityClass": "cf.cplace.platform.assets.file.Page",
+    "targetInternalTypeNames": [
       "cf.cplace.solution.safe.solution"
     ],
     "isHierarchy": false

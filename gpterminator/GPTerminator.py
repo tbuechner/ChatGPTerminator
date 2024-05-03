@@ -560,6 +560,8 @@ class GPTerminator:
         function_name_2_arguments = {}
         full_reply_content = ""
         function_name = None
+        function_arguments = ""
+        log = ""
 
         with Live(md, console=self.console, transient=True) as live:
             for chunk in resp:
@@ -568,20 +570,23 @@ class GPTerminator:
 
                     if(chunk_message.tool_calls):
                         for tool_call in chunk_message.tool_calls:
+                            log += f"tool_call\n"
                             function_call_arguments = tool_call.function.arguments
+                            function_arguments += function_call_arguments
+                            log += f"function_call_arguments: {function_call_arguments}\n"
                             if tool_call.function.name is not None:
+                                log += f"tool_call.function.name: {tool_call.function.name}\n"
                                 if function_name is not None:
                                     full_reply_content += "\n```\n"
+                                    self.addToFunctionName2Arguments(function_name, function_arguments, function_name_2_arguments)
 
                                 function_name = tool_call.function.name
+
                                 full_reply_content += "Function: " + function_name + "\n"
                                 full_reply_content += "```json\n"
-                            if function_name in function_name_2_arguments:
-                                function_name_2_arguments[function_name] = function_name_2_arguments[function_name] + function_call_arguments
-                            else:
-                                function_name_2_arguments[function_name] = function_call_arguments
+                                function_arguments = ""
+
                             full_reply_content += "".join(function_call_arguments)
-                            # full_reply_content += "```\n"
 
                     if chunk_message.content is not None:
                         full_reply_content += "".join(chunk_message.content)
@@ -603,7 +608,13 @@ class GPTerminator:
                     )
                     live.update(md)
 
-        # self.saveDataModel(function_name_2_arguments)
+        if function_name is not None:
+            self.addToFunctionName2Arguments(function_name, function_arguments, function_name_2_arguments)
+
+        # print("function_name_2_arguments: " + str(function_name_2_arguments))
+
+        # print(str(function_name_2_arguments))
+        self.saveDataModel(function_name_2_arguments)
 
         # if function_name_2_arguments:
         #     for function_name, arguments in function_name_2_arguments.items():
@@ -614,41 +625,45 @@ class GPTerminator:
         self.console.print()
         self.msg_hist.append({"role": "assistant", "content": full_reply_content})
 
+    def addToFunctionName2Arguments(self, function_name, function_arguments, function_name_2_arguments):
+        if function_name in function_name_2_arguments:
+            function_name_2_arguments[function_name].append(function_arguments)
+        else:
+            function_name_2_arguments[function_name] = [function_arguments]
 
     def saveDataModel(self, function_name_2_arguments):
         if function_name_2_arguments:
             for function_name, arguments in function_name_2_arguments.items():
                 if function_name is not None and arguments is not None:
-                    if function_name == "generate_data_model":
-                        # find all files with name "data_model_xxxx.json" - xxxx is a number starting with 0000 - find the highest number
+                    for argument in arguments:
+                        # find all files with name "xxxx-function_name.json" - xxxx is a number starting with 0000 - find the highest number
                         max_file_number = 0
                         for idx, file_name in enumerate(os.listdir(f"{self.save_path}")):
-                            if file_name.startswith("data_model_"):
-                                file_str = file_name.split(".")[0]
-                                file_number = file_str.split("_")[2]
+                            if file_name.endswith(".json"):
+                                file_str = file_name.split("-")[0]
                                 if idx == 0:
-                                    max_file_number = file_number
+                                    max_file_number = file_str
                                 else:
-                                    if file_number > max_file_number:
-                                        max_file_number = file_number
+                                    if file_str > max_file_number:
+                                        max_file_number = file_str
                         # increment the number by 1
                         new_file_number = int(max_file_number) + 1
-                        # write to a file with the name "data_model_xxxx.json"
-                        file_name = f"data_model_{new_file_number:04d}"
-                        json_object = json.loads(arguments)
-                        with open(Path(self.save_path) / f"{file_name}.json", "w") as f:
-                            # parse the arguments to json
+                        file_name = f"{new_file_number:04d}"
+                        with open(Path(self.save_path) / f"{file_name}-{function_name}.json", "w") as f:
+                            json_object = json.loads(argument)
                             json.dump(json_object, f, indent=4)
 
-                        # validate arguments against the schema
-                        # q: how to validate a json against a schema in python programatically
 
-                        # schema = json.loads(self.json_schema)
-                        # try:
-                        #     jsonschema.validate(instance=json_object, schema=schema)
-                        #     print("JSON object is valid")
-                        # except jsonschema.exceptions.ValidationError as ve:
-                        #     print("JSON object is not valid.")
+
+                    # validate arguments against the schema
+                    # q: how to validate a json against a schema in python programatically
+
+                    # schema = json.loads(self.json_schema)
+                    # try:
+                    #     jsonschema.validate(instance=json_object, schema=schema)
+                    #     print("JSON object is valid")
+                    # except jsonschema.exceptions.ValidationError as ve:
+                    #     print("JSON object is not valid.")
 
 
     def setApiKey(self):

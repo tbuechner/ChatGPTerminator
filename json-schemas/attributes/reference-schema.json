@@ -53,11 +53,11 @@
         "attributeType": {
           "const": "reference"
         },
-        "internalTypeNames": {
+        "targetInternalTypeNames": {
           "type": "string",
           "description": "The internal type name of the entity that is referenced by the attribute."
         },
-        "entityClass": {
+        "targetEntityClass": {
           "type": "string",
           "description": "Specifies the class of the entity to which the reference points. It can have one of the following values: - 'cf.cplace.platform.assets.group.Group' if the target is a group, - 'cf.cplace.platform.assets.group.Person' if the target is a user, - 'cf.cplace.platform.assets.file.Document' if the target is a user, - 'cf.cplace.platform.assets.file.Page' otherwise.",
           "enum": [
