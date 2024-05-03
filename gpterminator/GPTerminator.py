@@ -137,80 +137,80 @@ class GPTerminator:
             {
                 "type": "function",
                 "function": {
-                    'name': 'add_type',
-                    'description': 'Add a new type to the data model. This is similar to adding a new table to a SQL database.',
+                    'name': 'generate_type',
+                    'description': 'Generate a type and add it to the data model. This is similar to adding a new table to a SQL database.',
                     'parameters': self.add_type_schema
                 }
             },
             {
                 "type": "function",
                 "function": {
-                    'name': 'add_boolean_attribute',
-                    'description': 'Add a new boolean attribute to a type. Values of boolean attributes are either true or false.',
+                    'name': 'generate_boolean_attribute',
+                    'description': 'Generate a new boolean attribute and add it to a type. Values of boolean attributes are either true or false.',
                     'parameters': self.add_boolean_attribute_schema
                 }
             },
             {
                 "type": "function",
                 "function": {
-                    'name': 'add_date_attribute',
-                    'description': 'Add a new date attribute to a type.',
+                    'name': 'generate_date_attribute',
+                    'description': 'Generate a new date attribute and add it to a type.',
                     'parameters': self.add_date_attribute_schema
                 }
             },
             {
                 "type": "function",
                 "function": {
-                    'name': 'add_long_text_attribute',
-                    'description': 'Add a new long text attribute to a type. Long text attributes are used for large amounts of text.',
+                    'name': 'generate_long_text_attribute',
+                    'description': 'Generate a new long text attributeand add it to a type. Long text attributes are used for large amounts of text.',
                     'parameters': self.add_long_text_attribute_schema
                 }
             },
             {
                 "type": "function",
                 "function": {
-                    'name': 'add_number_enumeration_attribute',
-                    'description': 'Add a new number enumeration attribute to a type. Number enumeration attributes are used if there is a given set of allowed numbers.',
+                    'name': 'generate_number_enumeration_attribute',
+                    'description': 'Generate a new number enumeration attribute and add it to a type. Number enumeration attributes are used if there is a given set of allowed numbers.',
                     'parameters': self.add_number_enumeration_attribute_schema
                 }
             },
             {
                 "type": "function",
                 "function": {
-                    'name': 'add_number_attribute',
-                    'description': 'Add a new number attribute to a type. Number attributes are used for numerical values.',
+                    'name': 'generate_number_attribute',
+                    'description': 'Generate a new number attribute and add it to a type. Number attributes are used for numerical values.',
                     'parameters': self.add_number_attribute_schema
                 }
             },
             {
                 "type": "function",
                 "function": {
-                    'name': 'add_reference_attribute',
-                    'description': 'Add a new reference attribute to a type. Reference attributes are used to reference another type. Similar to a foreign key in a SQL database.',
+                    'name': 'generate_reference_attribute',
+                    'description': 'Generate a new reference attribute and add it to a type. Reference attributes are used to reference another type. Similar to a foreign key in a SQL database.',
                     'parameters': self.add_reference_attribute_schema
                 }
             },
             {
                 "type": "function",
                 "function": {
-                    'name': 'add_rich_string_attribute',
-                    'description': 'Add a new rich string attribute to a type. A rich string attribute is a string that can contain rich text such as bold, italic, and underline, tables, images, ...',
+                    'name': 'generate_rich_string_attribute',
+                    'description': 'Generate a new rich string attribute and add it to a type. A rich string attribute is a string that can contain rich text such as bold, italic, and underline, tables, images, ...',
                     'parameters': self.add_rich_string_attribute_schema
                 }
             },
             {
                 "type": "function",
                 "function": {
-                    'name': 'add_string_enumeration_attribute',
-                    'description': 'Add a new text enumeration attribute to a type. String enumeration attributes are used if there is a given set of allowed strings.',
+                    'name': 'generate_string_enumeration_attribute',
+                    'description': 'Generate a new text enumeration attribute and add it to a type. String enumeration attributes are used if there is a given set of allowed strings.',
                     'parameters': self.add_string_enumeration_attribute_schema
                 }
             },
             {
                 "type": "function",
                 "function": {
-                    'name': 'add_string_attribute',
-                    'description': 'Add a new string attribute to a type.',
+                    'name': 'generate_string_attribute',
+                    'description': 'Generate a new string attribute and add it to a type.',
                     'parameters': self.add_string_attribute_schema
                 }
             }
@@ -482,18 +482,20 @@ class GPTerminator:
 
         function_name_2_arguments = {}
         full_reply_content = ""
+        function_name = None
 
         with Live(md, console=self.console, transient=True) as live:
             for chunk in resp:
-                if len(chunk.choices) > 0:
-                    first_choice = chunk.choices[0]
-
-                    chunk_message = first_choice.delta  # extract the message
+                for choice in chunk.choices:
+                    chunk_message = choice.delta  # extract the message
 
                     if(chunk_message.tool_calls):
                         for tool_call in chunk_message.tool_calls:
                             function_call_arguments = tool_call.function.arguments
                             if tool_call.function.name is not None:
+                                if function_name is not None:
+                                    full_reply_content += "\n```\n"
+
                                 function_name = tool_call.function.name
                                 full_reply_content += "Function: " + function_name + "\n"
                                 full_reply_content += "```json\n"
@@ -502,9 +504,10 @@ class GPTerminator:
                             else:
                                 function_name_2_arguments[function_name] = function_call_arguments
                             full_reply_content += "".join(function_call_arguments)
-                    else:
-                        if chunk_message.content is not None:
-                            full_reply_content += "".join(chunk_message.content)
+                            # full_reply_content += "```\n"
+
+                    if chunk_message.content is not None:
+                        full_reply_content += "".join(chunk_message.content)
 
                     encoding = tiktoken.encoding_for_model(self.model)
                     num_tokens = len(encoding.encode(full_reply_content))
