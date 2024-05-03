@@ -69,19 +69,27 @@ class GPTerminator:
         self.getConfigPath()
         config = configparser.ConfigParser()
         config.read(self.config_path)
+
+        self.sys_prmpt = config["COMMON"]["SystemMessage"]
+        self.cmd_init = config["COMMON"]["CommandInitiator"]
+        self.save_path = config["COMMON"]["SavePath"]
+        self.temperature = config["COMMON"]["Temperature"]
+        self.presence_penalty = config["COMMON"]["PresencePenalty"]
+        self.frequency_penalty = config["COMMON"]["FrequencyPenalty"]
+        self.code_theme = config["COMMON"]["CodeTheme"]
+
         self.config_selected = config["SELECTED_CONFIG"]["ConfigName"]
-        self.model = config[self.config_selected]["ModelName"]
-        self.sys_prmpt = config[self.config_selected]["SystemMessage"]
-        self.cmd_init = config[self.config_selected]["CommandInitiator"]
-        self.save_path = config[self.config_selected]["SavePath"]
-        self.temperature = config[self.config_selected]["Temperature"]
-        self.presence_penalty = config[self.config_selected]["PresencePenalty"]
-        self.frequency_penalty = config[self.config_selected]["FrequencyPenalty"]
-        self.code_theme = config[self.config_selected]["CodeTheme"]
-        self.azure_openai_api_key = config[self.config_selected]["AZURE_OPENAI_API_KEY"]
-        self.azure_openai_endpoint = config[self.config_selected]["AZURE_OPENAI_ENDPOINT"]
-        self.azure_deployment = config[self.config_selected]["AZURE_DEPLOYMENT"]
-        self.api_version = config[self.config_selected]["ApiVersion"]
+
+        if(self.config_selected == "AZURE_CONFIG"):
+            self.model = config[self.config_selected]["Model"]
+            self.azure_openai_api_key = config[self.config_selected]["AZURE_OPENAI_API_KEY"]
+            self.azure_openai_endpoint = config[self.config_selected]["AZURE_OPENAI_ENDPOINT"]
+            self.azure_deployment = config[self.config_selected]["AZURE_DEPLOYMENT"]
+            self.api_version = config[self.config_selected]["ApiVersion"]
+
+        if(self.config_selected == "OPENAI_CONFIG"):
+            self.openai_key = config[self.config_selected]["API_KEY"]
+            self.model = config[self.config_selected]["Model"]
 
 
     def init(self):
@@ -90,12 +98,16 @@ class GPTerminator:
         self.setApiKey()
         self.msg_hist.append({"role": "system", "content": self.sys_prmpt})
 
-        self.client = AzureOpenAI(
-            api_version = self.api_version,
-            azure_endpoint = self.azure_openai_endpoint,
-            azure_deployment = self.azure_deployment,
-            api_key = self.azure_openai_api_key
-        )
+        if(self.config_selected == "AZURE_CONFIG"):
+            self.client = AzureOpenAI(
+                api_version = self.api_version,
+                azure_endpoint = self.azure_openai_endpoint,
+                azure_deployment = self.azure_deployment,
+                api_key = self.azure_openai_api_key
+            )
+        elif(self.config_selected == "OPENAI_CONFIG"):
+            self.client = openai
+            openai.api_key = self.openai_key
 
         # with open("system_prompt.txt", "r") as file:
         #     self.system_prompt = file.read()
@@ -105,6 +117,9 @@ class GPTerminator:
 
         with open("../json-schemas/just-types/type-schema.json", "r") as file:
             self.add_type_schema = json.loads(file.read())
+
+        with open("../json-schemas/just-types/type-example-1.json", "r") as file:
+            self.add_type_example_1 = file.read()
 
         with open("../json-schemas/attributes/boolean-schema.json", "r") as file:
             self.add_boolean_attribute_schema = json.loads(file.read())
@@ -124,6 +139,68 @@ class GPTerminator:
             self.add_string_enumeration_attribute_schema = json.loads(file.read())
         with open("../json-schemas/attributes/string-schema.json", "r") as file:
             self.add_string_attribute_schema = json.loads(file.read())
+
+        with open("../json-schemas/attributes/boolean-example-1.json", "r") as file:
+            self.add_boolean_attribute_example_1 = file.read()
+        with open("../json-schemas/attributes/date-example-1.json", "r") as file:
+            self.add_date_attribute_example_1 = file.read()
+        with open("../json-schemas/attributes/long-text-example-1.json", "r") as file:
+            self.add_long_text_attribute_example_1 = file.read()
+        with open("../json-schemas/attributes/number-enumeration-example-1.json", "r") as file:
+            self.add_number_enumeration_attribute_example_1 = file.read()
+        with open("../json-schemas/attributes/number-example-1.json", "r") as file:
+            self.add_number_attribute_example_1 = file.read()
+        with open("../json-schemas/attributes/reference-example-1.json", "r") as file:
+            self.add_reference_attribute_example_1 = file.read()
+        with open("../json-schemas/attributes/rich-string-example-1.json", "r") as file:
+            self.add_rich_string_attribute_example_1 = file.read()
+        with open("../json-schemas/attributes/string-enumeration-example-1.json", "r") as file:
+            self.add_string_enumeration_attribute_example_1 = file.read()
+        with open("../json-schemas/attributes/string-example-1.json", "r") as file:
+            self.add_string_attribute_example_1 = file.read()
+
+        self.msg_hist.append({
+            "role": "function",
+            "name": "generate_type",
+            "content": self.add_type_example_1})
+
+        self.msg_hist.append({
+            "role": "function",
+            "name": "generate_boolean_attribute",
+            "content": self.add_boolean_attribute_example_1})
+        self.msg_hist.append({
+            "role": "function",
+            "name": "generate_date_attribute",
+            "content": self.add_date_attribute_example_1})
+        self.msg_hist.append({
+            "role": "function",
+            "name": "generate_long_text_attribute",
+            "content": self.add_long_text_attribute_example_1})
+        self.msg_hist.append({
+            "role": "function",
+            "name": "generate_number_enumeration_attribute",
+            "content": self.add_number_enumeration_attribute_example_1})
+        self.msg_hist.append({
+            "role": "function",
+            "name": "generate_number_attribute",
+            "content": self.add_number_attribute_example_1})
+        self.msg_hist.append({
+            "role": "function",
+            "name": "generate_reference_attribute",
+            "content": self.add_reference_attribute_example_1})
+        self.msg_hist.append({
+            "role": "function",
+            "name": "generate_rich_string_attribute",
+            "content": self.add_rich_string_attribute_example_1})
+        self.msg_hist.append({
+            "role": "function",
+            "name": "generate_string_enumeration_attribute",
+            "content": self.add_string_enumeration_attribute_example_1})
+        self.msg_hist.append({
+            "role": "function",
+            "name": "generate_string_attribute",
+            "content": self.add_string_attribute_example_1})
+
 
         self.tools = [
             # {

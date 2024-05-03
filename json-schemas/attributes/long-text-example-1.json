@@ -1,0 +1,12 @@
+{
+  "internalTypeName": "cf.cplace.solution.safe.program",
+  "internalName": "cf.cplace.solution.safe.statsJson",
+  "localizedName": {
+    "en": "Statistics JSON",
+    "de": "Statistics JSON"
+  },
+  "constraint": {
+    "attributeType": "long"
+  },
+  "multiplicity": "maximalOne"
+}

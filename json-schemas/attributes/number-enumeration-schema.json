@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
-    "typeName": {
+    "internalTypeName": {
       "type": "string",
       "description": "The internal name of the type the attribute belongs to."
     },
@@ -83,9 +83,6 @@
               "value": {
                 "type": "string"
               },
-              "icon": {
-                "type": "string"
-              },
               "localizedName": {
                 "type": "object",
                 "properties": {
@@ -102,7 +99,6 @@
             "additionalProperties": false,
             "required": [
               "value",
-              "icon",
               "localizedName"
             ]
           }

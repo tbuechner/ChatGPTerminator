@@ -1,0 +1,17 @@
+{
+  "internalTypeName": "cf.cplace.solution.safe.program",
+  "internalName": "cf.cplace.solution.safe.solution",
+  "localizedName": {
+    "en": "Solution",
+    "de": "Lösung"
+  },
+  "constraint": {
+    "attributeType": "reference",
+    "entityClass": "cf.cplace.platform.assets.file.Page",
+    "internalTypeNames": [
+      "cf.cplace.solution.safe.solution"
+    ],
+    "isHierarchy": false
+  },
+  "multiplicity": "maximalOne"
+}

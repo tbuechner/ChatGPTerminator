@@ -1,0 +1,13 @@
+{
+  "internalTypeName": "cf.cplace.solution.safe.program",
+  "internalName": "cf.cplace.solution.safe.calculateDateConflicts",
+  "localizedName": {
+    "en": "Calculate Date Conflicts",
+    "de": "Berechne Datumskonflikte"
+  },
+  "constraint": {
+    "defaultValues": "false",
+    "attributeType": "boolean"
+  },
+  "multiplicity": "exactlyOne"
+}

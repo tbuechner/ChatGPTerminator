@@ -1,0 +1,36 @@
+{
+  "internalTypeName": "cf.cplace.solution.safe.program",
+  "internalName": "cf.cplace.solution.safe.timeCriticality",
+  "localizedName": {
+    "en": "Time Criticality",
+    "de": "Zeitkritikalität"
+  },
+  "constraint": {
+    "attributeType": "numberEnumeration",
+    "precision": 0,
+    "elements": [
+      {
+        "value": 10,
+        "localizedName": {
+          "en": "High",
+          "de": "Hoch"
+        }
+      },
+      {
+        "value": 5,
+        "localizedName": {
+          "en": "Medium",
+          "de": "Mittel"
+        }
+      },
+      {
+        "value": 1,
+        "localizedName": {
+          "en": "Low",
+          "de": "Niedrig"
+        }
+      }
+    ]
+  },
+  "multiplicity": "exactlyOne"
+}
