@@ -3,7 +3,7 @@ I want to build an application focused on managing Objectives and Key Results (O
 ### Capabilities of the Application:
 1. **Structured OKR Planning:** Allows organizational units to define and articulate objectives and their measurable outcomes over set time frames (cycles).
 2. **Tracking and Progress Updates:** Facilitates tracking of progress against key results using indicators and updates which are reflected in tasks and progress reports.
-3. **Role-based Accessibility:** It appears that tasks and key results can be paired with specific individuals or roles, supporting personalized responsibility and accountability.
+3. **Role-based Accessibility:** Tasks and key results can be paired with specific individuals or roles, supporting personalized responsibility and accountability.
 4. **Temporal Navigation:** Enables users to view past, current, and forecast future cycles, enhancing the ability to strategize based on historical data.
 5. **Organizational Alignment:** Supports linking tasks and OKRs to specific organizational units, ensuring alignment with broader organizational goals.
 
@@ -27,7 +27,7 @@ The application thus serves as a comprehensive tool for managing an organization
 * The cycle should have a status with states like Next, Current, Closed
 * There should be a "set" type, which aggregates all objectives within a cycle 
 
-### Data Modeling
+### Data Modeling - Meta Model
 
 In order to implement the application, I would need to create a data model that stores the necessary information for managing OKRs effectively.
 
@@ -46,7 +46,9 @@ The following attribute types exist:
 
 Just give me the data model in a tabular forma. I will take care of the rest.
 
-One table for all types. One table for each type and the attributes of the type.
+One table for each type and the attributes of the type. The table for the attributes should have these columns: "Attribute", "Type", "Description".
+
+List the types in alphabetical order. List the attributes in alphabetical order within each type.
 
 There exists a built-in user type, we do not need a separate type for it. There can be references towards the built-in user type.
 

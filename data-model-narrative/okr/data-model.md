@@ -1,46 +1,45 @@
-To implement the data model for your OKR management application, I will provide a setup that explicitly defines each type along with its attributes. Let's dive into the separate tables for types and their associated attributes:
+Here is the structured data model for the OKR management application presented in tabular format for each type with their corresponding attributes:
 
-### Type: Cycle
-| Attribute     | Type            | Description                        |
-|---------------|-----------------|------------------------------------|
-| Year          | Number          | The year of the cycle              |
-| Quarter       | Number          | The quarter (1 to 4) of the cycle  |
-| Start Date    | Date            | The starting date of the cycle     |
-| End Date      | Date            | The ending date of the cycle       |
-| Status        | Text Enumeration| Status of the cycle (Next, Current, Closed) |
+### 1. Cycle
+| Attribute    | Type                  | Description                      |
+|--------------|-----------------------|----------------------------------|
+| End Date     | Date                  | The date when the cycle ends     |
+| Start Date   | Date                  | The date when the cycle begins   |
+| Quarter      | Number                | Identifies the quarter of the year|
+| Status       | Text Enumeration      | Can be "Next", "Current", or "Closed" |
+| Year         | Number                | Identifies the year of the cycle |
 
-### Type: Set
-| Attribute     | Type            | Description                                      |
-|---------------|-----------------|--------------------------------------------------|
-| Title         | Text            | Title of the set                                |
-| Description   | Rich Text       | Description of the set                          |
-| Cycle         | Reference       | Reference to the associated Cycle                |
+### 2. Key Result
+| Attribute    | Type                  | Description                      |
+|--------------|-----------------------|----------------------------------|
+| Description  | Text                  | Detailed description of the key result |
+| Objective    | Reference             | Link to the associated Objective |
+| Progress     | Number                | Percent completion of the key result |
+| Status       | Text Enumeration      | Status of the key result such as "Pending", "On Track", "At Risk", "Completed" |
 
-### Type: Objective
-| Attribute     | Type            | Description                 |
-|---------------|-----------------|-----------------------------|
-| Title         | Text            | Title of the objective      |
-| Description   | Rich Text       | Description of the objective|
-| Set           | Reference       | Reference to the associated Set |
+### 3. Objective
+| Attribute    | Type                  | Description                      |
+|--------------|-----------------------|----------------------------------|
+| Description  | Text                  | Detailed description of the objective |
+| Name         | Text                  | Name or title of the objective   |
+| Owner        | Reference             | Reference to the User who owns the objective |
+| Set          | Reference             | Link to the associated Set       |
 
-### Type: Key Result
-| Attribute     | Type            | Description                                |
-|---------------|-----------------|--------------------------------------------|
-| Title         | Text            | Title of the key result                    |
-| Description   | Rich Text       | Detailed description of the key result     |
-| Objective     | Reference       | Reference to the associated Objective      |
-| Assigned To   | Reference       | Reference to a User                        |
-| Current Value | Number          | Current numeric value                      |
-| Target Value  | Number          | Target numeric value                       |
+### 4. Set
+| Attribute    | Type                  | Description                      |
+|--------------|-----------------------|----------------------------------|
+| Cycle        | Reference             | Link to the associated Cycle     |
+| Description  | Text                  | Description of the set of objectives |
+| Name         | Text                  | Name or title of the set         |
 
-### Type: Task
-| Attribute     | Type            | Description                          |
-|---------------|-----------------|--------------------------------------|
-| Title         | Text            | Title of the task                    |
-| Description   | Rich Text       | Detailed description of the task     |
-| Key Result    | Reference       | Reference to the associated Key Result  |
-| Assigned To   | Reference       | Reference to a User                  |
-| Due Date      | Date            | Task completion due date             |
-| Status        | Text Enumeration| Status of the task (e.g., Pending, Completed) |
+### 5. Task
+| Attribute    | Type                  | Description                      |
+|--------------|-----------------------|----------------------------------|
+| Completed Date | Date                | Date when the task was completed |
+| Description  | Text                  | Detailed description of the task |
+| Due Date     | Date                  | Date when the task is due        |
+| Key Result   | Reference             | Link to the associated Key Result |
+| Owner        | Reference             | Reference to the User responsible for the task |
+| Status       | Text Enumeration      | Status such as "Not Started", "In Progress", "Completed" |
 
-This comprehensive data model will provide a strong foundation for the development of your OKR management application, ensuring all necessary components are captured accurately. This setup allows for meticulous tracking and management of objectives, key results, and associated tasks relevant to strategic organizational functions.
+These tables represent the core data structure required to effectively manage OKRs within an organization through your application. Each type captures essential attributes that define their roles in the system, aligning perfectly with the capabilities, operations, and use cases of the application.
