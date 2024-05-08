@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "generate_long_text_attribute",
+  "content": {{ load_file('functions/fine-granular/generate_long_text_attribute_example.json') }}
+}

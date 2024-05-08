@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "generate_date_attribute",
+    "description": "Generate a new date attribute and add it to a type.",
+    "parameters": {{ load_file('functions/fine-granular/generate_date_attribute_schema.json') }}
+  }
+}

@@ -22,6 +22,7 @@ from rich.syntax import Syntax
 
 from openai.lib.azure import AzureOpenAI
 
+from jinja2 import Template
 
 
 class GPTerminator:
@@ -115,183 +116,7 @@ class GPTerminator:
         # with open("json-schema.json", "r") as file:
         #     self.generate_data_model_schema = json.loads(file.read())
 
-        with open("../json-schemas/just-types/type-schema.json", "r") as file:
-            self.add_type_schema = json.loads(file.read())
-
-        with open("../json-schemas/just-types/type-example-1.json", "r") as file:
-            self.add_type_example_1 = file.read()
-
-        with open("../json-schemas/attributes/boolean-schema.json", "r") as file:
-            self.add_boolean_attribute_schema = json.loads(file.read())
-        with open("../json-schemas/attributes/date-schema.json", "r") as file:
-            self.add_date_attribute_schema = json.loads(file.read())
-        with open("../json-schemas/attributes/long-text-schema.json", "r") as file:
-            self.add_long_text_attribute_schema = json.loads(file.read())
-        with open("../json-schemas/attributes/number-enumeration-schema.json", "r") as file:
-            self.add_number_enumeration_attribute_schema = json.loads(file.read())
-        with open("../json-schemas/attributes/number-schema.json", "r") as file:
-            self.add_number_attribute_schema = json.loads(file.read())
-        with open("../json-schemas/attributes/reference-schema.json", "r") as file:
-            self.add_reference_attribute_schema = json.loads(file.read())
-        with open("../json-schemas/attributes/rich-string-schema.json", "r") as file:
-            self.add_rich_string_attribute_schema = json.loads(file.read())
-        with open("../json-schemas/attributes/string-enumeration-schema.json", "r") as file:
-            self.add_string_enumeration_attribute_schema = json.loads(file.read())
-        with open("../json-schemas/attributes/string-schema.json", "r") as file:
-            self.add_string_attribute_schema = json.loads(file.read())
-
-        with open("../json-schemas/attributes/boolean-example-1.json", "r") as file:
-            self.add_boolean_attribute_example_1 = file.read()
-        with open("../json-schemas/attributes/date-example-1.json", "r") as file:
-            self.add_date_attribute_example_1 = file.read()
-        with open("../json-schemas/attributes/long-text-example-1.json", "r") as file:
-            self.add_long_text_attribute_example_1 = file.read()
-        with open("../json-schemas/attributes/number-enumeration-example-1.json", "r") as file:
-            self.add_number_enumeration_attribute_example_1 = file.read()
-        with open("../json-schemas/attributes/number-example-1.json", "r") as file:
-            self.add_number_attribute_example_1 = file.read()
-        with open("../json-schemas/attributes/reference-example-1.json", "r") as file:
-            self.add_reference_attribute_example_1 = file.read()
-        with open("../json-schemas/attributes/rich-string-example-1.json", "r") as file:
-            self.add_rich_string_attribute_example_1 = file.read()
-        with open("../json-schemas/attributes/string-enumeration-example-1.json", "r") as file:
-            self.add_string_enumeration_attribute_example_1 = file.read()
-        with open("../json-schemas/attributes/string-example-1.json", "r") as file:
-            self.add_string_attribute_example_1 = file.read()
-
-        self.msg_hist.append({
-            "role": "function",
-            "name": "generate_type",
-            "content": self.add_type_example_1})
-
-        self.msg_hist.append({
-            "role": "function",
-            "name": "generate_boolean_attribute",
-            "content": self.add_boolean_attribute_example_1})
-        self.msg_hist.append({
-            "role": "function",
-            "name": "generate_date_attribute",
-            "content": self.add_date_attribute_example_1})
-        self.msg_hist.append({
-            "role": "function",
-            "name": "generate_long_text_attribute",
-            "content": self.add_long_text_attribute_example_1})
-        self.msg_hist.append({
-            "role": "function",
-            "name": "generate_number_enumeration_attribute",
-            "content": self.add_number_enumeration_attribute_example_1})
-        self.msg_hist.append({
-            "role": "function",
-            "name": "generate_number_attribute",
-            "content": self.add_number_attribute_example_1})
-        self.msg_hist.append({
-            "role": "function",
-            "name": "generate_reference_attribute",
-            "content": self.add_reference_attribute_example_1})
-        self.msg_hist.append({
-            "role": "function",
-            "name": "generate_rich_string_attribute",
-            "content": self.add_rich_string_attribute_example_1})
-        self.msg_hist.append({
-            "role": "function",
-            "name": "generate_string_enumeration_attribute",
-            "content": self.add_string_enumeration_attribute_example_1})
-        self.msg_hist.append({
-            "role": "function",
-            "name": "generate_string_attribute",
-            "content": self.add_string_attribute_example_1})
-
-
-        self.tools = [
-            # {
-            #     "type": "function",
-            #     "function": {
-            #         'name': 'generate_data_model',
-            #         'description': 'Generate a data model from the body of the input text',
-            #         'parameters': self.generate_data_model_schema
-            #     }
-            # },
-            {
-                "type": "function",
-                "function": {
-                    'name': 'generate_type',
-                    'description': 'Generate a type and add it to the data model. This is similar to adding a new table to a SQL database.',
-                    'parameters': self.add_type_schema
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    'name': 'generate_boolean_attribute',
-                    'description': 'Generate a new boolean attribute and add it to a type. Values of boolean attributes are either true or false.',
-                    'parameters': self.add_boolean_attribute_schema
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    'name': 'generate_date_attribute',
-                    'description': 'Generate a new date attribute and add it to a type.',
-                    'parameters': self.add_date_attribute_schema
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    'name': 'generate_long_text_attribute',
-                    'description': 'Generate a new long text attributeand add it to a type. Long text attributes are used for large amounts of text.',
-                    'parameters': self.add_long_text_attribute_schema
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    'name': 'generate_number_enumeration_attribute',
-                    'description': 'Generate a new number enumeration attribute and add it to a type. Number enumeration attributes are used if there is a given set of allowed numbers.',
-                    'parameters': self.add_number_enumeration_attribute_schema
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    'name': 'generate_number_attribute',
-                    'description': 'Generate a new number attribute and add it to a type. Number attributes are used for numerical values.',
-                    'parameters': self.add_number_attribute_schema
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    'name': 'generate_reference_attribute',
-                    'description': 'Generate a new reference attribute and add it to a type. Reference attributes are used to reference another type. Similar to a foreign key in a SQL database.',
-                    'parameters': self.add_reference_attribute_schema
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    'name': 'generate_rich_string_attribute',
-                    'description': 'Generate a new rich string attribute and add it to a type. A rich string attribute is a string that can contain rich text such as bold, italic, and underline, tables, images, ...',
-                    'parameters': self.add_rich_string_attribute_schema
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    'name': 'generate_string_enumeration_attribute',
-                    'description': 'Generate a new text enumeration attribute and add it to a type. String enumeration attributes are used if there is a given set of allowed strings.',
-                    'parameters': self.add_string_enumeration_attribute_schema
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    'name': 'generate_string_attribute',
-                    'description': 'Generate a new string attribute and add it to a type.',
-                    'parameters': self.add_string_attribute_schema
-                }
-            }
-        ]
+        self.render_and_get_tools_and_examples('functions/fine-granular')
 
 
     def printError(self, msg):
@@ -512,7 +337,6 @@ class GPTerminator:
     def getResponse(self, usr_prompt):
         self.msg_hist.append({"role": "user", "content": usr_prompt})
         try:
-            # resp = openai.ChatCompletion.create(
             resp = self.client.chat.completions.create(
                 model=self.model,
                 messages=self.msg_hist,
@@ -614,7 +438,7 @@ class GPTerminator:
         # print("function_name_2_arguments: " + str(function_name_2_arguments))
 
         # print(str(function_name_2_arguments))
-        self.saveDataModel(function_name_2_arguments)
+        self.saveToolCalls(function_name_2_arguments)
 
         # if function_name_2_arguments:
         #     for function_name, arguments in function_name_2_arguments.items():
@@ -631,7 +455,7 @@ class GPTerminator:
         else:
             function_name_2_arguments[function_name] = [function_arguments]
 
-    def saveDataModel(self, function_name_2_arguments):
+    def saveToolCalls(self, function_name_2_arguments):
         if function_name_2_arguments:
             for function_name, arguments in function_name_2_arguments.items():
                 if function_name is not None and arguments is not None:
@@ -746,3 +570,49 @@ class GPTerminator:
             if usr_input is not None:
                 self.prompt_count += 1
                 self.getResponse(usr_input)
+
+
+    def render_and_get_tools_and_examples(self, folder_name):
+        tools = []
+        for root, dirs, files in os.walk(folder_name):
+            for file in files:
+                # if the file is a .txt file
+                if file.endswith('function.json'):
+                    # render the template
+                    template_file = os.path.join(root, file)
+                    rendered_string = self.render_template(template_file)
+
+                    # parse the rendered string to a dictionary
+                    tool = json.loads(rendered_string)
+                    print("adding tool: " + file)
+                    tools.append(tool)
+                if file.endswith('generate_boolean_attribute_example_msg.json'):
+                    # render the template
+                    template_file = os.path.join(root, file)
+                    rendered_string = self.render_template(template_file)
+
+                    # parse the rendered string to a dictionary
+                    example = json.loads(rendered_string)
+                    print("adding example: " + file)
+                    self.msg_hist.append(example)
+        self.tools = tools
+
+    def render_template(self, template_file):
+        # Read the template file
+        with open(template_file, "r") as file:
+            template_string = file.read()
+
+        # Create a template object
+        template = Template(template_string)
+
+        # Render the template with the file contents
+        rendered_string = template.render(
+            load_file=load_file
+        )
+
+        return rendered_string
+
+def load_file(file_path):
+    # Read the contents of the file
+    with open(file_path, "r") as file:
+        return file.read()

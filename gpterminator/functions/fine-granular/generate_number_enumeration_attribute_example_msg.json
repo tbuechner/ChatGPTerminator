@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "generate_number_enumeration_attribute",
+  "content": {{ load_file('functions/fine-granular/generate_number_enumeration_attribute_example.json') }}
+}

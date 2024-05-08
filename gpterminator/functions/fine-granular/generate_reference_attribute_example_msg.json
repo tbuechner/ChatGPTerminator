@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "generate_reference_attribute",
+  "content": {{ load_file('functions/fine-granular/generate_reference_attribute_example.json') }}
+}

@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "generate_type",
+  "content": {{ load_file('functions/fine-granular/generate_type_example.json') }}
+}
