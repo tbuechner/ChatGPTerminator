@@ -33,7 +33,6 @@ class GPTerminator:
         self.temperature = ""
         self.presence_penalty = ""
         self.frequency_penalty = ""
-        self.sys_prmpt = ""
         self.msg_hist = []
         self.cmd_init = ""
         self.cmds = {
@@ -71,7 +70,6 @@ class GPTerminator:
         config = configparser.ConfigParser()
         config.read(self.config_path)
 
-        self.sys_prmpt = config["COMMON"]["SystemMessage"]
         self.cmd_init = config["COMMON"]["CommandInitiator"]
         self.save_path = config["COMMON"]["SavePath"]
         self.temperature = config["COMMON"]["Temperature"]
@@ -97,7 +95,6 @@ class GPTerminator:
         if not os.path.exists(self.save_path):
             os.makedirs(self.save_path)
         self.setApiKey()
-        self.msg_hist.append({"role": "system", "content": self.sys_prmpt})
 
         if(self.config_selected == "AZURE_CONFIG"):
             self.client = AzureOpenAI(
@@ -505,7 +502,6 @@ class GPTerminator:
 """
         self.console.print(f"[bold green]{welcome_ascii}[/bold green]", end="")
         self.console.print(f"[bright_black]Version: v0.1.11[/]")
-        self.console.print(f"[bright_black]System prompt: {self.sys_prmpt}[/]")
         self.console.print(f"[bright_black]Model: {self.model}[/]")
         self.console.print(
             f"[bright_black]Type '{self.cmd_init}quit' to quit the program; '{self.cmd_init}help' for a list of cmds[/]\n"
@@ -573,7 +569,10 @@ class GPTerminator:
 
 
     def render_and_get_tools_and_examples(self, folder_name):
-        tools = []
+        with open(os.path.join(folder_name, "system_prompt.txt"), "r") as file:
+            self.msg_hist.append({"role": "system", "content": file.read()})
+
+        self.tools = []
         for root, dirs, files in os.walk(folder_name):
             for file in files:
                 # if the file is a .txt file
@@ -584,8 +583,8 @@ class GPTerminator:
 
                     # parse the rendered string to a dictionary
                     tool = json.loads(rendered_string)
-                    print("adding tool: " + file)
-                    tools.append(tool)
+                    # print("adding tool: " + file)
+                    self.tools.append(tool)
                 if file.endswith('generate_boolean_attribute_example_msg.json'):
                     # render the template
                     template_file = os.path.join(root, file)
@@ -593,10 +592,8 @@ class GPTerminator:
 
                     # parse the rendered string to a dictionary
                     example = json.loads(rendered_string)
-                    print("adding example: " + file)
-                    print(rendered_string)
+                    # print("adding example: " + file)
                     self.msg_hist.append(example)
-        self.tools = tools
 
     def render_template(self, template_file):
         # Read the template file
