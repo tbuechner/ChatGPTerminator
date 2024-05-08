@@ -1,5 +1,5 @@
 {
   "role": "function",
   "name": "generate_string_enumeration_attribute",
-  "content": {{ load_file('functions/fine-granular/generate_string_enumeration_attribute_example.json') }}
+  "content": {{ load_file('functions/fine-granular/generate_string_enumeration_attribute_example.json') | tojson }}
 }

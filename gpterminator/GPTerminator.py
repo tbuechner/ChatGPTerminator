@@ -594,6 +594,7 @@ class GPTerminator:
                     # parse the rendered string to a dictionary
                     example = json.loads(rendered_string)
                     print("adding example: " + file)
+                    print(rendered_string)
                     self.msg_hist.append(example)
         self.tools = tools
 
