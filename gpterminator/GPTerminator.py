@@ -1,6 +1,7 @@
 import configparser
 import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -107,13 +108,9 @@ class GPTerminator:
             self.client = openai
             openai.api_key = self.openai_key
 
-        # with open("system_prompt.txt", "r") as file:
-        #     self.system_prompt = file.read()
-        #
-        # with open("json-schema.json", "r") as file:
-        #     self.generate_data_model_schema = json.loads(file.read())
-
-        self.render_and_get_tools_and_examples('functions/fine-granular')
+        # self.render_and_get_tools_and_examples('functions/fine-granular')
+        # self.render_and_get_tools_and_examples('functions/high-level')
+        self.render_and_get_tools_and_examples('functions/textual')
 
 
     def printError(self, msg):
@@ -352,13 +349,13 @@ class GPTerminator:
         except openai.APIConnectionError as e:
             self.printError(f"OpenAI API request failed to connect: {e}")
             sys.exit()
-        except openai.InvalidRequestError as e:
+        except openai.BadRequestError as e:
             self.printError(f"OpenAI API request was invalid: {e}")
             sys.exit()
         except openai.AuthenticationError as e:
             self.printError(f"OpenAI API request was not authorized: {e}")
             sys.exit()
-        except openai.PermissionError as e:
+        except openai.PermissionDeniedError as e:
             self.printError(f"OpenAI API request was not permitted: {e}")
             sys.exit()
         except openai.RateLimitError as e:
@@ -435,7 +432,7 @@ class GPTerminator:
         # print("function_name_2_arguments: " + str(function_name_2_arguments))
 
         # print(str(function_name_2_arguments))
-        self.saveToolCalls(function_name_2_arguments)
+        file_names = self.saveToolCalls(function_name_2_arguments, full_reply_content)
 
         # if function_name_2_arguments:
         #     for function_name, arguments in function_name_2_arguments.items():
@@ -452,29 +449,23 @@ class GPTerminator:
         else:
             function_name_2_arguments[function_name] = [function_arguments]
 
-    def saveToolCalls(self, function_name_2_arguments):
+    def saveToolCalls(self, function_name_2_arguments, full_reply_content):
+        file_names = []
+        if full_reply_content:
+            file_name = f"{self.get_file_name()}.md"
+            file_names.append(file_name)
+            with open(Path(self.save_path) / file_name, "w") as f:
+                f.write(full_reply_content)
+
         if function_name_2_arguments:
             for function_name, arguments in function_name_2_arguments.items():
                 if function_name is not None and arguments is not None:
                     for argument in arguments:
-                        # find all files with name "xxxx-function_name.json" - xxxx is a number starting with 0000 - find the highest number
-                        max_file_number = 0
-                        for idx, file_name in enumerate(os.listdir(f"{self.save_path}")):
-                            if file_name.endswith(".json"):
-                                file_str = file_name.split("-")[0]
-                                if idx == 0:
-                                    max_file_number = file_str
-                                else:
-                                    if file_str > max_file_number:
-                                        max_file_number = file_str
-                        # increment the number by 1
-                        new_file_number = int(max_file_number) + 1
-                        file_name = f"{new_file_number:04d}"
-                        with open(Path(self.save_path) / f"{file_name}-{function_name}.json", "w") as f:
+                        file_name = f"{self.get_file_name()}-{function_name}.json"
+                        file_names.append(file_name)
+                        with open(Path(self.save_path) / file_name, "w") as f:
                             json_object = json.loads(argument)
                             json.dump(json_object, f, indent=4)
-
-
 
                     # validate arguments against the schema
                     # q: how to validate a json against a schema in python programatically
@@ -485,6 +476,25 @@ class GPTerminator:
                     #     print("JSON object is valid")
                     # except jsonschema.exceptions.ValidationError as ve:
                     #     print("JSON object is not valid.")
+
+        return file_names
+
+    def get_file_name(self):
+        pattern = r'^\d{4}-'
+        max_file_number = 0
+        for idx, file_name in enumerate(os.listdir(f"{self.save_path}")):
+            # test if file_name starts with four digits followed by "-", e.g., 0003-
+            if re.match(pattern, file_name):
+                file_str = file_name.split("-")[0]
+                if idx == 0:
+                    max_file_number = file_str
+                else:
+                    if file_str > max_file_number:
+                        max_file_number = file_str
+        # increment the number by 1
+        new_file_number = int(max_file_number) + 1
+        file_name = f"{new_file_number:04d}"
+        return file_name
 
 
     def setApiKey(self):
@@ -572,7 +582,7 @@ class GPTerminator:
         with open(os.path.join(folder_name, "system_prompt.txt"), "r") as file:
             self.msg_hist.append({"role": "system", "content": file.read()})
 
-        self.tools = []
+        tools = []
         for root, dirs, files in os.walk(folder_name):
             for file in files:
                 # if the file is a .txt file
@@ -584,7 +594,7 @@ class GPTerminator:
                     # parse the rendered string to a dictionary
                     tool = json.loads(rendered_string)
                     # print("adding tool: " + file)
-                    self.tools.append(tool)
+                    tools.append(tool)
                 if file.endswith('generate_boolean_attribute_example_msg.json'):
                     # render the template
                     template_file = os.path.join(root, file)
@@ -594,6 +604,10 @@ class GPTerminator:
                     example = json.loads(rendered_string)
                     # print("adding example: " + file)
                     self.msg_hist.append(example)
+        if tools:
+            self.tools = tools
+        else:
+            self.tools = None
 
     def render_template(self, template_file):
         # Read the template file
