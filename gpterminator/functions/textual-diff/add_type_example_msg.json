@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "add_type",
+  "content": {{ load_file('functions/fine-granular/add_type_example.json') | tojson }}
+}

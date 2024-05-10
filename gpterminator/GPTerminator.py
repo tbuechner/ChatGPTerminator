@@ -110,7 +110,8 @@ class GPTerminator:
 
         # self.setToolsAndExamples('functions/fine-granular')
         # self.setToolsAndExamples('functions/high-level')
-        self.setToolsAndExamples('functions/textual')
+        # self.setToolsAndExamples('functions/textual')
+        self.setToolsAndExamples('functions/textual-diff')
         # self.setToolsAndExamples('functions/one-pass')
 
         self.generatePrompt()
