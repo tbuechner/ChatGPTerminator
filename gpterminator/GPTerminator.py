@@ -704,11 +704,11 @@ class GPTerminator:
                 if type_['name'] == argument_dict['typeName']:
                     type_attributes = type_['attributes']
                     for i, attribute in enumerate(type_attributes):
-                        if attribute['name'] == argument_dict['name']:
-                            print(f"Deleting attribute with name {argument_dict['name']} from type {argument_dict['typeName']}")
+                        if attribute['name'] == argument_dict['attributeName']:
+                            print(f"Deleting attribute with name {argument_dict['attributeName']} from type {argument_dict['typeName']}")
                             type_attributes.pop(i)
                             return
-            print(f"Attribute with name {argument_dict['name']} does not exist in type {argument_dict['typeName']}")
+            print(f"Attribute with name {argument_dict['attributeName']} does not exist in type {argument_dict['typeName']}")
 
         if 'delete_type' == function_name:
             for i, type in enumerate(types):

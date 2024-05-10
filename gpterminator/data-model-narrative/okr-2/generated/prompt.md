@@ -40,7 +40,6 @@ Here is the structured data model for the OKR management application presented i
 | Attribute    | Type                  | Description                      |
 |--------------|-----------------------|----------------------------------|
 | Objectives | Reference | References to objectives part of this cycle. | 
-| Key Results | Reference | References to key results associated with this cycle. | 
 
 ### Key Result
 | Attribute    | Type                  | Description                      |
@@ -48,6 +47,7 @@ Here is the structured data model for the OKR management application presented i
 | Description | Text | Detailed description of the key result | 
 | Progress | Number | Percent completion of the key result | 
 | Status | Text Enumeration | Status of the key result such as 'Pending', 'On Track', 'At Risk', 'Completed' | 
+| Objective | Reference | Reference to the objective this key result is part of. | 
 
 ### Objective
 | Attribute    | Type                  | Description                      |

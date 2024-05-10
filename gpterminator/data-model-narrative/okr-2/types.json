@@ -6,11 +6,6 @@
                 "name": "Objectives",
                 "type": "Reference",
                 "description": "References to objectives part of this cycle."
-            },
-            {
-                "name": "Key Results",
-                "type": "Reference",
-                "description": "References to key results associated with this cycle."
             }
         ]
     },
@@ -31,6 +26,11 @@
                 "name": "Status",
                 "type": "Text Enumeration",
                 "description": "Status of the key result such as 'Pending', 'On Track', 'At Risk', 'Completed'"
+            },
+            {
+                "name": "Objective",
+                "type": "Reference",
+                "description": "Reference to the objective this key result is part of."
             }
         ]
     },
