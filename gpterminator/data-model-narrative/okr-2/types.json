@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Cycle",
+    "attributes": [
+      {
+        "name": "End Date",
+        "type": "Date",
+        "description": "The date when the cycle ends"
+      },
+      {
+        "name": "Start Date",
+        "type": "Date",
+        "description": "The date when the cycle begins"
+      },
+      {
+        "name": "Quarter",
+        "type": "Number",
+        "description": "Identifies the quarter of the year"
+      },
+      {
+        "name": "Status",
+        "type": "Text Enumeration",
+        "description": "Can be 'Next', 'Current', or 'Closed'"
+      },
+      {
+        "name": "Year",
+        "type": "Number",
+        "description": "Identifies the year of the cycle"
+      }
+    ]
+  },
+  {
+    "name": "Key Result",
+    "attributes": [
+      {
+        "name": "Description",
+        "type": "Text",
+        "description": "Detailed description of the key result"
+      },
+      {
+        "name": "Objective",
+        "type": "Reference",
+        "description": "Link to the associated Objective"
+      },
+      {
+        "name": "Progress",
+        "type": "Number",
+        "description": "Percent completion of the key result"
+      },
+      {
+        "name": "Status",
+        "type": "Text Enumeration",
+        "description": "Status of the key result such as 'Pending', 'On Track', 'At Risk', 'Completed'"
+      }
+    ]
+  }
+]

@@ -592,6 +592,14 @@ class GPTerminator:
         # create folder folder_name_generated
         os.mkdir(folder_name_generated)
 
+        # load content of file types.json into the variable types
+        with open('data-model-narrative/okr-2/types.json', 'r') as file:
+            types = json.load(file)
+
+        rendered = self.renderTemplate("data-model-narrative/okr-2/types-template.md", types)
+        with open(os.path.join(folder_name_generated, "types.md"), "w") as new_file:
+            new_file.write(rendered)
+
         rendered = self.renderTemplate("data-model-narrative/okr-2/prompt.md")
         with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
             new_file.write(rendered)
@@ -628,7 +636,7 @@ class GPTerminator:
         else:
             self.tools = None
 
-    def renderTemplate(self, template_file):
+    def renderTemplate(self, template_file, data=None):
         # Read the template file
         with open(template_file, "r") as file:
             template_string = file.read()
@@ -638,7 +646,8 @@ class GPTerminator:
 
         # Render the template with the file contents
         rendered_string = template.render(
-            load_file=loadFile
+            load_file=loadFile,
+            data=data
         )
 
         return rendered_string

@@ -10,7 +10,7 @@
 
 Here is the structured data model for the OKR management application presented in tabular format for each type with their corresponding attributes:
 
-{{ load_file('data-model-narrative/okr-2/data-model.md') }}
+{{ load_file('data-model-narrative/okr-2/generated/types.md') }}
 
 ### Adapted Data Model
 
