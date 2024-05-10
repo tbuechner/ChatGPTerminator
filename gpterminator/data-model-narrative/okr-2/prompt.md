@@ -4,7 +4,7 @@
 
 ### Data Modeling - Meta Model
 
-{{ load_file('data-model-narrative/okr-2/meta-model.md') }}
+{{ load_file('data-model-narrative/meta-model.md') }}
 
 ### Current Data Model
 

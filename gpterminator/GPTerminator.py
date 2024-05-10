@@ -618,7 +618,7 @@ class GPTerminator:
         with open('data-model-narrative/okr-2/types.json', 'r') as file:
             types = json.load(file)
 
-        rendered = self.renderTemplate("data-model-narrative/okr-2/types-template.md", types)
+        rendered = self.renderTemplate("data-model-narrative/types-template.md", types)
         with open(os.path.join(folder_name_generated, "types.md"), "w") as new_file:
             new_file.write(rendered)
 
