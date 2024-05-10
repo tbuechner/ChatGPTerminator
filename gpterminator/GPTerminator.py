@@ -108,10 +108,12 @@ class GPTerminator:
             self.client = openai
             openai.api_key = self.openai_key
 
-        self.setToolsAndExamples('functions/fine-granular')
+        # self.setToolsAndExamples('functions/fine-granular')
         # self.setToolsAndExamples('functions/high-level')
-        # self.setToolsAndExamples('functions/textual')
+        self.setToolsAndExamples('functions/textual')
         # self.setToolsAndExamples('functions/one-pass')
+
+        self.generatePrompt()
 
 
     def printError(self, msg):
@@ -436,7 +438,7 @@ class GPTerminator:
         # print("function_name_2_arguments: " + str(function_name_2_arguments))
 
         # print(str(function_name_2_arguments))
-        file_names = self.saveToolCalls(function_name_2_arguments, full_reply_content)
+        file_names = self.saveToolCalls(function_name_2_arguments, full_reply_content_shortened)
 
         # if function_name_2_arguments:
         #     for function_name, arguments in function_name_2_arguments.items():
@@ -445,7 +447,7 @@ class GPTerminator:
 
         self.console.print(md)
         self.console.print()
-        self.msg_hist.append({"role": "assistant", "content": full_reply_content})
+        self.msg_hist.append({"role": "assistant", "content": full_reply_content_shortened})
 
     def addToFunctionName2Arguments(self, function_name, function_arguments, function_name_2_arguments):
         if function_name in function_name_2_arguments:
@@ -580,6 +582,19 @@ class GPTerminator:
             if usr_input is not None:
                 self.prompt_count += 1
                 self.getResponse(usr_input)
+
+
+    def generatePrompt(self):
+        folder_name_generated = 'data-model-narrative/okr-2/generated'
+        if os.path.exists(folder_name_generated):
+            os.system("rm -r " + folder_name_generated)
+
+        # create folder folder_name_generated
+        os.mkdir(folder_name_generated)
+
+        rendered = self.renderTemplate("data-model-narrative/okr-2/prompt.md")
+        with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
+            new_file.write(rendered)
 
 
     def setToolsAndExamples(self, folder_name):
