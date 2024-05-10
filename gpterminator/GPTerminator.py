@@ -116,6 +116,9 @@ class GPTerminator:
 
         # self.setToolsAndExamples('functions/textual')
 
+        # self.data_model_narrative = 'okr-2'
+        self.data_model_narrative = 'large-safe'
+
         self.setToolsAndExamples('functions/textual-diff')
         self.apply_function_handler = textualDiffApplyFunctionHandler
 
@@ -477,7 +480,7 @@ class GPTerminator:
                 self.apply_function_handler(self, function_name, arguments)
 
     def runTypesPrompt(self):
-        with open('data-model-narrative/okr-2/generated/prompt.md', 'r') as file:
+        with open('data-model-narrative/' + self.data_model_narrative + '/generated/prompt.md', 'r') as file:
             prompt = file.read()
 
         self.getResponse(prompt)
@@ -607,7 +610,7 @@ class GPTerminator:
 
 
     def generatePrompt(self):
-        folder_name_generated = 'data-model-narrative/okr-2/generated'
+        folder_name_generated = 'data-model-narrative/' + self.data_model_narrative + '/generated'
         if os.path.exists(folder_name_generated):
             os.system("rm -r " + folder_name_generated)
 
@@ -615,14 +618,14 @@ class GPTerminator:
         os.mkdir(folder_name_generated)
 
         # load content of file types.json into the variable types
-        with open('data-model-narrative/okr-2/types.json', 'r') as file:
+        with open('data-model-narrative/' + self.data_model_narrative + '/types.json', 'r') as file:
             types = json.load(file)
 
         rendered = self.renderTemplate("data-model-narrative/types-template.md", types)
         with open(os.path.join(folder_name_generated, "types.md"), "w") as new_file:
             new_file.write(rendered)
 
-        rendered = self.renderTemplate("data-model-narrative/okr-2/prompt.md")
+        rendered = self.renderTemplate("data-model-narrative/" + self.data_model_narrative + "/prompt.md")
         with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
             new_file.write(rendered)
 
@@ -722,7 +725,7 @@ def loadFile(file_path):
         return file.read()
 
 def textualDiffApplyFunctionHandler(self, function_name, arguments):
-    with open('data-model-narrative/okr-2/types.json', 'r') as file:
+    with open('data-model-narrative/' + self.data_model_narrative + '/types.json', 'r') as file:
         types = json.load(file)
 
     print("Applying function calls")
@@ -732,7 +735,7 @@ def textualDiffApplyFunctionHandler(self, function_name, arguments):
         self.handleFunction(function_name, argument_dict, types)
 
     # write the types to the types.json file
-    with open('data-model-narrative/okr-2/types.json', 'w') as file:
+    with open('data-model-narrative/' + self.data_model_narrative + '/types.json', 'w') as file:
         json.dump(types, file, indent=4)
 
     self.generatePrompt()
