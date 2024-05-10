@@ -108,9 +108,9 @@ class GPTerminator:
             self.client = openai
             openai.api_key = self.openai_key
 
-        # self.render_and_get_tools_and_examples('functions/fine-granular')
-        # self.render_and_get_tools_and_examples('functions/high-level')
-        self.render_and_get_tools_and_examples('functions/textual')
+        # self.setToolsAndExamples('functions/fine-granular')
+        # self.setToolsAndExamples('functions/high-level')
+        self.setToolsAndExamples('functions/textual')
         # self.setToolsAndExamples('functions/one-pass')
 
 
