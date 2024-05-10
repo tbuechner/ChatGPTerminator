@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "modify_type",
-  "content": {{ load_file('functions/textual-diff/modify_type_example.json') | tojson }}
-}

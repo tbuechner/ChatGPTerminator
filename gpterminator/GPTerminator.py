@@ -41,7 +41,7 @@ class GPTerminator:
             "help": ["h", "prints a list of acceptable commands"],
             "pconf": [None, "prints out the users current config file"],
             "setconf": [None, "switches to a new config"],
-            "regen": ["r", "generates a new response from the last message"],
+            "regen": ["re", "generates a new response from the last message"],
             "new": ["n", "removes chat history and starts a new session"],
             "load": ["l", "loads a previously saved chatlog"],
             "save": ["s", "saves the chat history"],
@@ -49,6 +49,7 @@ class GPTerminator:
             "cpyall": ["ca", "copies all raw text from the previous response"],
             "ccpy": ["cc", "copies code blocks from the last response"],
             "apply": ["a", "applies the function calls"],
+            "run": ["r", "run types prompt"]
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -110,10 +111,14 @@ class GPTerminator:
             openai.api_key = self.openai_key
 
         # self.setToolsAndExamples('functions/fine-granular')
+
         # self.setToolsAndExamples('functions/high-level')
+
         # self.setToolsAndExamples('functions/textual')
+
         self.setToolsAndExamples('functions/textual-diff')
         self.apply_function_handler = textualDiffApplyFunctionHandler
+
         # self.setToolsAndExamples('functions/one-pass')
 
         self.generatePrompt()
@@ -299,7 +304,7 @@ class GPTerminator:
                     sys.exit()
                 elif cmd == "help" or cmd == "h":
                     self.printCmds()
-                elif cmd == "regen" or cmd == "r":
+                elif cmd == "regen" or cmd == "re":
                     if self.prompt_count > 0:
                         self.msg_hist.pop(-1)
                         last_msg = self.msg_hist.pop(-1)["content"]
@@ -328,6 +333,8 @@ class GPTerminator:
                     self.printBanner()
                 elif cmd == "apply" or cmd == "a":
                     self.applyFunctionCalls()
+                elif cmd == "run" or cmd == "r":
+                    self.runTypesPrompt()
             else:
                 self.printError(
                     f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help"
@@ -468,6 +475,12 @@ class GPTerminator:
                 # print(f"Function name: {function_name}")
                 # print(f"Argument: {arguments}\n")
                 self.apply_function_handler(self, function_name, arguments)
+
+    def runTypesPrompt(self):
+        with open('data-model-narrative/okr-2/generated/prompt.md', 'r') as file:
+            prompt = file.read()
+
+        self.getResponse(prompt)
 
     def saveFunctionCalls(self, function_name_2_arguments, full_reply_content):
         file_names = []
@@ -680,12 +693,23 @@ def textualDiffApplyFunctionHandler(self, function_name, arguments):
             argument_dict = json.loads(argument)
             types.append(argument_dict)
 
-    if 'modify_type' == function_name:
+    if 'add_attribute' == function_name:
         for argument in arguments:
             argument_dict = json.loads(argument)
-            for i, type in enumerate(types):
-                if type['name'] == argument_dict['name']:
-                    types[i] = argument_dict
+            for type_ in types:
+                if type_['name'] == argument_dict['typeName']:
+                    type_attributes = type_['attributes']
+                    type_attributes.append(argument_dict)
+
+    if 'delete_attribute' == function_name:
+        for argument in arguments:
+            argument_dict = json.loads(argument)
+            for type_ in types:
+                if type_['name'] == argument_dict['typeName']:
+                    type_attributes = type_['attributes']
+                    for i, attribute in enumerate(type_attributes):
+                        if attribute['name'] == argument_dict['name']:
+                            type_attributes.pop(i)
 
     if 'delete_type' == function_name:
         for argument in arguments:
@@ -699,3 +723,8 @@ def textualDiffApplyFunctionHandler(self, function_name, arguments):
         json.dump(types, file, indent=4)
 
     self.generatePrompt()
+
+    self.msg_hist = self.msg_hist[:1]
+    self.prompt_count = 0
+    self.printBanner()
+

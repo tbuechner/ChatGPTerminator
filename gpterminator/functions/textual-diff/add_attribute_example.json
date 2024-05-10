@@ -1,0 +1,8 @@
+{
+  "typeName": "Risk",
+  "attribute": {
+    "name": "Description",
+    "type": "Text",
+    "description": "Detailed description of the risk"
+  }
+}

@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "modify_type",
-    "description": "Modify a type of the data model. This function can be used to change the attributes of a type in the data model. The function will fail if a type with the given name does not exist.",
-    "parameters": {{ load_file('functions/textual-diff/modify_type_schema.json') }}
-  }
-}

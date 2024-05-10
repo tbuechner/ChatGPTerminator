@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "typeName": {
+      "type": "string",
+      "description": "The name of the type. Descriptive name to be used in the UI"
+    },
+    "attribute": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the attribute. Descriptive name to be used in the UI"
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of the attribute. One of: Text, Number, Date, Boolean, Reference"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the attribute. Descriptive text to be used in the UI"
+        }
+      },
+      "required": ["name", "type", "description"]
+    }
+  },
+  "additionalProperties": false
+}

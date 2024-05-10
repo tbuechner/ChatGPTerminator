@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "add_attribute",
+    "description": "Add an attribute to an existing type. The function will fail if a type with the given name does not exist.",
+    "parameters": {{ load_file('functions/textual-diff/add_attribute_schema.json') }}
+  }
+}
