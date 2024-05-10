@@ -2,7 +2,9 @@
 ### Cycle
 | Attribute    | Type                  | Description                      |
 |--------------|-----------------------|----------------------------------|
-| Objectives | Reference | References to objectives part of this cycle. | 
+| Year | Number | The year in which the cycle occurs. | 
+| Quarter | Text Enumeration | The specific quarter of the year. Possible values might include 'Q1', 'Q2', 'Q3', and 'Q4'. | 
+| Status | Text Enumeration | The current status of the cycle, such as 'Planning', 'Active', 'Reviewing', 'Completed'. | 
 
 ### Key Result
 | Attribute    | Type                  | Description                      |

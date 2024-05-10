@@ -3,9 +3,19 @@
         "name": "Cycle",
         "attributes": [
             {
-                "name": "Objectives",
-                "type": "Reference",
-                "description": "References to objectives part of this cycle."
+                "name": "Year",
+                "type": "Number",
+                "description": "The year in which the cycle occurs."
+            },
+            {
+                "name": "Quarter",
+                "type": "Text Enumeration",
+                "description": "The specific quarter of the year. Possible values might include 'Q1', 'Q2', 'Q3', and 'Q4'."
+            },
+            {
+                "name": "Status",
+                "type": "Text Enumeration",
+                "description": "The current status of the cycle, such as 'Planning', 'Active', 'Reviewing', 'Completed'."
             }
         ]
     },

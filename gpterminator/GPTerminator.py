@@ -449,7 +449,7 @@ class GPTerminator:
         # print("function_name_2_arguments: " + str(function_name_2_arguments))
 
         # print(str(function_name_2_arguments))
-        file_names = self.saveFunctionCalls(function_name_2_arguments, full_reply_content_shortened)
+        self.saveFunctionCalls(function_name_2_arguments, full_reply_content_shortened)
         self.function_name_2_arguments = function_name_2_arguments
 
         # if function_name_2_arguments:
@@ -468,7 +468,7 @@ class GPTerminator:
             function_name_2_arguments[function_name] = [function_arguments]
 
     def applyFunctionCalls(self):
-        # print("applyFunctionCalls, self.function_name_2_arguments: " + str(self.function_name_2_arguments))
+        print("applyFunctionCalls, self.function_name_2_arguments: " + str(self.function_name_2_arguments))
         if self.function_name_2_arguments and self.apply_function_handler is not None:
             # iterate over the function_name_2_arguments dictionary
             for function_name, arguments in self.function_name_2_arguments.items():
@@ -483,10 +483,8 @@ class GPTerminator:
         self.getResponse(prompt)
 
     def saveFunctionCalls(self, function_name_2_arguments, full_reply_content):
-        file_names = []
         if full_reply_content:
-            file_name = f"{self.get_file_name()}.md"
-            file_names.append(file_name)
+            file_name = f"{self.get_file_name()}-text.md"
             with open(Path(self.save_path) / file_name, "w") as f:
                 f.write(full_reply_content)
 
@@ -495,7 +493,6 @@ class GPTerminator:
                 if function_name is not None and arguments is not None:
                     for argument in arguments:
                         file_name = f"{self.get_file_name()}-{function_name}.json"
-                        file_names.append(file_name)
                         with open(Path(self.save_path) / file_name, "w") as f:
                             json_object = json.loads(argument)
                             json.dump(json_object, f, indent=4)
@@ -509,8 +506,6 @@ class GPTerminator:
                     #     print("JSON object is valid")
                     # except jsonschema.exceptions.ValidationError as ve:
                     #     print("JSON object is not valid.")
-
-        return file_names
 
     def get_file_name(self):
         pattern = r'^\d{4}-'
@@ -730,8 +725,10 @@ def textualDiffApplyFunctionHandler(self, function_name, arguments):
     with open('data-model-narrative/okr-2/types.json', 'r') as file:
         types = json.load(file)
 
+    print("Applying function calls")
     for argument in arguments:
         argument_dict = json.loads(argument)
+        print(f"Function: {function_name}")
         self.handleFunction(function_name, argument_dict, types)
 
     # write the types to the types.json file
@@ -742,5 +739,6 @@ def textualDiffApplyFunctionHandler(self, function_name, arguments):
 
     self.msg_hist = self.msg_hist[:1]
     self.prompt_count = 0
-    self.printBanner()
+
+    print("Session has been reset. You can now run the prompt again.")
 
