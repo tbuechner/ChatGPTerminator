@@ -14,4 +14,14 @@ Here is the structured data model for the OKR management application presented i
 
 ### Adapted Data Model
 
-Provide instructions for how to adapt the data model to meet the specific requirements of the organization or project. This may include adding new types, modifying existing attributes, or creating custom relationships between entities.
+Provide instructions for how to adapt the data model to meet the specific requirements of the organization or project. 
+
+This may include adding new types, modifying existing attributes, or creating custom relationships between entities.
+
+The following operations can be performed on the data model:
+* Add new types with relevant attributes.
+* Add attributes to existing types.
+* Delete attributes from existing types.
+* Delete types that are no longer needed.
+
+If you think the current data model fits the requirements of the application - give this as the response: "The current data model meets the requirements of the application."
