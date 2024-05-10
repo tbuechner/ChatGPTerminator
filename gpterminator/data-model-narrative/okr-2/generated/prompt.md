@@ -56,6 +56,7 @@ Here is the structured data model for the OKR management application presented i
 | Description | Rich Text | Detailed description of the objective. | 
 | Status | Text Enumeration | Possible statuses: 'Not Started', 'In Progress', 'Completed' | 
 | Owner | Reference | Reference to the user in charge of the objective. | 
+| Cycle | Reference | Reference to the cycle this objective belongs to. | 
 
 
 ### Adapted Data Model

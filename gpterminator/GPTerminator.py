@@ -679,6 +679,48 @@ class GPTerminator:
 
         return rendered_string
 
+    def handleFunction(self, function_name, argument_dict, types):
+        if 'add_type' == function_name:
+            for type_ in types:
+                if type_['name'] == argument_dict['name']:
+                    print(f"Type with name {argument_dict['name']} already exists")
+                    return
+            print(f"Adding type with name {argument_dict['name']}")
+            types.append(argument_dict)
+            return
+
+        if 'add_attribute' == function_name:
+            for type_ in types:
+                if type_['name'] == argument_dict['typeName']:
+                    type_attributes = type_['attributes']
+                    type_attributes.append(argument_dict['attribute'])
+                    print(f"Adding attribute with name {argument_dict['attribute']['name']} to type {argument_dict['typeName']}")
+                    return
+            print(f"Type with name {argument_dict['typeName']} does not exist")
+            return
+
+        if 'delete_attribute' == function_name:
+            for type_ in types:
+                if type_['name'] == argument_dict['typeName']:
+                    type_attributes = type_['attributes']
+                    for i, attribute in enumerate(type_attributes):
+                        if attribute['name'] == argument_dict['name']:
+                            print(f"Deleting attribute with name {argument_dict['name']} from type {argument_dict['typeName']}")
+                            type_attributes.pop(i)
+                            return
+            print(f"Attribute with name {argument_dict['name']} does not exist in type {argument_dict['typeName']}")
+
+        if 'delete_type' == function_name:
+            for i, type in enumerate(types):
+                if type['name'] == argument_dict['name']:
+                    types.pop(i)
+                    print(f"Deleting type with name {argument_dict['name']}")
+                    return
+            print(f"Type with name {argument_dict['name']} does not exist")
+            return
+
+        print(f"Function {function_name} not found")
+
 def loadFile(file_path):
     # Read the contents of the file
     with open(file_path, "r") as file:
@@ -688,35 +730,9 @@ def textualDiffApplyFunctionHandler(self, function_name, arguments):
     with open('data-model-narrative/okr-2/types.json', 'r') as file:
         types = json.load(file)
 
-    if 'add_type' == function_name:
-        for argument in arguments:
-            argument_dict = json.loads(argument)
-            types.append(argument_dict)
-
-    if 'add_attribute' == function_name:
-        for argument in arguments:
-            argument_dict = json.loads(argument)
-            for type_ in types:
-                if type_['name'] == argument_dict['typeName']:
-                    type_attributes = type_['attributes']
-                    type_attributes.append(argument_dict)
-
-    if 'delete_attribute' == function_name:
-        for argument in arguments:
-            argument_dict = json.loads(argument)
-            for type_ in types:
-                if type_['name'] == argument_dict['typeName']:
-                    type_attributes = type_['attributes']
-                    for i, attribute in enumerate(type_attributes):
-                        if attribute['name'] == argument_dict['name']:
-                            type_attributes.pop(i)
-
-    if 'delete_type' == function_name:
-        for argument in arguments:
-            argument_dict = json.loads(argument)
-            for i, type in enumerate(types):
-                if type['name'] == argument_dict['name']:
-                    types.pop(i)
+    for argument in arguments:
+        argument_dict = json.loads(argument)
+        self.handleFunction(function_name, argument_dict, types)
 
     # write the types to the types.json file
     with open('data-model-narrative/okr-2/types.json', 'w') as file:

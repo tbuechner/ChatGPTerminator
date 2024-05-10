@@ -56,6 +56,11 @@
                 "name": "Owner",
                 "type": "Reference",
                 "description": "Reference to the user in charge of the objective."
+            },
+            {
+                "name": "Cycle",
+                "type": "Reference",
+                "description": "Reference to the cycle this objective belongs to."
             }
         ]
     }
