@@ -108,9 +108,9 @@ class GPTerminator:
             self.client = openai
             openai.api_key = self.openai_key
 
-        # self.setToolsAndExamples('functions/fine-granular')
+        self.setToolsAndExamples('functions/fine-granular')
         # self.setToolsAndExamples('functions/high-level')
-        self.setToolsAndExamples('functions/textual')
+        # self.setToolsAndExamples('functions/textual')
         # self.setToolsAndExamples('functions/one-pass')
 
 
@@ -377,7 +377,8 @@ class GPTerminator:
         start_time = time.time()
 
         function_name_2_arguments = {}
-        full_reply_content = ""
+        # full_reply_content = ""
+        full_reply_content_shortened = ""
         function_name = None
         function_arguments = ""
         log = ""
@@ -396,29 +397,31 @@ class GPTerminator:
                             if tool_call.function.name is not None:
                                 log += f"tool_call.function.name: {tool_call.function.name}\n"
                                 if function_name is not None:
-                                    full_reply_content += "\n```\n"
+                                    # full_reply_content += "\n```\n"
                                     self.addToFunctionName2Arguments(function_name, function_arguments, function_name_2_arguments)
 
                                 function_name = tool_call.function.name
 
-                                full_reply_content += "Function: " + function_name + "\n"
-                                full_reply_content += "```json\n"
+                                # full_reply_content += "Function: " + function_name + "\n"
+                                full_reply_content_shortened += "Function: " + function_name + "\n"
+                                # full_reply_content += "```json\n"
                                 function_arguments = ""
 
-                            full_reply_content += "".join(function_call_arguments)
+                            # full_reply_content += "".join(function_call_arguments)
 
                     if chunk_message.content is not None:
-                        full_reply_content += "".join(chunk_message.content)
+                        # full_reply_content += "".join(chunk_message.content)
+                        full_reply_content_shortened += "".join(chunk_message.content)
 
                     encoding = tiktoken.encoding_for_model(self.model)
-                    num_tokens = len(encoding.encode(full_reply_content))
+                    num_tokens = len(encoding.encode(full_reply_content_shortened))
                     time_elapsed_s = time.time() - start_time
                     subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/] | "
                     subtitle_str += (
                         f"[bright_black]Time Elapsed:[/][bold yellow] {time_elapsed_s:.1f}s [/]"
                     )
                     md = Panel(
-                        Markdown(full_reply_content, self.code_theme),
+                        Markdown(full_reply_content_shortened, self.code_theme),
                         border_style="bright_black",
                         title="[bright_black]Assistant[/]",
                         title_align="left",
