@@ -111,6 +111,7 @@ class GPTerminator:
         # self.render_and_get_tools_and_examples('functions/fine-granular')
         # self.render_and_get_tools_and_examples('functions/high-level')
         self.render_and_get_tools_and_examples('functions/textual')
+        # self.setToolsAndExamples('functions/one-pass')
 
 
     def printError(self, msg):
@@ -578,7 +579,7 @@ class GPTerminator:
                 self.getResponse(usr_input)
 
 
-    def render_and_get_tools_and_examples(self, folder_name):
+    def setToolsAndExamples(self, folder_name):
         with open(os.path.join(folder_name, "system_prompt.txt"), "r") as file:
             self.msg_hist.append({"role": "system", "content": file.read()})
 
@@ -589,7 +590,7 @@ class GPTerminator:
                 if file.endswith('function.json'):
                     # render the template
                     template_file = os.path.join(root, file)
-                    rendered_string = self.render_template(template_file)
+                    rendered_string = self.renderTemplate(template_file)
 
                     # parse the rendered string to a dictionary
                     tool = json.loads(rendered_string)
@@ -598,7 +599,7 @@ class GPTerminator:
                 if file.endswith('generate_boolean_attribute_example_msg.json'):
                     # render the template
                     template_file = os.path.join(root, file)
-                    rendered_string = self.render_template(template_file)
+                    rendered_string = self.renderTemplate(template_file)
 
                     # parse the rendered string to a dictionary
                     example = json.loads(rendered_string)
@@ -609,7 +610,7 @@ class GPTerminator:
         else:
             self.tools = None
 
-    def render_template(self, template_file):
+    def renderTemplate(self, template_file):
         # Read the template file
         with open(template_file, "r") as file:
             template_string = file.read()
@@ -619,12 +620,12 @@ class GPTerminator:
 
         # Render the template with the file contents
         rendered_string = template.render(
-            load_file=load_file
+            load_file=loadFile
         )
 
         return rendered_string
 
-def load_file(file_path):
+def loadFile(file_path):
     # Read the contents of the file
     with open(file_path, "r") as file:
         return file.read()
