@@ -47,7 +47,8 @@ class GPTerminator:
             "save": ["s", "saves the chat history"],
             "ifile": [None, "allows the user to analyze files with a prompt"],
             "cpyall": ["ca", "copies all raw text from the previous response"],
-            "ccpy": ["cc", "copies code blocks from the last response"]
+            "ccpy": ["cc", "copies code blocks from the last response"],
+            "apply": ["a", "applies the function calls"],
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -112,10 +113,10 @@ class GPTerminator:
         # self.setToolsAndExamples('functions/high-level')
         # self.setToolsAndExamples('functions/textual')
         self.setToolsAndExamples('functions/textual-diff')
+        self.apply_function_handler = textualDiffApplyFunctionHandler
         # self.setToolsAndExamples('functions/one-pass')
 
         self.generatePrompt()
-
 
     def printError(self, msg):
         self.console.print(Panel(f"[bold red]ERROR: [/]{msg}", border_style="red"))
@@ -325,6 +326,8 @@ class GPTerminator:
                     self.msg_hist = self.msg_hist[:1]
                     self.prompt_count = 0
                     self.printBanner()
+                elif cmd == "apply" or cmd == "a":
+                    self.applyFunctionCalls()
             else:
                 self.printError(
                     f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help"
@@ -439,7 +442,8 @@ class GPTerminator:
         # print("function_name_2_arguments: " + str(function_name_2_arguments))
 
         # print(str(function_name_2_arguments))
-        file_names = self.saveToolCalls(function_name_2_arguments, full_reply_content_shortened)
+        file_names = self.saveFunctionCalls(function_name_2_arguments, full_reply_content_shortened)
+        self.function_name_2_arguments = function_name_2_arguments
 
         # if function_name_2_arguments:
         #     for function_name, arguments in function_name_2_arguments.items():
@@ -456,7 +460,16 @@ class GPTerminator:
         else:
             function_name_2_arguments[function_name] = [function_arguments]
 
-    def saveToolCalls(self, function_name_2_arguments, full_reply_content):
+    def applyFunctionCalls(self):
+        # print("applyFunctionCalls, self.function_name_2_arguments: " + str(self.function_name_2_arguments))
+        if self.function_name_2_arguments and self.apply_function_handler is not None:
+            # iterate over the function_name_2_arguments dictionary
+            for function_name, arguments in self.function_name_2_arguments.items():
+                # print(f"Function name: {function_name}")
+                # print(f"Argument: {arguments}\n")
+                self.apply_function_handler(self, function_name, arguments)
+
+    def saveFunctionCalls(self, function_name_2_arguments, full_reply_content):
         file_names = []
         if full_reply_content:
             file_name = f"{self.get_file_name()}.md"
@@ -657,3 +670,18 @@ def loadFile(file_path):
     # Read the contents of the file
     with open(file_path, "r") as file:
         return file.read()
+
+def textualDiffApplyFunctionHandler(self, function_name, arguments):
+    with open('data-model-narrative/okr-2/types.json', 'r') as file:
+        types = json.load(file)
+
+    if 'add_type' == function_name:
+        for argument in arguments:
+            argument_dict = json.loads(argument)
+            types.append(argument_dict)
+
+    print("types: " + str(types))
+
+    # write the types to the types.json file
+    with open('data-model-narrative/okr-2/types.json', 'w') as file:
+        json.dump(types, file, indent=4)
