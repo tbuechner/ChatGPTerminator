@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the type. Descriptive name to be used in the UI"
+    }
+  },
+  "additionalProperties": false
+}

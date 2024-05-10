@@ -680,8 +680,22 @@ def textualDiffApplyFunctionHandler(self, function_name, arguments):
             argument_dict = json.loads(argument)
             types.append(argument_dict)
 
-    print("types: " + str(types))
+    if 'modify_type' == function_name:
+        for argument in arguments:
+            argument_dict = json.loads(argument)
+            for i, type in enumerate(types):
+                if type['name'] == argument_dict['name']:
+                    types[i] = argument_dict
+
+    if 'delete_type' == function_name:
+        for argument in arguments:
+            argument_dict = json.loads(argument)
+            for i, type in enumerate(types):
+                if type['name'] == argument_dict['name']:
+                    types.pop(i)
 
     # write the types to the types.json file
     with open('data-model-narrative/okr-2/types.json', 'w') as file:
         json.dump(types, file, indent=4)
+
+    self.generatePrompt()

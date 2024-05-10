@@ -1,0 +1,15 @@
+{
+  "name": "Risk",
+  "attributes": [
+    {
+      "name": "Description",
+      "type": "Text",
+      "description": "Detailed description of the risk"
+    },
+    {
+      "name": "Probability",
+      "type": "Number",
+      "description": "Probability of the risk occurring"
+    }
+  ]
+}
