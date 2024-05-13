@@ -1,16 +1,16 @@
 ### Application Description
 
-{{ load_file('data-model-narrative/okr-2/capabilities.md') }}
+{{ load_file('data-model-narrative/' ~ application_name ~ '/capabilities.md') }}
 
 ### Data Modeling - Meta Model
 
-{{ load_file('data-model-narrative/meta-model.md') }}
+{{ load_file('meta-model.md') }}
 
 ### Current Data Model
 
-Here is the structured data model for the OKR management application presented in tabular format for each type with their corresponding attributes:
+Here is the structured data model for the application presented in tabular format for each type with their corresponding attributes:
 
-{{ load_file('data-model-narrative/okr-2/generated/types.md') }}
+{{ load_file('data-model-narrative/' ~ application_name ~ '/generated/types.md') }}
 
 ### Adapted Data Model
 

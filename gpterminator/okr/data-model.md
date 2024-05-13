@@ -1,4 +1,4 @@
-Here is the structured data model for the OKR management application presented in tabular format for each type with their corresponding attributes:
+Here is the structured data model for the application presented in tabular format for each type with their corresponding attributes:
 
 ### 1. Cycle
 | Attribute    | Type                  | Description                      |

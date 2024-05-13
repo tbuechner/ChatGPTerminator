@@ -1,4 +1,4 @@
-{% for item in data %}
+{% for item in types %}
 ### {{ item.name }}
 | Attribute    | Type                  | Description                      |
 |--------------|-----------------------|----------------------------------|{% for attribute in item.attributes %}

@@ -1,4 +1,4 @@
-In order to implement the application, I would need to create a data model that stores the necessary information for managing OKRs effectively.
+In order to implement the application, I would need to create a data model that stores the necessary information for managing data needed for the application.
 
 The data model consists of types and attributes. Types are the entities that represent different concepts within the application, while attributes define the properties of these entities.
 

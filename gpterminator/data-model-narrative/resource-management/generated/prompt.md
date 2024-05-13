@@ -1,10 +1,10 @@
 ### Application Description
 
-I want to build an application which can be used to manage a Large Solution SAFe process. 
+I want to build an application which can be used for resource management. 
 
 ### Data Modeling - Meta Model
 
-In order to implement the application, I would need to create a data model that stores the necessary information for managing OKRs effectively.
+In order to implement the application, I would need to create a data model that stores the necessary information for managing data needed for the application.
 
 The data model consists of types and attributes. Types are the entities that represent different concepts within the application, while attributes define the properties of these entities.
 
@@ -28,7 +28,7 @@ The name of the reference should be the name of the type it is referring to. For
 
 ### Current Data Model
 
-Here is the structured data model for the OKR management application presented in tabular format for each type with their corresponding attributes:
+Here is the structured data model for the application presented in tabular format for each type with their corresponding attributes:
 
 
 

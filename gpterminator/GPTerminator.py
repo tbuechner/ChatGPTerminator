@@ -96,39 +96,6 @@ class GPTerminator:
             self.model = config[self.config_selected]["Model"]
 
 
-    def init(self):
-        if not os.path.exists(self.save_path):
-            os.makedirs(self.save_path)
-        self.setApiKey()
-
-        if(self.config_selected == "AZURE_CONFIG"):
-            self.client = AzureOpenAI(
-                api_version = self.api_version,
-                azure_endpoint = self.azure_openai_endpoint,
-                azure_deployment = self.azure_deployment,
-                api_key = self.azure_openai_api_key
-            )
-        elif(self.config_selected == "OPENAI_CONFIG"):
-            self.client = openai
-            openai.api_key = self.openai_key
-
-        # self.setToolsAndExamples('functions/fine-granular')
-
-        # self.setToolsAndExamples('functions/high-level')
-
-        # self.setToolsAndExamples('functions/textual')
-
-        # self.data_model_narrative = 'okr-2'
-        # self.data_model_narrative = 'large-safe'
-        self.data_model_narrative = 'resource-management'
-
-        self.setToolsAndExamples('functions/textual-diff')
-        self.apply_function_handler = textualDiffApplyFunctionHandler
-
-        # self.setToolsAndExamples('functions/one-pass')
-
-        self.generatePrompt()
-
     def printError(self, msg):
         self.console.print(Panel(f"[bold red]ERROR: [/]{msg}", border_style="red"))
 
@@ -137,7 +104,6 @@ class GPTerminator:
         for cmd, desc in self.cmds.items():
             short = "" if desc[0] is None else f"({desc[0]})"
             self.console.print(f"[bright_black]{self.cmd_init}{cmd} {short}: {desc[1]}[/]")
-
 
     def copyCode(self):
         last_resp = self.msg_hist[-1]["content"]
@@ -185,6 +151,7 @@ class GPTerminator:
                 return
             index += 2
 
+
     def printConfig(self):
         config = configparser.ConfigParser()
         config.read(self.config_path)
@@ -195,7 +162,6 @@ class GPTerminator:
                 f"[bright_black]{setting}: {config[self.config_selected][setting]}[/]"
             )
 
-
     def copyAll(self):
         if self.prompt_count == 0:
             self.printError("cannot run cpyall when there are no responses")
@@ -203,6 +169,7 @@ class GPTerminator:
         last_resp = self.msg_hist[-1]["content"]
         pyperclip.copy(last_resp)
         self.console.print(f"[bright_black]Copied text to keyboard...[/]")
+
 
     def analyzeFile(self):
         while True:
@@ -282,6 +249,85 @@ class GPTerminator:
                 )
         else:
             return user_in
+
+    def setApiKey(self):
+        self.api_key = os.getenv("OPENAI_API_KEY")
+        if self.api_key == None or self.api_key == "":
+            self.printError("the OPENAI_API_KEY environment variable is missing")
+            sys.exit()
+
+    def printBanner(self):
+        welcome_ascii = """                                                        
+ _____ _____ _____               _         _           
+|   __|  _  |_   _|___ ___ _____|_|___ ___| |_ ___ ___ 
+|  |  |   __| | | | -_|  _|     | |   | .'|  _| . |  _|
+|_____|__|    |_| |___|_| |_|_|_|_|_|_|__,|_| |___|_|  
+"""
+        self.console.print(f"[bold green]{welcome_ascii}[/bold green]", end="")
+        self.console.print(f"[bright_black]Version: v0.1.11[/]")
+        self.console.print(f"[bright_black]Model: {self.model}[/]")
+        self.console.print(
+            f"[bright_black]Type '{self.cmd_init}quit' to quit the program; '{self.cmd_init}help' for a list of cmds[/]\n"
+        )
+
+    def checkDirs(self):
+        # get paths
+        if "APPDATA" in os.environ:
+            confighome = os.environ["APPDATA"]
+        elif "XDG_CONFIG_HOME" in os.environ:
+            confighome = os.environ["XDG_CONFIG_HOME"]
+        else:
+            confighome = os.path.join(os.environ["HOME"], ".config")
+        configpath = os.path.join(confighome, "gpterminator")
+        savespath = os.path.join(configpath, "saves")
+
+        # check if paths/files exist
+        config_exists = os.path.exists(os.path.join(configpath, "config.ini"))
+        configpath_exists = os.path.exists(configpath)
+        saves_exist = os.path.exists(savespath)
+
+        if configpath_exists == False:
+            self.console.print(f"[bright_black]Initializing config path ({configpath})...[/]")
+            os.mkdir(configpath)
+
+        # make paths/files
+        if config_exists == False:
+            full_config_path = os.path.join(configpath, "config.ini")
+            self.console.print(f"[bright_black]Initializing config file ({full_config_path})...[/]")
+            config = configparser.ConfigParser()
+            config["SELECTED_CONFIG"] = {"configname": "BASE_CONFIG"}
+            config["BASE_CONFIG"] = {
+                "ModelName": "gpt-3.5-turbo",
+                "Temperature": "1",
+                "PresencePenalty": "0",
+                "FrequencyPenalty": "0",
+                "CommandInitiator": "!",
+                "SavePath": f"{savespath}",
+                "CodeTheme": "monokai",
+            }
+            with open(full_config_path, "w") as configfile:
+                config.write(configfile)
+
+        if saves_exist == False:
+            self.console.print(f"[bright_black]Initializing save path ({savespath})...[/]")
+            os.mkdir(savespath)
+
+    def run(self, passed_input=None):
+        self.checkDirs()
+        self.loadConfig()
+        self.init()
+        self.printBanner()
+
+        if passed_input is not None:
+            self.prompt_count += 1
+            self.getResponse(passed_input)
+
+        while True:
+            usr_input = self.queryUser()
+
+            if usr_input is not None:
+                self.prompt_count += 1
+                self.getResponse(usr_input)
 
     def getResponse(self, usr_prompt):
         self.msg_hist.append({"role": "user", "content": usr_prompt})
@@ -402,21 +448,6 @@ class GPTerminator:
         self.console.print()
         self.msg_hist.append({"role": "assistant", "content": full_reply_content_shortened})
 
-    def applyFunctionCalls(self):
-        print("applyFunctionCalls, self.function_name_2_arguments: " + str(self.function_name_2_arguments))
-        if self.function_name_2_arguments and self.apply_function_handler is not None:
-            # iterate over the function_name_2_arguments dictionary
-            for function_name, arguments in self.function_name_2_arguments.items():
-                # print(f"Function name: {function_name}")
-                # print(f"Argument: {arguments}\n")
-                self.apply_function_handler(self, function_name, arguments)
-
-    def runTypesPrompt(self):
-        with open('data-model-narrative/' + self.data_model_narrative + '/generated/prompt.md', 'r') as file:
-            prompt = file.read()
-
-        self.getResponse(prompt)
-
     def saveFunctionCalls(self, function_name_2_arguments, full_reply_content):
         if full_reply_content:
             file_name = f"{get_file_name(self.save_path)}-text.md"
@@ -443,105 +474,78 @@ class GPTerminator:
                     #     print("JSON object is not valid.")
 
 
-    def setApiKey(self):
-        self.api_key = os.getenv("OPENAI_API_KEY")
-        if self.api_key == None or self.api_key == "":
-            self.printError("the OPENAI_API_KEY environment variable is missing")
-            sys.exit()
+    def init(self):
+        if not os.path.exists(self.save_path):
+            os.makedirs(self.save_path)
+        self.setApiKey()
 
-    def printBanner(self):
-        welcome_ascii = """                                                        
- _____ _____ _____               _         _           
-|   __|  _  |_   _|___ ___ _____|_|___ ___| |_ ___ ___ 
-|  |  |   __| | | | -_|  _|     | |   | .'|  _| . |  _|
-|_____|__|    |_| |___|_| |_|_|_|_|_|_|__,|_| |___|_|  
-"""
-        self.console.print(f"[bold green]{welcome_ascii}[/bold green]", end="")
-        self.console.print(f"[bright_black]Version: v0.1.11[/]")
-        self.console.print(f"[bright_black]Model: {self.model}[/]")
-        self.console.print(
-            f"[bright_black]Type '{self.cmd_init}quit' to quit the program; '{self.cmd_init}help' for a list of cmds[/]\n"
-        )
+        if(self.config_selected == "AZURE_CONFIG"):
+            self.client = AzureOpenAI(
+                api_version = self.api_version,
+                azure_endpoint = self.azure_openai_endpoint,
+                azure_deployment = self.azure_deployment,
+                api_key = self.azure_openai_api_key
+            )
+        elif(self.config_selected == "OPENAI_CONFIG"):
+            self.client = openai
+            openai.api_key = self.openai_key
 
-    def checkDirs(self):
-        # get paths
-        if "APPDATA" in os.environ:
-            confighome = os.environ["APPDATA"]
-        elif "XDG_CONFIG_HOME" in os.environ:
-            confighome = os.environ["XDG_CONFIG_HOME"]
-        else:
-            confighome = os.path.join(os.environ["HOME"], ".config")
-        configpath = os.path.join(confighome, "gpterminator")
-        savespath = os.path.join(configpath, "saves")
+        # self.setToolsAndExamples('functions/fine-granular')
 
-        # check if paths/files exist
-        config_exists = os.path.exists(os.path.join(configpath, "config.ini"))
-        configpath_exists = os.path.exists(configpath)
-        saves_exist = os.path.exists(savespath)
+        # self.setToolsAndExamples('functions/high-level')
 
-        if configpath_exists == False:
-            self.console.print(f"[bright_black]Initializing config path ({configpath})...[/]")
-            os.mkdir(configpath)
+        # self.setToolsAndExamples('functions/textual')
 
-        # make paths/files
-        if config_exists == False:
-            full_config_path = os.path.join(configpath, "config.ini")
-            self.console.print(f"[bright_black]Initializing config file ({full_config_path})...[/]")
-            config = configparser.ConfigParser()
-            config["SELECTED_CONFIG"] = {"configname": "BASE_CONFIG"}
-            config["BASE_CONFIG"] = {
-                "ModelName": "gpt-3.5-turbo",
-                "Temperature": "1",
-                "PresencePenalty": "0",
-                "FrequencyPenalty": "0",
-                "CommandInitiator": "!",
-                "SavePath": f"{savespath}",
-                "CodeTheme": "monokai",
-            }
-            with open(full_config_path, "w") as configfile:
-                config.write(configfile)
+        # self.application_name = 'okr-2'
+        # self.application_name = 'large-safe'
+        self.application_name = 'resource-management'
 
-        if saves_exist == False:
-            self.console.print(f"[bright_black]Initializing save path ({savespath})...[/]")
-            os.mkdir(savespath)
+        self.setToolsAndExamples('functions/textual-diff')
+        self.apply_function_handler = textualDiffApplyFunctionHandler
 
-    def run(self, passed_input=None):
-        self.checkDirs()
-        self.loadConfig()
-        self.init()
-        self.printBanner()
-
-        if passed_input is not None:
-            self.prompt_count += 1
-            self.getResponse(passed_input)
-
-        while True:
-            usr_input = self.queryUser()
-
-            if usr_input is not None:
-                self.prompt_count += 1
-                self.getResponse(usr_input)
+        # self.setToolsAndExamples('functions/one-pass')
+        self.generateAllPrompts()
 
 
-    def generatePrompt(self):
-        folder_name_generated = 'data-model-narrative/' + self.data_model_narrative + '/generated'
-        if os.path.exists(folder_name_generated):
-            os.system("rm -r " + folder_name_generated)
+    def applyFunctionCalls(self):
+        print("applyFunctionCalls, self.function_name_2_arguments: " + str(self.function_name_2_arguments))
+        if self.function_name_2_arguments and self.apply_function_handler is not None:
+            # iterate over the function_name_2_arguments dictionary
+            for function_name, arguments in self.function_name_2_arguments.items():
+                # print(f"Function name: {function_name}")
+                # print(f"Argument: {arguments}\n")
+                self.apply_function_handler(self, function_name, arguments)
 
-        # create folder folder_name_generated
-        os.mkdir(folder_name_generated)
+    def runTypesPrompt(self):
+        with open('data-model-narrative/' + self.application_name + '/generated/prompt.md', 'r') as file:
+            prompt = file.read()
 
-        # load content of file types.json into the variable types
-        with open('data-model-narrative/' + self.data_model_narrative + '/types.json', 'r') as file:
-            types = json.load(file)
+        print("prompt: " + prompt)
 
-        rendered = renderTemplate("data-model-narrative/types-template.md", types)
-        with open(os.path.join(folder_name_generated, "types.md"), "w") as new_file:
-            new_file.write(rendered)
+        self.getResponse(prompt)
 
-        rendered = renderTemplate("data-model-narrative/" + self.data_model_narrative + "/prompt.md")
-        with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
-            new_file.write(rendered)
+
+    def generateAllPrompts(self):
+        for dir in os.listdir('data-model-narrative'):
+            if os.path.isdir(os.path.join('data-model-narrative', dir)):
+                folder_name_generated = 'data-model-narrative/' + dir + '/generated'
+                if os.path.exists(folder_name_generated):
+                    os.system("rm -r " + folder_name_generated)
+
+                # create folder folder_name_generated
+                os.mkdir(folder_name_generated)
+
+                # load content of file types.json into the variable types
+                with open('data-model-narrative/' + dir + '/types.json', 'r') as file:
+                    types = json.load(file)
+
+                rendered = renderTemplate('data-model-narrative/types-template.md', types)
+                with open(os.path.join(folder_name_generated, "types.md"), "w") as new_file:
+                    new_file.write(rendered)
+
+                rendered = renderTemplate('data-model-narrative/prompt-template.md', None, dir)
+                with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
+                    new_file.write(rendered)
 
 
     def setToolsAndExamples(self, folder_name):
@@ -621,7 +625,7 @@ class GPTerminator:
         print(f"Function {function_name} not found")
 
 def textualDiffApplyFunctionHandler(self, function_name, arguments):
-    with open('data-model-narrative/' + self.data_model_narrative + '/types.json', 'r') as file:
+    with open('data-model-narrative/' + self.application_name + '/types.json', 'r') as file:
         types = json.load(file)
 
     print("Applying function calls")
@@ -631,10 +635,10 @@ def textualDiffApplyFunctionHandler(self, function_name, arguments):
         self.handleFunction(function_name, argument_dict, types)
 
     # write the types to the types.json file
-    with open('data-model-narrative/' + self.data_model_narrative + '/types.json', 'w') as file:
+    with open('data-model-narrative/' + self.application_name + '/types.json', 'w') as file:
         json.dump(types, file, indent=4)
 
-    self.generatePrompt()
+    self.generateAllPrompts()
 
     self.msg_hist = self.msg_hist[:1]
     self.prompt_count = 0
