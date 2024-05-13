@@ -25,6 +25,8 @@ from openai.lib.azure import AzureOpenAI
 
 from jinja2 import Template
 
+from gpterminator.Utils import get_file_name, renderTemplate, addToFunctionName2Arguments
+
 
 class GPTerminator:
     def __init__(self):
@@ -117,7 +119,8 @@ class GPTerminator:
         # self.setToolsAndExamples('functions/textual')
 
         # self.data_model_narrative = 'okr-2'
-        self.data_model_narrative = 'large-safe'
+        # self.data_model_narrative = 'large-safe'
+        self.data_model_narrative = 'resource-management'
 
         self.setToolsAndExamples('functions/textual-diff')
         self.apply_function_handler = textualDiffApplyFunctionHandler
@@ -349,7 +352,7 @@ class GPTerminator:
                                 log += f"tool_call.function.name: {tool_call.function.name}\n"
                                 if function_name is not None:
                                     # full_reply_content += "\n```\n"
-                                    self.addToFunctionName2Arguments(function_name, function_arguments, function_name_2_arguments)
+                                    addToFunctionName2Arguments(function_name, function_arguments, function_name_2_arguments)
 
                                 function_name = tool_call.function.name
 
@@ -382,7 +385,7 @@ class GPTerminator:
                     live.update(md)
 
         if function_name is not None:
-            self.addToFunctionName2Arguments(function_name, function_arguments, function_name_2_arguments)
+            addToFunctionName2Arguments(function_name, function_arguments, function_name_2_arguments)
 
         # print("function_name_2_arguments: " + str(function_name_2_arguments))
 
@@ -398,12 +401,6 @@ class GPTerminator:
         self.console.print(md)
         self.console.print()
         self.msg_hist.append({"role": "assistant", "content": full_reply_content_shortened})
-
-    def addToFunctionName2Arguments(self, function_name, function_arguments, function_name_2_arguments):
-        if function_name in function_name_2_arguments:
-            function_name_2_arguments[function_name].append(function_arguments)
-        else:
-            function_name_2_arguments[function_name] = [function_arguments]
 
     def applyFunctionCalls(self):
         print("applyFunctionCalls, self.function_name_2_arguments: " + str(self.function_name_2_arguments))
@@ -422,7 +419,7 @@ class GPTerminator:
 
     def saveFunctionCalls(self, function_name_2_arguments, full_reply_content):
         if full_reply_content:
-            file_name = f"{self.get_file_name()}-text.md"
+            file_name = f"{get_file_name(self.save_path)}-text.md"
             with open(Path(self.save_path) / file_name, "w") as f:
                 f.write(full_reply_content)
 
@@ -430,7 +427,7 @@ class GPTerminator:
             for function_name, arguments in function_name_2_arguments.items():
                 if function_name is not None and arguments is not None:
                     for argument in arguments:
-                        file_name = f"{self.get_file_name()}-{function_name}.json"
+                        file_name = f"{get_file_name(self.save_path)}-{function_name}.json"
                         with open(Path(self.save_path) / file_name, "w") as f:
                             json_object = json.loads(argument)
                             json.dump(json_object, f, indent=4)
@@ -444,23 +441,6 @@ class GPTerminator:
                     #     print("JSON object is valid")
                     # except jsonschema.exceptions.ValidationError as ve:
                     #     print("JSON object is not valid.")
-
-    def get_file_name(self):
-        pattern = r'^\d{4}-'
-        max_file_number = 0
-        for idx, file_name in enumerate(os.listdir(f"{self.save_path}")):
-            # test if file_name starts with four digits followed by "-", e.g., 0003-
-            if re.match(pattern, file_name):
-                file_str = file_name.split("-")[0]
-                if idx == 0:
-                    max_file_number = file_str
-                else:
-                    if file_str > max_file_number:
-                        max_file_number = file_str
-        # increment the number by 1
-        new_file_number = int(max_file_number) + 1
-        file_name = f"{new_file_number:04d}"
-        return file_name
 
 
     def setApiKey(self):
@@ -514,7 +494,6 @@ class GPTerminator:
                 "Temperature": "1",
                 "PresencePenalty": "0",
                 "FrequencyPenalty": "0",
-                "SystemMessage": "You are a helpful assistant named GPTerminator.",
                 "CommandInitiator": "!",
                 "SavePath": f"{savespath}",
                 "CodeTheme": "monokai",
@@ -556,18 +535,20 @@ class GPTerminator:
         with open('data-model-narrative/' + self.data_model_narrative + '/types.json', 'r') as file:
             types = json.load(file)
 
-        rendered = self.renderTemplate("data-model-narrative/types-template.md", types)
+        rendered = renderTemplate("data-model-narrative/types-template.md", types)
         with open(os.path.join(folder_name_generated, "types.md"), "w") as new_file:
             new_file.write(rendered)
 
-        rendered = self.renderTemplate("data-model-narrative/" + self.data_model_narrative + "/prompt.md")
+        rendered = renderTemplate("data-model-narrative/" + self.data_model_narrative + "/prompt.md")
         with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
             new_file.write(rendered)
 
 
     def setToolsAndExamples(self, folder_name):
         with open(os.path.join(folder_name, "system_prompt.txt"), "r") as file:
-            self.msg_hist.append({"role": "system", "content": file.read()})
+            system_prompt = file.read()
+            print("system_prompt: " + system_prompt)
+            self.msg_hist.append({"role": "system", "content": system_prompt})
 
         tools = []
         for root, dirs, files in os.walk(folder_name):
@@ -576,32 +557,26 @@ class GPTerminator:
                 if file.endswith('function.json'):
                     # render the template
                     template_file = os.path.join(root, file)
-                    rendered_string = self.renderTemplate(template_file)
+                    rendered_string = renderTemplate(template_file)
 
                     # parse the rendered string to a dictionary
                     tool = json.loads(rendered_string)
-                    # print("adding tool: " + file)
+                    print("adding tool: " + file)
                     tools.append(tool)
+                if file.endswith('example_msg.json'):
+                    # render the template
+                    template_file = os.path.join(root, file)
+                    rendered_string = renderTemplate(template_file)
+
+                    # parse the rendered string to a dictionary
+                    example = json.loads(rendered_string)
+                    print("adding example: " + file)
+                    self.msg_hist.append(example)
+
         if tools:
             self.tools = tools
         else:
             self.tools = None
-
-    def renderTemplate(self, template_file, data=None):
-        # Read the template file
-        with open(template_file, "r") as file:
-            template_string = file.read()
-
-        # Create a template object
-        template = Template(template_string)
-
-        # Render the template with the file contents
-        rendered_string = template.render(
-            load_file=loadFile,
-            data=data
-        )
-
-        return rendered_string
 
     def handleFunction(self, function_name, argument_dict, types):
         if 'add_type' == function_name:
@@ -644,11 +619,6 @@ class GPTerminator:
             return
 
         print(f"Function {function_name} not found")
-
-def loadFile(file_path):
-    # Read the contents of the file
-    with open(file_path, "r") as file:
-        return file.read()
 
 def textualDiffApplyFunctionHandler(self, function_name, arguments):
     with open('data-model-narrative/' + self.data_model_narrative + '/types.json', 'r') as file:
