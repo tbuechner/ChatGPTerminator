@@ -497,8 +497,8 @@ class GPTerminator:
         # self.setToolsAndExamples('functions/textual')
 
         # self.application_name = 'okr-2'
-        # self.application_name = 'large-safe'
-        self.application_name = 'resource-management'
+        self.application_name = 'large-safe'
+        # self.application_name = 'resource-management'
 
         self.setToolsAndExamples('functions/textual-diff')
         self.apply_function_handler = textualDiffApplyFunctionHandler
@@ -508,7 +508,7 @@ class GPTerminator:
 
 
     def applyFunctionCalls(self):
-        print("applyFunctionCalls, self.function_name_2_arguments: " + str(self.function_name_2_arguments))
+        # print("applyFunctionCalls, self.function_name_2_arguments: " + str(self.function_name_2_arguments))
         if self.function_name_2_arguments and self.apply_function_handler is not None:
             # iterate over the function_name_2_arguments dictionary
             for function_name, arguments in self.function_name_2_arguments.items():
@@ -520,7 +520,7 @@ class GPTerminator:
         with open('data-model-narrative/' + self.application_name + '/generated/prompt.md', 'r') as file:
             prompt = file.read()
 
-        print("prompt: " + prompt)
+        # print("prompt: " + prompt)
 
         self.getResponse(prompt)
 
@@ -551,7 +551,7 @@ class GPTerminator:
     def setToolsAndExamples(self, folder_name):
         with open(os.path.join(folder_name, "system_prompt.txt"), "r") as file:
             system_prompt = file.read()
-            print("system_prompt: " + system_prompt)
+            # print("system_prompt: " + system_prompt)
             self.msg_hist.append({"role": "system", "content": system_prompt})
 
         tools = []
@@ -565,7 +565,7 @@ class GPTerminator:
 
                     # parse the rendered string to a dictionary
                     tool = json.loads(rendered_string)
-                    print("adding tool: " + file)
+                    # print("adding tool: " + file)
                     tools.append(tool)
                 if file.endswith('example_msg.json'):
                     # render the template
@@ -574,7 +574,7 @@ class GPTerminator:
 
                     # parse the rendered string to a dictionary
                     example = json.loads(rendered_string)
-                    print("adding example: " + file)
+                    # print("adding example: " + file)
                     self.msg_hist.append(example)
 
         if tools:
