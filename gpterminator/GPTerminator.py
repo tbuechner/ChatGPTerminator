@@ -135,18 +135,6 @@ class GPTerminator:
             short = "" if desc[0] is None else f"({desc[0]})"
             self.console.print(f"[bright_black]{self.cmd_init}{cmd} {short}: {desc[1]}[/]")
 
-    def saveChat(self):
-        if self.prompt_count == 0:
-            self.printError("cant save an empty discussion")
-        else:
-            self.console.print(
-                f"[yellow]|{self.cmd_init}|[/][bold green] Name this chat[/bold green][bold gray] > [/bold gray]",
-                end="",
-            )
-            user_in = prompt().strip().replace(" ", "_")
-            with open(Path(self.save_path) / f"{user_in}.json", "w") as f:
-                json.dump(self.msg_hist, f, indent=4)
-            self.console.print(f"[bright_black]Saved file as {user_in}.json[/]")
 
     def copyCode(self):
         last_resp = self.msg_hist[-1]["content"]
@@ -204,55 +192,6 @@ class GPTerminator:
                 f"[bright_black]{setting}: {config[self.config_selected][setting]}[/]"
             )
 
-    def loadChatlog(self):
-        self.console.print("[bold bright_black]Available saves:[/]")
-        file_dict = {}
-        for idx, file_name in enumerate(os.listdir(f"{self.save_path}")):
-            file_str = file_name.split(".")[0]
-            file_dict[idx + 1] = file_str
-            self.console.print(f"[bold bright_black]({idx + 1}) > [/][red]{file_str}[/]")
-        if len(file_dict) == 0:
-            self.printError("you have no saved chats")
-            return
-        while True:
-            self.console.print(
-                f"[yellow]|{self.cmd_init}|[/][bold green] Select a file to load [/bold green][bold gray]> [/bold gray]",
-                end="",
-            )
-            selection = input()
-            if selection.isdigit() == True and int(selection) in file_dict:
-                break
-            else:
-                self.printError(f"{selection} is not a valid selection")
-        with open(Path(f"{self.save_path}") / f"{file_dict[int(selection)]}.json", "r") as f:
-            save = json.load(f)
-        self.prompt_count = 0
-        self.msg_hist = save
-        for msg in save:
-            role = msg["role"]
-            if role == "user":
-                self.console.print(
-                    f"[yellow]|{self.prompt_count}|[/][bold green] Input [/bold green][bold gray]> [/bold gray]",
-                    end="",
-                )
-                self.console.print(msg["content"])
-                self.prompt_count += 1
-            elif role == "assistant":
-                encoding = tiktoken.encoding_for_model(self.model)
-                num_tokens = len(encoding.encode(msg["content"]))
-                subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/]"
-                md = Panel(
-                    Markdown(msg["content"], self.code_theme),
-                    border_style="bright_black",
-                    title="[bright_black]Assistant[/]",
-                    title_align="left",
-                    subtitle=subtitle_str,
-                    subtitle_align="right",
-                )
-                self.console.print(md)
-                self.console.print()
-            else:
-                pass
 
     def copyAll(self):
         if self.prompt_count == 0:
@@ -315,8 +254,6 @@ class GPTerminator:
                         return last_msg
                     else:
                         self.printError("can't regenenerate, there is no previous prompt")
-                elif cmd == "save" or cmd == "s":
-                    self.saveChat()
                 elif cmd == "ccpy" or cmd == "cc":
                     if self.prompt_count > 0:
                         self.copyCode()
@@ -324,8 +261,6 @@ class GPTerminator:
                         self.printError("can't copy, there is no previous response")
                 elif cmd == "pconf":
                     self.printConfig()
-                elif cmd == "load" or cmd == "l":
-                    self.loadChatlog()
                 elif cmd == "cpyall" or cmd == "ca":
                     self.copyAll()
                 elif cmd == "ifile":
@@ -647,15 +582,6 @@ class GPTerminator:
                     tool = json.loads(rendered_string)
                     # print("adding tool: " + file)
                     tools.append(tool)
-                if file.endswith('generate_boolean_attribute_example_msg.json'):
-                    # render the template
-                    template_file = os.path.join(root, file)
-                    rendered_string = self.renderTemplate(template_file)
-
-                    # parse the rendered string to a dictionary
-                    example = json.loads(rendered_string)
-                    # print("adding example: " + file)
-                    self.msg_hist.append(example)
         if tools:
             self.tools = tools
         else:
