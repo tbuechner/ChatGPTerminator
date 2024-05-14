@@ -467,6 +467,10 @@ class GPTerminator:
             self.client = openai
             openai.api_key = self.config[self.config_selected]["API_KEY"]
 
+        self.initAgent()
+
+
+    def initAgent(self):
         # self.setToolsAndExamples('functions/fine-granular')
 
         # self.setToolsAndExamples('functions/high-level')
