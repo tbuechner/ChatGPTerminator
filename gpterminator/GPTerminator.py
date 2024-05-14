@@ -433,16 +433,8 @@ class GPTerminator:
         if function_name is not None:
             addToFunctionName2Arguments(function_name, function_arguments, function_name_2_arguments)
 
-        # print("function_name_2_arguments: " + str(function_name_2_arguments))
-
-        # print(str(function_name_2_arguments))
         self.saveFunctionCalls(function_name_2_arguments, full_reply_content_shortened)
         self.function_name_2_arguments = function_name_2_arguments
-
-        # if function_name_2_arguments:
-        #     for function_name, arguments in function_name_2_arguments.items():
-        #         print(f"Function name: {function_name}")
-        #         print(f"Argument: {arguments}\n")
 
         self.console.print(md)
         self.console.print()

@@ -18,9 +18,9 @@ These key responsibilities and qualifications are quite close to the job profile
 
 **Qualifications:**
 * Bachelor’s or Master’s degree in Computer Science, Business, or a related field.
-* Proven experience in product management, ideally within the no-code/low-code space or similar technology sectors.
-* Strong technical acumen, with experience in software development or managing technical products.
+* At least 5 years of experience in product management, with a proven track record in the no-code/low-code sector, demonstrating a deep understanding of the technical and market dynamics of such platforms.
+* Robust technical foundation, preferably including hands-on experience in software development and a comprehensive understanding of modern development frameworks and APIs.
 * Excellent strategic thinking and problem-solving skills.
 * Outstanding communication and interpersonal skills, capable of fostering strong relationships with team members and stakeholders.
 * Experience in outbound product management activities, such as market analysis, product positioning, and customer engagement.
-* Demonstrated ability to lead cross-functional teams and drive product success in a fast-paced environment.
+* Demonstrated ability to lead cross-functional teams and drive product success in a fast-paced environment. Adept at inspiring teams and leading through influence to achieve business goals.
