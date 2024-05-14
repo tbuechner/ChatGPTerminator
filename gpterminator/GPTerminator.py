@@ -26,6 +26,11 @@ from openai.lib.azure import AzureOpenAI
 from jinja2 import Template
 
 from gpterminator.Agent import Agent
+from gpterminator.FineGranularAgent import FineGranularAgent
+from gpterminator.HighLevelAgent import HighLevelAgent
+from gpterminator.OnePassAgent import OnePassAgent
+from gpterminator.TextualAgent import TextualAgent
+from gpterminator.TextualDiffAgent import TextualDiffAgent
 from gpterminator.Utils import get_file_name, renderTemplate, addToFunctionName2Arguments
 
 class GPTerminator:
@@ -57,7 +62,15 @@ class GPTerminator:
         self.prompt_count = 0
         self.save_path = ""
         self.console = Console()
-        self.agent = Agent(self)
+
+        self.agent = TextualDiffAgent(self, 'large-safe')
+        # self.agent = TextualDiffAgent(self, 'okr-2')
+        # self.agent = TextualDiffAgent(self, 'resource-management')
+
+        # self.agent = FineGranularAgent(self)
+        # self.agent = HighLevelAgent(self)
+        # self.agent = OnePassAgent(self)
+        # self.agent = TextualAgent(self)
 
 
     def loadConfig(self):
@@ -230,7 +243,7 @@ class GPTerminator:
                 elif cmd == "apply" or cmd == "a":
                     self.agent.applyFunctionCalls()
                 elif cmd == "run" or cmd == "r":
-                    self.agent.runTypesPrompt()
+                    self.agent.runPrompt()
             else:
                 self.printError(
                     f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help"
