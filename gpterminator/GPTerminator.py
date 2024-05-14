@@ -25,8 +25,8 @@ from openai.lib.azure import AzureOpenAI
 
 from jinja2 import Template
 
+from gpterminator.Agent import Agent
 from gpterminator.Utils import get_file_name, renderTemplate, addToFunctionName2Arguments
-
 
 class GPTerminator:
     def __init__(self):
@@ -57,9 +57,10 @@ class GPTerminator:
         self.prompt_count = 0
         self.save_path = ""
         self.console = Console()
+        self.agent = Agent()
 
 
-    def getConfigPath(self):
+    def loadConfig(self):
         if "APPDATA" in os.environ:
             confighome = os.environ["APPDATA"]
         elif "XDG_CONFIG_HOME" in os.environ:
@@ -69,31 +70,18 @@ class GPTerminator:
         configpath = os.path.join(confighome, "gpterminator", "config.ini")
         print("configpath: " + configpath)
         self.config_path = configpath
+        self.config = configparser.ConfigParser()
+        self.config.read(self.config_path)
 
-    def loadConfig(self):
-        self.getConfigPath()
-        config = configparser.ConfigParser()
-        config.read(self.config_path)
+        self.cmd_init = self.config["COMMON"]["CommandInitiator"]
+        self.save_path = self.config["COMMON"]["SavePath"]
+        self.temperature = self.config["COMMON"]["Temperature"]
+        self.presence_penalty = self.config["COMMON"]["PresencePenalty"]
+        self.frequency_penalty = self.config["COMMON"]["FrequencyPenalty"]
+        self.code_theme = self.config["COMMON"]["CodeTheme"]
 
-        self.cmd_init = config["COMMON"]["CommandInitiator"]
-        self.save_path = config["COMMON"]["SavePath"]
-        self.temperature = config["COMMON"]["Temperature"]
-        self.presence_penalty = config["COMMON"]["PresencePenalty"]
-        self.frequency_penalty = config["COMMON"]["FrequencyPenalty"]
-        self.code_theme = config["COMMON"]["CodeTheme"]
-
-        self.config_selected = config["SELECTED_CONFIG"]["ConfigName"]
-
-        if(self.config_selected == "AZURE_CONFIG"):
-            self.model = config[self.config_selected]["Model"]
-            self.azure_openai_api_key = config[self.config_selected]["AZURE_OPENAI_API_KEY"]
-            self.azure_openai_endpoint = config[self.config_selected]["AZURE_OPENAI_ENDPOINT"]
-            self.azure_deployment = config[self.config_selected]["AZURE_DEPLOYMENT"]
-            self.api_version = config[self.config_selected]["ApiVersion"]
-
-        if(self.config_selected == "OPENAI_CONFIG"):
-            self.openai_key = config[self.config_selected]["API_KEY"]
-            self.model = config[self.config_selected]["Model"]
+        self.config_selected = self.config["SELECTED_CONFIG"]["ConfigName"]
+        self.model = self.config[self.config_selected]["Model"]
 
 
     def printError(self, msg):
@@ -249,12 +237,6 @@ class GPTerminator:
                 )
         else:
             return user_in
-
-    def setApiKey(self):
-        self.api_key = os.getenv("OPENAI_API_KEY")
-        if self.api_key == None or self.api_key == "":
-            self.printError("the OPENAI_API_KEY environment variable is missing")
-            sys.exit()
 
     def printBanner(self):
         welcome_ascii = """                                                        
@@ -469,18 +451,21 @@ class GPTerminator:
     def init(self):
         if not os.path.exists(self.save_path):
             os.makedirs(self.save_path)
-        self.setApiKey()
+        self.api_key = os.getenv("OPENAI_API_KEY")
+        if self.api_key == None or self.api_key == "":
+            self.printError("the OPENAI_API_KEY environment variable is missing")
+            sys.exit()
 
         if(self.config_selected == "AZURE_CONFIG"):
             self.client = AzureOpenAI(
-                api_version = self.api_version,
-                azure_endpoint = self.azure_openai_endpoint,
-                azure_deployment = self.azure_deployment,
-                api_key = self.azure_openai_api_key
+                api_version = self.config[self.config_selected]["ApiVersion"],
+                azure_endpoint = self.config[self.config_selected]["AZURE_OPENAI_ENDPOINT"],
+                azure_deployment = self.config[self.config_selected]["AZURE_DEPLOYMENT"],
+                api_key = self.config[self.config_selected]["AZURE_OPENAI_API_KEY"]
             )
         elif(self.config_selected == "OPENAI_CONFIG"):
             self.client = openai
-            openai.api_key = self.openai_key
+            openai.api_key = self.config[self.config_selected]["API_KEY"]
 
         # self.setToolsAndExamples('functions/fine-granular')
 
