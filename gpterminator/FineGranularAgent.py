@@ -42,7 +42,6 @@ class FineGranularAgent(Agent):
                 # create folder folder_name_generated
                 os.mkdir(folder_name_generated)
 
-
                 rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', None, dir)
                 with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
                     new_file.write(rendered)

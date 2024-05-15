@@ -1,6 +1,6 @@
 ### Application Description
 
-{{ load_file('agents/one-pass/prompts/' ~ application_name ~ '/capabilities.md') }}
+{{ load_file('agents/fine-granular/prompts/' ~ application_name ~ '/capabilities.md') }}
 
 ### Data Modeling - Meta Model
 
@@ -10,12 +10,12 @@
 
 Here is a high-level data model for the application presented in tabular format - one table for each type with their corresponding attributes:
 
-{{ load_file('agents/one-pass/prompts/' ~ application_name ~ '/types-high-level.md') }}
+{{ load_file('agents/fine-granular/prompts/' ~ application_name ~ '/types-high-level.md') }}
 
 Here is the current detailed data model in JSON:
 
 ```json
-{{ load_file('agents/one-pass/prompts/' ~ application_name ~ '/types-detailed.json') }}
+{{ load_file('agents/fine-granular/prompts/' ~ application_name ~ '/types-detailed.json') }}
 ```
 
 ### Adapted Data Model
