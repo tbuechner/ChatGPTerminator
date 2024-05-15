@@ -15,10 +15,18 @@ class TextualDiffAgent(Agent):
     def init(self):
         self.setToolsAndExamples('agents/textual-diff')
         self.apply_function_handler = textualDiffApplyFunctionHandler
+        self.generateAllPrompts()
+
+
+    def getPromptFolder(self):
+        return 'agents/textual-diff/prompts'
+
+    def getPromptApplicationFolder(self):
+        return 'agents/textual-diff/prompts/' + self.application_name
 
 
     def runPrompt(self):
-        with open('data-model-narrative/' + self.application_name + '/generated/prompt.md', 'r') as file:
+        with open(self.getPromptApplicationFolder() + '/generated/prompt.md', 'r') as file:
             prompt = file.read()
 
         # print("prompt: " + prompt)
@@ -27,9 +35,9 @@ class TextualDiffAgent(Agent):
 
 
     def generateAllPrompts(self):
-        for dir in os.listdir('data-model-narrative'):
-            if os.path.isdir(os.path.join('data-model-narrative', dir)):
-                folder_name_generated = 'data-model-narrative/' + dir + '/generated'
+        for dir in os.listdir(self.getPromptFolder()):
+            if os.path.isdir(os.path.join(self.getPromptFolder(), dir)):
+                folder_name_generated = self.getPromptFolder() + '/' + dir + '/generated'
                 if os.path.exists(folder_name_generated):
                     os.system("rm -r " + folder_name_generated)
 
@@ -37,14 +45,14 @@ class TextualDiffAgent(Agent):
                 os.mkdir(folder_name_generated)
 
                 # load content of file types.json into the variable types
-                with open('data-model-narrative/' + dir + '/types.json', 'r') as file:
+                with open(self.getPromptFolder() + '/' + dir + '/types.json', 'r') as file:
                     types = json.load(file)
 
-                rendered = renderTemplate('data-model-narrative/types-template.md', types)
+                rendered = renderTemplate(self.getPromptFolder() + '/types-template.md', types)
                 with open(os.path.join(folder_name_generated, "types.md"), "w") as new_file:
                     new_file.write(rendered)
 
-                rendered = renderTemplate('data-model-narrative/prompt-template.md', None, dir)
+                rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', None, dir)
                 with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
                     new_file.write(rendered)
 
@@ -93,7 +101,7 @@ class TextualDiffAgent(Agent):
 
 
 def textualDiffApplyFunctionHandler(self, function_name, arguments):
-    with open('data-model-narrative/' + self.application_name + '/types.json', 'r') as file:
+    with open(self.getPromptApplicationFolder() + '/types.json', 'r') as file:
         types = json.load(file)
 
     print("Applying function calls")
@@ -103,7 +111,7 @@ def textualDiffApplyFunctionHandler(self, function_name, arguments):
         self.handleFunction(function_name, argument_dict, types)
 
     # write the types to the types.json file
-    with open('data-model-narrative/' + self.application_name + '/types.json', 'w') as file:
+    with open(self.getPromptApplicationFolder() + '/types.json', 'w') as file:
         json.dump(types, file, indent=4)
 
     self.generateAllPrompts()
