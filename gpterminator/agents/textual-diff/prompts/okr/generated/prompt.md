@@ -1,6 +1,11 @@
 ### Application Description
 
-I want to build an application which can be used to manage a Large Solution SAFe process. 
+I want to build an application focused on managing Objectives and Key Results (OKRs). The application should accommodate the planning, tracking, and evaluation of OKRs within an organization. Here’s a comprehensive summary and analysis of the capabilities, main operations, and potential use cases for this application:
+
+Central to this system is the concept of "Cycles," which are predefined periods, typically aligning with fiscal or calendar quarters, during which specific OKRs are pursued.
+
+For each cycle, there are sets of objectives and key results that are tracked and evaluated.
+
 
 ### Data Modeling - Meta Model
 
@@ -31,59 +36,29 @@ The name of the reference should be the name of the type it is referring to. For
 Here is the structured data model for the application presented in tabular format for each type with their corresponding attributes:
 
 
-### Capability
+### Cycle
 | Attribute    | Type                  | Description                      |
 |--------------|-----------------------|----------------------------------|
-| Description | Text | A brief description of the capability | 
-| Status | Text Enumeration | Current status of the capability | 
-| Owner | Reference | The user responsible for this capability | 
+| Year | Number | The year in which the cycle occurs. | 
+| Quarter | Text Enumeration | The specific quarter of the year. Possible values might include 'Q1', 'Q2', 'Q3', and 'Q4'. | 
+| Status | Text Enumeration | The current status of the cycle, such as 'Planning', 'Active', 'Reviewing', 'Completed'. | 
 
-### Epic
+### Key Result
 | Attribute    | Type                  | Description                      |
 |--------------|-----------------------|----------------------------------|
-| Title | Text | Title of the epic | 
-| Description | Rich Text | Detailed description of the epic | 
-| Business Value | Number | The business value attributed to the epic | 
-| Status | Text Enumeration | Current status of the epic | 
-| Owner | Reference | The user responsible for the epic | 
-| Related Capabilities | Reference | Capabilities related to this epic | 
+| Description | Text | Detailed description of the key result | 
+| Progress | Number | Percent completion of the key result | 
+| Status | Text Enumeration | Status of the key result such as 'Pending', 'On Track', 'At Risk', 'Completed' | 
+| Objective | Reference | Reference to the objective this key result is part of. | 
 
-### Feature
+### Objective
 | Attribute    | Type                  | Description                      |
 |--------------|-----------------------|----------------------------------|
-| Title | Text | Title of the feature | 
-| Description | Rich Text | Detailed description of the feature | 
-| Benefit | Text | The benefit provided by the feature | 
-| Status | Text Enumeration | Current status of the feature | 
-| Owner | Reference | The user responsible for the feature | 
-| Parent Epic | Reference | The epic to which this feature is related | 
-
-### User Story
-| Attribute    | Type                  | Description                      |
-|--------------|-----------------------|----------------------------------|
-| Title | Text | Title of the user story | 
-| Description | Rich Text | Detailed description of the story | 
-| Acceptance Criteria | Rich Text | Criteria that must be met for the story to be considered complete | 
-| Status | Text Enumeration | The current status of the user story | 
-| Owner | Reference | The user responsible for the story | 
-| Parent Feature | Reference | The feature this story contributes to | 
-
-### Task
-| Attribute    | Type                  | Description                      |
-|--------------|-----------------------|----------------------------------|
-| Title | Text | Title of the task | 
-| Description | Rich Text | Detailed description of the task | 
-| Status | Text Enumeration | Current status of the task | 
-| Owner | Reference | The user responsible for this task | 
-| Related User Story | Reference | The user story this task is part of | 
-
-### Program Increment
-| Attribute    | Type                  | Description                      |
-|--------------|-----------------------|----------------------------------|
-| Name | Text | Name of the program increment | 
-| Start Date | Date | Starting date of the program increment | 
-| End Date | Date | Ending date of the program increment | 
-| Goals | Rich Text | Goals to be achieved during this increment | 
+| Title | Text | The title or main idea of the objective. | 
+| Description | Rich Text | Detailed description of the objective. | 
+| Status | Text Enumeration | Possible statuses: 'Not Started', 'In Progress', 'Completed' | 
+| Owner | Reference | Reference to the user in charge of the objective. | 
+| Cycle | Reference | Reference to the cycle this objective belongs to. | 
 
 
 ### Adapted Data Model

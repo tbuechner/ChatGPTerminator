@@ -63,13 +63,20 @@ class GPTerminator:
         self.save_path = ""
         self.console = Console()
 
-        self.agent = TextualDiffAgent(self, 'large-safe')
-        # self.agent = TextualDiffAgent(self, 'okr-2')
+        # self.agent = TextualDiffAgent(self, 'risk-management')
+
+        # self.agent = TextualDiffAgent(self, 'large-safe')
+
+        # self.agent = TextualDiffAgent(self, 'okr')
         # self.agent = TextualDiffAgent(self, 'resource-management')
 
-        # self.agent = FineGranularAgent(self)
+        self.agent = FineGranularAgent(self, 'okr')
+
         # self.agent = HighLevelAgent(self)
-        # self.agent = OnePassAgent(self)
+
+        # self.agent = OnePassAgent(self, 'okr')
+        # self.agent = OnePassAgent(self, 'risk-management')
+
         # self.agent = TextualAgent(self)
 
 

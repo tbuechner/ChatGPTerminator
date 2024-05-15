@@ -16,7 +16,7 @@ Here is the structured data model for the application presented in tabular forma
 
 Provide instructions for how to adapt the data model to meet the specific requirements of the organization or project. 
 
-This may include adding new types, modifying existing attributes, or creating custom relationships between entities.
+This may include adding new types, modifying existing attributes, or creating references between entities.
 
 The following operations can be performed on the data model:
 * Add new types with relevant attributes.

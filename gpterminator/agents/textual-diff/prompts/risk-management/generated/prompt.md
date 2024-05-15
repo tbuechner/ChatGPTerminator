@@ -1,11 +1,6 @@
 ### Application Description
 
-I want to build an application focused on managing Objectives and Key Results (OKRs). The application should accommodate the planning, tracking, and evaluation of OKRs within an organization. Here’s a comprehensive summary and analysis of the capabilities, main operations, and potential use cases for this application:
-
-Central to this system is the concept of "Cycles," which are predefined periods, typically aligning with fiscal or calendar quarters, during which specific OKRs are pursued.
-
-For each cycle, there are sets of objectives and key results that are tracked and evaluated.
-
+I want to build an application which can be used to manage risks. It should be possible to identify, assess, and mitigate risks within the organization.
 
 ### Data Modeling - Meta Model
 
@@ -36,36 +31,26 @@ The name of the reference should be the name of the type it is referring to. For
 Here is the structured data model for the application presented in tabular format for each type with their corresponding attributes:
 
 
-### Cycle
+### Risk
 | Attribute    | Type                  | Description                      |
 |--------------|-----------------------|----------------------------------|
-| Year | Number | The year in which the cycle occurs. | 
-| Quarter | Text Enumeration | The specific quarter of the year. Possible values might include 'Q1', 'Q2', 'Q3', and 'Q4'. | 
-| Status | Text Enumeration | The current status of the cycle, such as 'Planning', 'Active', 'Reviewing', 'Completed'. | 
-
-### Key Result
-| Attribute    | Type                  | Description                      |
-|--------------|-----------------------|----------------------------------|
-| Description | Text | Detailed description of the key result | 
-| Progress | Number | Percent completion of the key result | 
-| Status | Text Enumeration | Status of the key result such as 'Pending', 'On Track', 'At Risk', 'Completed' | 
-| Objective | Reference | Reference to the objective this key result is part of. | 
-
-### Objective
-| Attribute    | Type                  | Description                      |
-|--------------|-----------------------|----------------------------------|
-| Title | Text | The title or main idea of the objective. | 
-| Description | Rich Text | Detailed description of the objective. | 
-| Status | Text Enumeration | Possible statuses: 'Not Started', 'In Progress', 'Completed' | 
-| Owner | Reference | Reference to the user in charge of the objective. | 
-| Cycle | Reference | Reference to the cycle this objective belongs to. | 
+| Title | Text | Brief title of the risk | 
+| Description | Text | Detailed description of the risk | 
+| Category | Text | The category to which the risk belongs e.g., Financial, Operational, Strategic | 
+| Probability | Number | Probability of the risk occurring, usually as a percentage | 
+| Impact | Number | Impact of the risk occurring, typically as a percentage or a score | 
+| Status | Text | Current status of the risk e.g., Identified, In Progress, Mitigated, Closed | 
+| IdentifiedDate | Date | The date when the risk was identified | 
+| MitigationPlan | Rich Text | The plan to mitigate the risk | 
+| DueDate | Date | The target date to mitigate or reassess the risk | 
+| Owner | Reference | The person responsible for managing the risk | 
 
 
 ### Adapted Data Model
 
 Provide instructions for how to adapt the data model to meet the specific requirements of the organization or project. 
 
-This may include adding new types, modifying existing attributes, or creating custom relationships between entities.
+This may include adding new types, modifying existing attributes, or creating references between entities.
 
 The following operations can be performed on the data model:
 * Add new types with relevant attributes.

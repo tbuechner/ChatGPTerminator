@@ -1,0 +1,137 @@
+{
+  "package": {
+    "localizedName": {
+      "de": "Risikomanagement",
+      "en": "Risk Management"
+    },
+    "slots": [
+      {
+        "localizedName": {
+          "de": "Risiken",
+          "en": "Risks"
+        },
+        "internalName": "risks",
+        "workspaceName": "Risks Workspace",
+        "types": [
+          {
+            "name": "Risk",
+            "localizedNameSingular": {
+              "en": "Risk",
+              "de": "Risiko"
+            },
+            "localizedNamePlural": {
+              "en": "Risks",
+              "de": "Risiken"
+            },
+            "iconName": "fa-exclamation-triangle",
+            "attributes": [
+              {
+                "name": "Title",
+                "localizedName": {
+                  "en": "Title",
+                  "de": "Titel"
+                },
+                "constraint": {
+                  "attributeType": "string"
+                }
+              },
+              {
+                "name": "Description",
+                "localizedName": {
+                  "en": "Description",
+                  "de": "Beschreibung"
+                },
+                "constraint": {
+                  "attributeType": "richString"
+                }
+              },
+              {
+                "name": "Category",
+                "localizedName": {
+                  "en": "Category",
+                  "de": "Kategorie"
+                },
+                "constraint": {
+                  "attributeType": "textEnumeration"
+                }
+              },
+              {
+                "name": "Probability",
+                "localizedName": {
+                  "en": "Probability",
+                  "de": "Wahrscheinlichkeit"
+                },
+                "constraint": {
+                  "attributeType": "number"
+                }
+              },
+              {
+                "name": "Impact",
+                "localizedName": {
+                  "en": "Impact",
+                  "de": "Auswirkung"
+                },
+                "constraint": {
+                  "attributeType": "number"
+                }
+              },
+              {
+                "name": "Status",
+                "localizedName": {
+                  "en": "Status",
+                  "de": "Status"
+                },
+                "constraint": {
+                  "attributeType": "textEnumeration"
+                }
+              },
+              {
+                "name": "IdentifiedDate",
+                "localizedName": {
+                  "en": "Identified Date",
+                  "de": "Erkennungsdatum"
+                },
+                "constraint": {
+                  "attributeType": "date"
+                }
+              },
+              {
+                "name": "MitigationPlan",
+                "localizedName": {
+                  "en": "Mitigation Plan",
+                  "de": "Minderungsplan"
+                },
+                "constraint": {
+                  "attributeType": "richString"
+                }
+              },
+              {
+                "name": "DueDate",
+                "localizedName": {
+                  "en": "Due Date",
+                  "de": "F\u00e4lligkeitsdatum"
+                },
+                "constraint": {
+                  "attributeType": "date"
+                }
+              },
+              {
+                "name": "Owner",
+                "localizedName": {
+                  "en": "Owner",
+                  "de": "Verantwortlicher"
+                },
+                "constraint": {
+                  "attributeType": "reference",
+                  "typeNames": "cf.cplace.user"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "internalName": "cf.cplace.riskManagement",
+    "version": "1.0"
+  }
+}
