@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "generate_type_with_attributes",
-    "description": "Generate a type with attributes.",
-    "parameters": {{ load_file('functions/high-level/generate_type_schema.json') }}
-  }
-}

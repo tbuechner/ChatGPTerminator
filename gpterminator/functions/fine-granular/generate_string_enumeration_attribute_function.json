@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "generate_string_enumeration_attribute",
-    "description": "Generate a new text enumeration attribute and add it to a type. String enumeration attributes are used if there is a given set of allowed strings.",
-    "parameters": {{ load_file('functions/fine-granular/generate_rich_string_attribute_schema.json') }}
-  }
-}

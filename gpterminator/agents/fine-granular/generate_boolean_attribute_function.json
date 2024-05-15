@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "generate_boolean_attribute",
+    "description": "Generate a new boolean attribute and add it to a type. Values of boolean attributes are either true or false.",
+    "parameters": {{ load_file('agents/fine-granular/generate_boolean_attribute_schema.json') }}
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "generate_number_attribute",
+    "description": "Generate a new number attribute and add it to a type. Number attributes are used for numerical values.",
+    "parameters": {{ load_file('agents/fine-granular/generate_number_attribute_schema.json') }}
+  }
+}

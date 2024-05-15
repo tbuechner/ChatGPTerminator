@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "generate_string_attribute",
-    "description": "Generate a new string attribute and add it to a type.",
-    "parameters": {{ load_file('functions/fine-granular/generate_string_attribute_schema.json') }}
-  }
-}

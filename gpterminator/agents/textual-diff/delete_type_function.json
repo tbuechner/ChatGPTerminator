@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "delete_type",
+    "description": "Delete a type from the data model. The function will fail if a type with the given name does not exist.",
+    "parameters": {{ load_file('agents/textual-diff/delete_type_schema.json') }}
+  }
+}

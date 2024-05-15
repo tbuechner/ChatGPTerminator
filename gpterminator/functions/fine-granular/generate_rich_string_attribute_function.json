@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "generate_rich_string_attribute",
-    "description": "Generate a new rich string attribute and add it to a type. A rich string attribute is a string that can contain rich text such as bold, italic, and underline, tables, images, ...",
-    "parameters": {{ load_file('functions/fine-granular/generate_rich_string_attribute_schema.json') }}
-  }
-}

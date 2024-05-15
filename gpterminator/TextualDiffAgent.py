@@ -13,7 +13,7 @@ class TextualDiffAgent(Agent):
 
 
     def init(self):
-        self.setToolsAndExamples('functions/textual-diff')
+        self.setToolsAndExamples('agents/textual-diff')
         self.apply_function_handler = textualDiffApplyFunctionHandler
 
 
@@ -90,6 +90,7 @@ class TextualDiffAgent(Agent):
             return
 
         print(f"Function {function_name} not found")
+
 
 def textualDiffApplyFunctionHandler(self, function_name, arguments):
     with open('data-model-narrative/' + self.application_name + '/types.json', 'r') as file:
