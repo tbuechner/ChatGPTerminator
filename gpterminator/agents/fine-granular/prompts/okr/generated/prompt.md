@@ -64,7 +64,44 @@ Here is a high-level data model for the application presented in tabular format 
 Here is the current detailed data model in JSON:
 
 ```json
-[]
+[
+    {
+        "internalName": "cf.cplace.solution.okr.cycle",
+        "localizedNameSingular": {
+            "en": "Cycle",
+            "de": "Zyklus"
+        },
+        "localizedNamePlural": {
+            "en": "Cycles",
+            "de": "Zyklen"
+        },
+        "iconName": "fa-redo"
+    },
+    {
+        "internalName": "cf.cplace.solution.okr.keyResult",
+        "localizedNameSingular": {
+            "en": "Key Result",
+            "de": "Schl\u00fcsselergebnis"
+        },
+        "localizedNamePlural": {
+            "en": "Key Results",
+            "de": "Schl\u00fcsselergebnisse"
+        },
+        "iconName": "fa-key"
+    },
+    {
+        "internalName": "cf.cplace.solution.okr.objective",
+        "localizedNameSingular": {
+            "en": "Objective",
+            "de": "Ziel"
+        },
+        "localizedNamePlural": {
+            "en": "Objectives",
+            "de": "Ziele"
+        },
+        "iconName": "fa-bullseye"
+    }
+]
 ```
 
 ### Adapted Data Model

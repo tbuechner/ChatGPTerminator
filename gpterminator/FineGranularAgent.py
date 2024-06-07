@@ -12,6 +12,7 @@ class FineGranularAgent(Agent):
 
     def init(self):
         self.setToolsAndExamples('agents/fine-granular')
+        self.apply_function_handler = applyFunctionHandler
         self.generateAllPrompts()
 
 
@@ -46,4 +47,63 @@ class FineGranularAgent(Agent):
                 with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
                     new_file.write(rendered)
 
+    def handleFunction(self, function_name, argument_dict, types):
+        print(f"Function: {function_name}")
+        print(f"Arguments: {argument_dict}")
+        print(f"Types: {types}")
 
+        if 'generate_type' == function_name:
+            for type_ in types:
+                if type_['internalName'] == argument_dict['internalName']:
+                    print(f"Type with name {argument_dict['internalName']} already exists")
+                    return
+            print(f"Adding type with name {argument_dict['internalName']}")
+            types.append(argument_dict)
+            return
+
+        if (
+                'generate_boolean_attribute' == function_name or
+                'generate_date_attribute' == function_name or
+                'generate_long_text_attribute' == function_name or
+                'generate_number_attribute' == function_name or
+                'generate_number_enumeration_attribute' == function_name or
+                'generate_reference_attribute' == function_name or
+                'generate_rich_string_attribute' == function_name or
+                'generate_string_attribute' == function_name or
+                'generate_string_enumeration_attribute' == function_name
+
+        ):
+            for type_ in types:
+                if type_['internalName'] == argument_dict['internalTypeName']:
+                    if 'attributes' not in type_:
+                        type_['attributes'] = []
+                    for attribute in type_['attributes']:
+                        if attribute['internalName'] == argument_dict['internalName']:
+                            print(f"Attribute with name {argument_dict['internalName']} already exists")
+                            return
+                    print(f"Adding attribute with name {argument_dict['internalName']} to type {argument_dict['internalTypeName']}")
+                    type_['attributes'].append(argument_dict)
+                    return
+            print(f"Type with name {argument_dict['typeName']} does not exist")
+            return
+
+def applyFunctionHandler(self, function_name, arguments):
+    with open(self.getPromptApplicationFolder() + '/types-detailed.json', 'r') as file:
+        types = json.load(file)
+
+    print("Applying function calls")
+    for argument in arguments:
+        argument_dict = json.loads(argument)
+        print(f"Function: {function_name}")
+        self.handleFunction(function_name, argument_dict, types)
+
+    # write the types to the types.json file
+    with open(self.getPromptApplicationFolder() + '/types-detailed.json', 'w') as file:
+        json.dump(types, file, indent=4)
+
+    self.generateAllPrompts()
+
+    self.gpterminator.msg_hist = self.gpterminator.msg_hist[:1]
+    self.gpterminator.prompt_count = 0
+
+    print("Session has been reset. You can now run the prompt again.")

@@ -14,7 +14,7 @@ class TextualDiffAgent(Agent):
 
     def init(self):
         self.setToolsAndExamples('agents/textual-diff')
-        self.apply_function_handler = textualDiffApplyFunctionHandler
+        self.apply_function_handler = applyFunctionHandler
         self.generateAllPrompts()
 
 
@@ -100,7 +100,7 @@ class TextualDiffAgent(Agent):
         print(f"Function {function_name} not found")
 
 
-def textualDiffApplyFunctionHandler(self, function_name, arguments):
+def applyFunctionHandler(self, function_name, arguments):
     with open(self.getPromptApplicationFolder() + '/types.json', 'r') as file:
         types = json.load(file)
 
