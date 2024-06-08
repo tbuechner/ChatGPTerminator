@@ -187,7 +187,101 @@ Here is the current detailed data model in JSON. This is specifically about the 
             "de": "Schl\u00fcsselergebnisse"
         },
         "iconName": "fa-key",
-        "attributes": []
+        "attributes": [
+            {
+                "internalName": "cf.cplace.solution.okr.progress",
+                "localizedName": {
+                    "en": "Progress",
+                    "de": "Fortschritt"
+                },
+                "shortHelp": {
+                    "en": "Percent completion of the key result",
+                    "de": "Prozentualer Abschluss des Schl\u00fcsselergebnisses"
+                },
+                "constraint": {
+                    "attributeType": "number"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.solution.okr.description",
+                "localizedName": {
+                    "en": "Description",
+                    "de": "Beschreibung"
+                },
+                "shortHelp": {
+                    "en": "Detailed description of the key result",
+                    "de": "Detaillierte Beschreibung des Schl\u00fcsselergebnisses"
+                },
+                "constraint": {
+                    "attributeType": "string"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.solution.okr.status",
+                "localizedName": {
+                    "en": "Status",
+                    "de": "Status"
+                },
+                "shortHelp": {
+                    "en": "Status of the key result such as 'Pending', 'On Track', 'At Risk', 'Completed'",
+                    "de": "Status des Schl\u00fcsselergebnisses wie 'Ausstehend', 'Im Plan', 'Gef\u00e4hrdet', 'Abgeschlossen'"
+                },
+                "constraint": {
+                    "attributeType": "textEnumeration",
+                    "elements": [
+                        {
+                            "value": "Pending",
+                            "localizedName": {
+                                "en": "Pending",
+                                "de": "Ausstehend"
+                            }
+                        },
+                        {
+                            "value": "On Track",
+                            "localizedName": {
+                                "en": "On Track",
+                                "de": "Im Plan"
+                            }
+                        },
+                        {
+                            "value": "At Risk",
+                            "localizedName": {
+                                "en": "At Risk",
+                                "de": "Gef\u00e4hrdet"
+                            }
+                        },
+                        {
+                            "value": "Completed",
+                            "localizedName": {
+                                "en": "Completed",
+                                "de": "Abgeschlossen"
+                            }
+                        }
+                    ]
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.solution.okr.objective",
+                "localizedName": {
+                    "en": "Objective",
+                    "de": "Ziel"
+                },
+                "shortHelp": {
+                    "en": "Reference to the objective this key result is part of",
+                    "de": "Referenz auf das Ziel, zu dem dieses Schl\u00fcsselergebnis geh\u00f6rt"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.solution.okr.objective",
+                    "targetEntityClass": "cf.cplace.platform.assets.file.Page",
+                    "isHierarchy": "false"
+                },
+                "multiplicity": "maximalOne"
+            }
+        ]
     },
     {
         "internalName": "cf.cplace.solution.okr.objective",
@@ -200,7 +294,112 @@ Here is the current detailed data model in JSON. This is specifically about the 
             "de": "Ziele"
         },
         "iconName": "fa-bullseye",
-        "attributes": []
+        "attributes": [
+            {
+                "internalName": "cf.cplace.solution.okr.title",
+                "localizedName": {
+                    "en": "Title",
+                    "de": "Titel"
+                },
+                "shortHelp": {
+                    "en": "The title or main idea of the objective",
+                    "de": "Der Titel oder die Hauptidee des Ziels"
+                },
+                "constraint": {
+                    "attributeType": "string"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.solution.okr.status",
+                "localizedName": {
+                    "en": "Status",
+                    "de": "Status"
+                },
+                "shortHelp": {
+                    "en": "Possible statuses: 'Not Started', 'In Progress', 'Completed'",
+                    "de": "M\u00f6gliche Status: 'Nicht gestartet', 'In Bearbeitung', 'Abgeschlossen'"
+                },
+                "constraint": {
+                    "attributeType": "textEnumeration",
+                    "elements": [
+                        {
+                            "value": "Not Started",
+                            "localizedName": {
+                                "en": "Not Started",
+                                "de": "Nicht gestartet"
+                            }
+                        },
+                        {
+                            "value": "In Progress",
+                            "localizedName": {
+                                "en": "In Progress",
+                                "de": "In Bearbeitung"
+                            }
+                        },
+                        {
+                            "value": "Completed",
+                            "localizedName": {
+                                "en": "Completed",
+                                "de": "Abgeschlossen"
+                            }
+                        }
+                    ]
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.solution.okr.owner",
+                "localizedName": {
+                    "en": "Owner",
+                    "de": "Verantwortlicher"
+                },
+                "shortHelp": {
+                    "en": "Reference to the user in charge of the objective",
+                    "de": "Verweis auf den f\u00fcr das Ziel verantwortlichen Benutzer"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.platform.assets.group.Person",
+                    "targetEntityClass": "cf.cplace.platform.assets.group.Person",
+                    "isHierarchy": "false"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.solution.okr.cycle",
+                "localizedName": {
+                    "en": "Cycle",
+                    "de": "Zyklus"
+                },
+                "shortHelp": {
+                    "en": "Reference to the cycle this objective belongs to",
+                    "de": "Referenz auf den Zyklus, zu dem dieses Ziel geh\u00f6rt"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.solution.okr.cycle",
+                    "targetEntityClass": "cf.cplace.platform.assets.file.Page",
+                    "isHierarchy": "false"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.solution.okr.description",
+                "localizedName": {
+                    "en": "Description",
+                    "de": "Beschreibung"
+                },
+                "shortHelp": {
+                    "en": "Detailed description of the objective",
+                    "de": "Detaillierte Beschreibung des Ziels"
+                },
+                "constraint": {
+                    "attributeType": "richString"
+                },
+                "multiplicity": "maximalOne"
+            }
+        ]
     }
 ]
 ```
