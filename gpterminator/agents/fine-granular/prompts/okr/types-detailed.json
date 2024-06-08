@@ -9,7 +9,104 @@
             "en": "Cycles",
             "de": "Zyklen"
         },
-        "iconName": "fa-redo"
+        "iconName": "fa-redo",
+        "attributes": [
+            {
+                "internalName": "cf.cplace.solution.okr.year",
+                "localizedName": {
+                    "en": "Year",
+                    "de": "Jahr"
+                },
+                "constraint": {
+                    "attributeType": "number"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.solution.okr.quarter",
+                "localizedName": {
+                    "en": "Quarter",
+                    "de": "Quartal"
+                },
+                "shortHelp": null,
+                "constraint": {
+                    "attributeType": "textEnumeration",
+                    "elements": [
+                        {
+                            "value": "Q1",
+                            "localizedName": {
+                                "en": "Q1",
+                                "de": "Q1"
+                            }
+                        },
+                        {
+                            "value": "Q2",
+                            "localizedName": {
+                                "en": "Q2",
+                                "de": "Q2"
+                            }
+                        },
+                        {
+                            "value": "Q3",
+                            "localizedName": {
+                                "en": "Q3",
+                                "de": "Q3"
+                            }
+                        },
+                        {
+                            "value": "Q4",
+                            "localizedName": {
+                                "en": "Q4",
+                                "de": "Q4"
+                            }
+                        }
+                    ]
+                },
+                "multiplicity": "exactlyOne"
+            },
+            {
+                "internalName": "cf.cplace.solution.okr.status",
+                "localizedName": {
+                    "en": "Status",
+                    "de": "Status"
+                },
+                "shortHelp": null,
+                "constraint": {
+                    "attributeType": "textEnumeration",
+                    "elements": [
+                        {
+                            "value": "Planning",
+                            "localizedName": {
+                                "en": "Planning",
+                                "de": "Planung"
+                            }
+                        },
+                        {
+                            "value": "Active",
+                            "localizedName": {
+                                "en": "Active",
+                                "de": "Aktiv"
+                            }
+                        },
+                        {
+                            "value": "Reviewing",
+                            "localizedName": {
+                                "en": "Reviewing",
+                                "de": "In \u00dcberpr\u00fcfung"
+                            }
+                        },
+                        {
+                            "value": "Completed",
+                            "localizedName": {
+                                "en": "Completed",
+                                "de": "Abgeschlossen"
+                            }
+                        }
+                    ]
+                },
+                "multiplicity": "exactlyOne"
+            }
+        ]
     },
     {
         "internalName": "cf.cplace.solution.okr.keyResult",
@@ -21,7 +118,8 @@
             "en": "Key Results",
             "de": "Schl\u00fcsselergebnisse"
         },
-        "iconName": "fa-key"
+        "iconName": "fa-key",
+        "attributes": []
     },
     {
         "internalName": "cf.cplace.solution.okr.objective",
@@ -33,6 +131,7 @@
             "en": "Objectives",
             "de": "Ziele"
         },
-        "iconName": "fa-bullseye"
+        "iconName": "fa-bullseye",
+        "attributes": []
     }
 ]

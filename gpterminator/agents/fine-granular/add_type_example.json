@@ -8,5 +8,6 @@
     "en": "Cycles",
     "de": "Zyklen"
   },
-  "iconName": "fa-redo"
+  "iconName": "fa-redo",
+  "attributes": []
 }

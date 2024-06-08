@@ -31,7 +31,7 @@ We do not need an explicit ID attribute for each type - unless there is a specif
 The name of the reference should be the name of the type it is referring to. For example, if a Task refers to a Key Result, the reference should be named Key Result. If there are multiple references to the same type, use a descriptive name for the reference.
 
 
-### Current Data Model
+### High-Level Data Model
 
 Here is a high-level data model for the application presented in tabular format - one table for each type with their corresponding attributes:
 
@@ -61,6 +61,8 @@ Here is a high-level data model for the application presented in tabular format 
 | Cycle | Reference | Reference to the cycle this objective belongs to. | 
 
 
+### Detailed Data Model
+
 Here is the current detailed data model in JSON. This is specifically about the detailed data model for the application:
 
 ```json
@@ -75,7 +77,104 @@ Here is the current detailed data model in JSON. This is specifically about the 
             "en": "Cycles",
             "de": "Zyklen"
         },
-        "iconName": "fa-redo"
+        "iconName": "fa-redo",
+        "attributes": [
+            {
+                "internalName": "cf.cplace.solution.okr.year",
+                "localizedName": {
+                    "en": "Year",
+                    "de": "Jahr"
+                },
+                "constraint": {
+                    "attributeType": "number"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.solution.okr.quarter",
+                "localizedName": {
+                    "en": "Quarter",
+                    "de": "Quartal"
+                },
+                "shortHelp": null,
+                "constraint": {
+                    "attributeType": "textEnumeration",
+                    "elements": [
+                        {
+                            "value": "Q1",
+                            "localizedName": {
+                                "en": "Q1",
+                                "de": "Q1"
+                            }
+                        },
+                        {
+                            "value": "Q2",
+                            "localizedName": {
+                                "en": "Q2",
+                                "de": "Q2"
+                            }
+                        },
+                        {
+                            "value": "Q3",
+                            "localizedName": {
+                                "en": "Q3",
+                                "de": "Q3"
+                            }
+                        },
+                        {
+                            "value": "Q4",
+                            "localizedName": {
+                                "en": "Q4",
+                                "de": "Q4"
+                            }
+                        }
+                    ]
+                },
+                "multiplicity": "exactlyOne"
+            },
+            {
+                "internalName": "cf.cplace.solution.okr.status",
+                "localizedName": {
+                    "en": "Status",
+                    "de": "Status"
+                },
+                "shortHelp": null,
+                "constraint": {
+                    "attributeType": "textEnumeration",
+                    "elements": [
+                        {
+                            "value": "Planning",
+                            "localizedName": {
+                                "en": "Planning",
+                                "de": "Planung"
+                            }
+                        },
+                        {
+                            "value": "Active",
+                            "localizedName": {
+                                "en": "Active",
+                                "de": "Aktiv"
+                            }
+                        },
+                        {
+                            "value": "Reviewing",
+                            "localizedName": {
+                                "en": "Reviewing",
+                                "de": "In \u00dcberpr\u00fcfung"
+                            }
+                        },
+                        {
+                            "value": "Completed",
+                            "localizedName": {
+                                "en": "Completed",
+                                "de": "Abgeschlossen"
+                            }
+                        }
+                    ]
+                },
+                "multiplicity": "exactlyOne"
+            }
+        ]
     },
     {
         "internalName": "cf.cplace.solution.okr.keyResult",
@@ -87,7 +186,8 @@ Here is the current detailed data model in JSON. This is specifically about the 
             "en": "Key Results",
             "de": "Schl\u00fcsselergebnisse"
         },
-        "iconName": "fa-key"
+        "iconName": "fa-key",
+        "attributes": []
     },
     {
         "internalName": "cf.cplace.solution.okr.objective",
@@ -99,22 +199,25 @@ Here is the current detailed data model in JSON. This is specifically about the 
             "en": "Objectives",
             "de": "Ziele"
         },
-        "iconName": "fa-bullseye"
+        "iconName": "fa-bullseye",
+        "attributes": []
     }
 ]
 ```
 
-### Adapted Data Model
+### Task: Generate a Detailed Data Model Based on the High-Level Data Model
 
 Provide instructions for how to adapt the detailed data model so that it fits with the high-level data model to meet the specific requirements of the organization or project.
 
-Pay attention to whether all types which are present in the high-level data model are also present in the detailed data model. If not, you may need to add them. 
+Pay attention to whether all types which are present in the high-level data model are also present in the detailed data model. If not, you may need to add them.
+
+Do not add types that are already present in the detailed data model.
 
 Pay attention to whether all attributes which are present in the high-level data model are also present in the detailed data model. If not, you may need to add them.
 
 This may include adding new types, modifying existing attributes, or creating references between entities.
 
-The following operations can be performed on the data model:
+The following operations can be performed on the detailed data model:
 
 * Add a new type.
 * Add a boolean attribute to a type.

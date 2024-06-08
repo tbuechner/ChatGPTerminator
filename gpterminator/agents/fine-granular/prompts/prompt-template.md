@@ -6,11 +6,13 @@
 
 {{ load_file('meta-model.md') }}
 
-### Current Data Model
+### High-Level Data Model
 
 Here is a high-level data model for the application presented in tabular format - one table for each type with their corresponding attributes:
 
 {{ load_file('agents/fine-granular/prompts/' ~ application_name ~ '/types-high-level.md') }}
+
+### Detailed Data Model
 
 Here is the current detailed data model in JSON. This is specifically about the detailed data model for the application:
 
@@ -18,17 +20,19 @@ Here is the current detailed data model in JSON. This is specifically about the 
 {{ load_file('agents/fine-granular/prompts/' ~ application_name ~ '/types-detailed.json') }}
 ```
 
-### Adapted Data Model
+### Task: Generate a Detailed Data Model Based on the High-Level Data Model
 
 Provide instructions for how to adapt the detailed data model so that it fits with the high-level data model to meet the specific requirements of the organization or project.
 
-Pay attention to whether all types which are present in the high-level data model are also present in the detailed data model. If not, you may need to add them. 
+Pay attention to whether all types which are present in the high-level data model are also present in the detailed data model. If not, you may need to add them.
+
+Do not add types that are already present in the detailed data model.
 
 Pay attention to whether all attributes which are present in the high-level data model are also present in the detailed data model. If not, you may need to add them.
 
 This may include adding new types, modifying existing attributes, or creating references between entities.
 
-The following operations can be performed on the data model:
+The following operations can be performed on the detailed data model:
 
 * Add a new type.
 * Add a boolean attribute to a type.
