@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "add_boolean_attribute",
+  "content": {{ load_file('agents/fine-granular/add_boolean_attribute_example.json') | tojson }}
+}

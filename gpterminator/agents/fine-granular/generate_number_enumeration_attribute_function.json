@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "generate_number_enumeration_attribute",
-    "description": "Generate a new number enumeration attribute and add it to a type. Number enumeration attributes are used if there is a given set of allowed numbers.",
-    "parameters": {{ load_file('agents/fine-granular/generate_number_enumeration_attribute_schema.json') }}
-  }
-}

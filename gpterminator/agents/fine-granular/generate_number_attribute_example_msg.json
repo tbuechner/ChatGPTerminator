@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "generate_number_attribute",
-  "content": {{ load_file('agents/fine-granular/generate_number_attribute_example.json') | tojson }}
-}

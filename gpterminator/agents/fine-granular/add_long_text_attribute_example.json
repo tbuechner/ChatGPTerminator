@@ -1,6 +1,6 @@
 {
   "role": "function",
-  "name": "generate_long_text_attribute",
+  "name": "add_long_text_attribute",
   "content": {
     "internalTypeName": "cf.cplace.solution.safe.program",
     "internalName": "cf.cplace.solution.safe.statsJson",

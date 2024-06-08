@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "add_string_enumeration_attribute",
+  "content": {{ load_file('agents/fine-granular/add_string_enumeration_attribute_example.json') | tojson }}
+}

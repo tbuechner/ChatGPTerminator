@@ -52,7 +52,7 @@ class FineGranularAgent(Agent):
         print(f"Arguments: {argument_dict}")
         print(f"Types: {types}")
 
-        if 'generate_type' == function_name:
+        if 'add_type' == function_name:
             for type_ in types:
                 if type_['internalName'] == argument_dict['internalName']:
                     print(f"Type with name {argument_dict['internalName']} already exists")
@@ -62,15 +62,15 @@ class FineGranularAgent(Agent):
             return
 
         if (
-                'generate_boolean_attribute' == function_name or
-                'generate_date_attribute' == function_name or
-                'generate_long_text_attribute' == function_name or
-                'generate_number_attribute' == function_name or
-                'generate_number_enumeration_attribute' == function_name or
-                'generate_reference_attribute' == function_name or
-                'generate_rich_string_attribute' == function_name or
-                'generate_string_attribute' == function_name or
-                'generate_string_enumeration_attribute' == function_name
+                'add_boolean_attribute' == function_name or
+                'add_date_attribute' == function_name or
+                'add_long_text_attribute' == function_name or
+                'add_number_attribute' == function_name or
+                'add_number_enumeration_attribute' == function_name or
+                'add_reference_attribute' == function_name or
+                'add_rich_string_attribute' == function_name or
+                'add_string_attribute' == function_name or
+                'add_string_enumeration_attribute' == function_name
 
         ):
             for type_ in types:

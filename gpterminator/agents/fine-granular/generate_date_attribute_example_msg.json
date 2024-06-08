@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "generate_date_attribute",
-  "content": {{ load_file('agents/fine-granular/generate_date_attribute_example.json') | tojson }}
-}
