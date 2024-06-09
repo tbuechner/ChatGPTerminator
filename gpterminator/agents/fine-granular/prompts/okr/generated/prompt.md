@@ -80,17 +80,6 @@ Here is the current detailed data model in JSON. This is specifically about the 
         "iconName": "fa-redo",
         "attributes": [
             {
-                "internalName": "cf.cplace.solution.okr.year",
-                "localizedName": {
-                    "en": "Year",
-                    "de": "Jahr"
-                },
-                "constraint": {
-                    "attributeType": "number"
-                },
-                "multiplicity": "maximalOne"
-            },
-            {
                 "internalName": "cf.cplace.solution.okr.quarter",
                 "localizedName": {
                     "en": "Quarter",
@@ -173,6 +162,17 @@ Here is the current detailed data model in JSON. This is specifically about the 
                     ]
                 },
                 "multiplicity": "exactlyOne"
+            },
+            {
+                "internalName": "cf.cplace.solution.okr.year",
+                "localizedName": {
+                    "en": "Year",
+                    "de": "Jahr"
+                },
+                "constraint": {
+                    "attributeType": "number"
+                },
+                "multiplicity": "maximalOne"
             }
         ]
     },
