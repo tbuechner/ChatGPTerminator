@@ -1,6 +1,8 @@
 import json
 import os
 
+import jsonschema
+
 from gpterminator.Agent import Agent
 from gpterminator.Utils import renderTemplate
 
@@ -51,6 +53,19 @@ class FineGranularAgent(Agent):
         print(f"Function: {function_name}")
         print(f"Arguments: {argument_dict}")
         print(f"Types: {types}")
+
+        # iterate over self.gpterminator.tools
+        for tool in self.gpterminator.tools:
+            if tool['function']['name'] == function_name:
+                print(f"Tool with name {function_name} found")
+                schema_as_string = tool['function']['parameters']
+                schema = json.loads(schema_as_string)
+                try:
+                    jsonschema.validate(instance=argument_dict, schema=schema)
+                    print("JSON object is valid")
+                except jsonschema.exceptions.ValidationError as ve:
+                    print("JSON object is not valid.")
+                break
 
         if 'add_type' == function_name:
             for type_ in types:

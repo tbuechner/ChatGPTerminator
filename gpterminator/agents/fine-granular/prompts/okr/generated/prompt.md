@@ -428,3 +428,7 @@ The following operations can be performed on the detailed data model:
 * Add a integer enumeration attribute to a type.
 
 If you think the detailed data model fits the high-level data model and the requirements of the application - give this as the response: "The current data model meets the requirements of the application."
+
+The following instructions refer to the details of the detailed data model:
+
+
