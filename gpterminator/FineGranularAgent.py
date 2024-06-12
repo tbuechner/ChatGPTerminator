@@ -54,17 +54,8 @@ class FineGranularAgent(Agent):
         # print(f"Arguments: {argument_dict}")
         # print(f"Types: {types}")
 
-        # iterate over self.gpterminator.tools
-        for tool in self.gpterminator.tools:
-            if tool['function']['name'] == function_name:
-                print(f"Tool with name {function_name} found")
-                schema = tool['function']['parameters']
-                try:
-                    jsonschema.validate(instance=argument_dict, schema=schema)
-                    print("JSON object is valid")
-                except jsonschema.exceptions.ValidationError as ve:
-                    print("JSON object is not valid.")
-                break
+        if not self.validateSchema(argument_dict, function_name):
+            return
 
         if 'add_type' == function_name:
             for type_ in types:
@@ -101,6 +92,23 @@ class FineGranularAgent(Agent):
                     return
             print(f"Type with name {argument_dict['typeName']} does not exist")
             return
+
+    def validateSchema(self, argument_dict, function_name):
+        for tool in self.gpterminator.tools:
+            if tool['function']['name'] == function_name:
+                print(f"Tool with name {function_name} found")
+                schema = tool['function']['parameters']
+                try:
+                    jsonschema.validate(instance=argument_dict, schema=schema)
+                    print("JSON object is valid")
+                    return True
+                except jsonschema.exceptions.ValidationError as ve:
+                    print("JSON object is not valid.")
+                    return False
+
+        print(f"Tool with name {function_name} not found")
+        return False
+
 
 def applyFunctionHandler(self, function_name, arguments):
     with open(self.getPromptApplicationFolder() + '/types-detailed.json', 'r') as file:
