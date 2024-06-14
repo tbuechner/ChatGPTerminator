@@ -1,0 +1,13 @@
+{
+  "internalName": "cf.cplace.solution.okr.cycle",
+  "localizedNameSingular": {
+    "en": "Cycle",
+    "de": "Zyklus"
+  },
+  "localizedNamePlural": {
+    "en": "Cycles",
+    "de": "Zyklen"
+  },
+  "iconName": "fa-redo",
+  "attributes": []
+}

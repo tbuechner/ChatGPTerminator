@@ -93,6 +93,28 @@ class FineGranularAgent(Agent):
             print(f"Type with name {argument_dict['typeName']} does not exist")
             return
 
+        if 'remove_type' == function_name:
+            for type_ in types:
+                if type_['internalName'] == argument_dict['internalName']:
+                    print(f"Removing type with name {argument_dict['internalName']}")
+                    types.remove(type_)
+                    return
+            print(f"Type with name {argument_dict['internalName']} not found")
+            return
+
+        if 'remove_attribute' == function_name:
+            for type_ in types:
+                if type_['internalName'] == argument_dict['internalTypeName']:
+                    for attribute in type_['attributes']:
+                        if attribute['internalName'] == argument_dict['internalName']:
+                            print(f"Removing attribute with name {argument_dict['internalName']} from type {argument_dict['internalTypeName']}")
+                            type_['attributes'].remove(attribute)
+                            return
+                    print(f"Attribute with name {argument_dict['internalName']} not found in type {argument_dict['internalTypeName']}")
+                    return
+            print(f"Type with name {argument_dict['internalTypeName']} not found")
+            return
+
     def validateSchema(self, argument_dict, function_name):
         for tool in self.gpterminator.tools:
             if tool['function']['name'] == function_name:
