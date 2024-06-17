@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "add_rich_string_attribute",
-  "content": {{ load_file('agents/fine-granular/add_rich_string_attribute_example.json') | tojson }}
-}

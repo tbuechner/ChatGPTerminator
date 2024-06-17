@@ -10,17 +10,17 @@ class TextualDiffAgent(Agent):
     def __init__(self, gpterminator, application_name):
         super().__init__(gpterminator)
         self.application_name = application_name
-        self.agent_directory = 'agents/textual-diff'
+        self.agent_name = 'textual-diff'
 
 
     def init(self):
-        self.setToolsAndExamples(self.agent_directory)
+        self.setToolsAndExamples('agents/' + self.agent_name + '-tools')
         self.apply_function_handler = applyFunctionHandler
         self.generateAllPrompts()
 
 
     def getPromptFolder(self):
-        return self.agent_directory + '/prompts'
+        return 'agents/' + self.agent_name + '-prompts'
 
     def getPromptApplicationFolder(self):
         return self.getPromptFolder() + '/' + self.application_name

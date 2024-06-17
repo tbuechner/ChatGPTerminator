@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "add_reference_attribute",
+    "description": "Add a new reference attribute to a type. Reference attributes are used to reference another type. Similar to a foreign key in a SQL database.",
+    "parameters": {{ load_file('agents/fine-granular-tools/add_reference_attribute_schema.json') }}
+  }
+}
