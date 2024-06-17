@@ -1,1 +1,54 @@
-[]
+[
+    {
+        "internalName": "cf.cplace.risk",
+        "localizedNameSingular": {
+            "en": "Risk",
+            "de": "Risiko"
+        },
+        "localizedNamePlural": {
+            "en": "Risks",
+            "de": "Risiken"
+        },
+        "iconName": "fa-exclamation-triangle",
+        "attributes": [
+            {
+                "internalName": "cf.cplace.risk.probability",
+                "localizedName": {
+                    "en": "Probability",
+                    "de": "Wahrscheinlichkeit"
+                },
+                "constraint": {
+                    "attributeType": "number",
+                    "precision": "0"
+                },
+                "multiplicity": "maximalOne"
+            }
+        ]
+    },
+    {
+        "internalName": "cf.cplace.mitigationAction",
+        "localizedNameSingular": {
+            "en": "Mitigation Action",
+            "de": "Gegenma\u00dfnahme"
+        },
+        "localizedNamePlural": {
+            "en": "Mitigation Actions",
+            "de": "Gegenma\u00dfnahmen"
+        },
+        "iconName": "fa-tools",
+        "attributes": [
+            {
+                "internalName": "cf.cplace.mitigationAction.effectiveness",
+                "localizedName": {
+                    "en": "Effectiveness",
+                    "de": "Wirksamkeit"
+                },
+                "constraint": {
+                    "attributeType": "number",
+                    "precision": "0"
+                },
+                "multiplicity": "maximalOne"
+            }
+        ]
+    }
+]
