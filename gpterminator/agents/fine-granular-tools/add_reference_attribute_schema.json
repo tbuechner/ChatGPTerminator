@@ -74,8 +74,8 @@
       },
       "required": [
         "attributeType",
-        "typeNames",
-        "entityClass",
+        "targetInternalTypeNames",
+        "targetEntityClass",
         "isHierarchy"],
       "additionalProperties": false
     },
@@ -91,7 +91,7 @@
     }
   },
   "required": [
-    "typeName",
+    "internalTypeName",
     "internalName",
     "localizedName",
     "shortHelp",

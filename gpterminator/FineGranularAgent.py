@@ -126,7 +126,8 @@ class FineGranularAgent(Agent):
                     print("JSON object is valid")
                     return True
                 except jsonschema.exceptions.ValidationError as ve:
-                    print("JSON object is not valid.")
+                    print("JSON object is not valid:")
+                    print(argument_dict)
                     return False
 
         print(f"Tool with name {function_name} not found")

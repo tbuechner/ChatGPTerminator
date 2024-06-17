@@ -91,7 +91,6 @@
       },
       "required": [
         "attributeType",
-        "defaultValues",
         "elements"
       ],
       "additionalProperties": false
@@ -108,7 +107,7 @@
     }
   },
   "required": [
-    "typeName",
+    "internalTypeName",
     "internalName",
     "localizedName",
     "shortHelp",

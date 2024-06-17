@@ -79,7 +79,7 @@
     }
   },
   "required": [
-    "typeName",
+    "internalTypeName",
     "internalName",
     "localizedName",
     "shortHelp",
