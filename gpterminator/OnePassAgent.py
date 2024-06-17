@@ -9,9 +9,10 @@ class OnePassAgent(Agent):
     def __init__(self, gpterminator, application_name):
         super().__init__(gpterminator)
         self.application_name = application_name
+        self.agent_directory = 'agents/one-pass'
 
     def init(self):
-        self.setToolsAndExamples('agents/one-pass')
+        self.setToolsAndExamples(self.agent_directory)
         self.generateAllPrompts()
 
 
@@ -25,11 +26,11 @@ class OnePassAgent(Agent):
 
 
     def getPromptFolder(self):
-        return 'agents/one-pass/prompts'
+        return self.agent_directory + '/prompts'
 
 
     def getPromptApplicationFolder(self):
-        return 'agents/one-pass/prompts/' + self.application_name
+        return self.getPromptFolder() + '/' + self.application_name
 
 
     def generateAllPrompts(self):
