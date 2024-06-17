@@ -68,7 +68,7 @@
           ]
         },
         "isHierarchy": {
-          "type": "string",
+          "type": "boolean",
           "description": "Specifies whether the reference is a hierarchy reference. If this is true, the reference points to a hierarchy of entities."
         }
       },

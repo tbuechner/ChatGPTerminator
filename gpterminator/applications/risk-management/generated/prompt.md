@@ -83,6 +83,21 @@ Here is the current detailed data model in JSON. This is specifically about the 
                     "precision": "0"
                 },
                 "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.risk.description",
+                "localizedName": {
+                    "en": "Description",
+                    "de": "Beschreibung"
+                },
+                "shortHelp": {
+                    "en": "Detailed description of the risk",
+                    "de": "Detaillierte Beschreibung des Risikos"
+                },
+                "constraint": {
+                    "attributeType": "text"
+                },
+                "multiplicity": "maximalOne"
             }
         ]
     },
