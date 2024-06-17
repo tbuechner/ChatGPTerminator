@@ -1,6 +1,6 @@
 ### Application Description
 
-{{ load_file('agents/fine-granular-prompts/' ~ application_name ~ '/capabilities.md') }}
+{{ load_file('applications/' ~ application_name ~ '/capabilities.md') }}
 
 ### Data Modeling - Meta Model
 
@@ -10,14 +10,14 @@
 
 Here is a high-level data model for the application presented in tabular format - one table for each type with their corresponding attributes:
 
-{{ load_file('agents/fine-granular-prompts/' ~ application_name ~ '/types-high-level.md') }}
+{{ load_file('applications/' ~ application_name ~ '/generated/types-high-level.md') }}
 
 ### Detailed Data Model
 
 Here is the current detailed data model in JSON. This is specifically about the detailed data model for the application:
 
 ```json
-{{ load_file('agents/fine-granular-prompts/' ~ application_name ~ '/types-detailed.json') }}
+{{ load_file('applications/' ~ application_name ~ '/types-detailed.json') }}
 ```
 
 ### Task: Generate a Detailed Data Model Based on the High-Level Data Model
@@ -47,5 +47,5 @@ If you think the detailed data model fits the high-level data model and the requ
 
 The following instructions refer to the details of the detailed data model:
 
-{{ load_file('agents/fine-granular-prompts/' ~ application_name ~ '/prompt-detailed.md') }}
+{{ load_file('applications/' ~ application_name ~ '/prompt-detailed.md') }}
 

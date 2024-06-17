@@ -51,12 +51,12 @@ class GPTerminator:
             "regen": ["re", "generates a new response from the last message"],
             "new": ["n", "removes chat history and starts a new session"],
             "load": ["l", "loads a previously saved chatlog"],
-            "save": ["s", "saves the chat history"],
             "ifile": [None, "allows the user to analyze files with a prompt"],
             "cpyall": ["ca", "copies all raw text from the previous response"],
             "ccpy": ["cc", "copies code blocks from the last response"],
             "apply": ["a", "applies the function calls"],
-            "run": ["r", "run types prompt"]
+            "run": ["r", "run types prompt"],
+            "set": ["s", "set agent and application"]
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -251,9 +251,10 @@ class GPTerminator:
                     self.agent.applyFunctionCalls()
                 elif cmd == "run" or cmd == "r":
                     self.agent.runPrompt()
-                elif cmd.startswith("set_agent_") or cmd.startswith("sa_"):
-                    agent_name = cmd.split("_")[2]
-                    application_name = cmd.split("_")[3]
+                elif cmd == "set" or cmd == "s":
+                    agent_and_application = raw_cmd[1].split()
+                    agent_name = agent_and_application[1]
+                    application_name = agent_and_application[2]
                     if agent_name == "textual-diff":
                         self.agent = TextualDiffAgent(self, application_name)
                     elif agent_name == "fine-granular":

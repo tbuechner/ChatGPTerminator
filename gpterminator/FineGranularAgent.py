@@ -31,18 +31,23 @@ class FineGranularAgent(Agent):
 
 
     def generateAllPrompts(self):
-        for dir in os.listdir(self.getPromptFolder()):
-            if os.path.isdir(os.path.join(self.getPromptFolder(), dir)):
-                folder_name_generated = self.getPromptFolder() + '/' + dir + '/generated'
-                if os.path.exists(folder_name_generated):
-                    os.system("rm -r " + folder_name_generated)
+        folder_name_generated = 'applications/' + self.application_name + '/generated'
+        if os.path.exists(folder_name_generated):
+            os.system("rm -r " + folder_name_generated)
 
-                # create folder folder_name_generated
-                os.mkdir(folder_name_generated)
+        # create folder folder_name_generated
+        os.mkdir(folder_name_generated)
 
-                rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', None, dir)
-                with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
-                    new_file.write(rendered)
+        with open('applications/' + self.application_name + '/types-high-level.json', 'r') as file:
+            types = json.load(file)
+
+        rendered = renderTemplate(self.getPromptFolder() + '/types-high-level-template.md', types, self.application_name)
+        with open(os.path.join(folder_name_generated, "types-high-level.md"), "w") as new_file:
+            new_file.write(rendered)
+
+        rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', None, self.application_name)
+        with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
+            new_file.write(rendered)
 
 
     def handleFunction(self, function_name, argument_dict, types):
