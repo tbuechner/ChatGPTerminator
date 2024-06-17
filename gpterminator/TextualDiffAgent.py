@@ -24,7 +24,7 @@ class TextualDiffAgent(Agent):
 
 
     def runPrompt(self):
-        with open(self.getPromptFolder() + '/' + self.application_name + '/generated/prompt.md', 'r') as file:
+        with open('applications/' + self.application_name + '/generated/prompt.md', 'r') as file:
             prompt = file.read()
 
         # print("prompt: " + prompt)
@@ -47,7 +47,7 @@ class TextualDiffAgent(Agent):
                     types = json.load(file)
 
                 rendered = renderTemplate(self.getPromptFolder() + '/types-template.md', types)
-                with open(os.path.join(folder_name_generated, "types.md"), "w") as new_file:
+                with open(os.path.join(folder_name_generated, "types-high-level.md"), "w") as new_file:
                     new_file.write(rendered)
 
                 rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', None, dir)
@@ -99,7 +99,7 @@ class TextualDiffAgent(Agent):
 
 
 def applyFunctionHandler(self, function_name, arguments):
-    with open(self.getPromptFolder() + '/' + self.application_name + '/types.json', 'r') as file:
+    with open('applications/' + self.application_name + '/types.json', 'r') as file:
         types = json.load(file)
 
     print("Applying function calls")
@@ -109,7 +109,7 @@ def applyFunctionHandler(self, function_name, arguments):
         self.handleFunction(function_name, argument_dict, types)
 
     # write the types to the types.json file
-    with open(self.getPromptFolder() + '/' + self.application_name + '/types.json', 'w') as file:
+    with open('applications/' + self.application_name + '/types.json', 'w') as file:
         json.dump(types, file, indent=4)
 
     self.generateAllPrompts()

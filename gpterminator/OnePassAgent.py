@@ -17,7 +17,7 @@ class OnePassAgent(Agent):
 
 
     def runPrompt(self):
-        with open(self.getPromptFolder() + '/' + self.application_name + '/generated/prompt.md', 'r') as file:
+        with open('applications/' + self.application_name + '/generated/prompt.md', 'r') as file:
             prompt = file.read()
 
         # print("prompt: " + prompt)

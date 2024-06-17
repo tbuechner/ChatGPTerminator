@@ -20,7 +20,7 @@ class FineGranularAgent(Agent):
 
 
     def runPrompt(self):
-        with open(self.getPromptFolder() + '/' + self.application_name + '/generated/prompt.md', 'r') as file:
+        with open('applications/' + self.application_name + '/generated/prompt.md', 'r') as file:
             prompt = file.read()
 
         # print("prompt: " + prompt)
@@ -131,7 +131,7 @@ class FineGranularAgent(Agent):
 
 
 def applyFunctionHandler(self, function_name, arguments):
-    with open(self.getPromptFolder() + '/' + self.application_name + '/types-detailed.json', 'r') as file:
+    with open('applications/' + self.application_name + '/types-detailed.json', 'r') as file:
         types = json.load(file)
 
     print("Applying function calls")
@@ -141,7 +141,7 @@ def applyFunctionHandler(self, function_name, arguments):
         self.handleFunction(function_name, argument_dict, types)
 
     # write the types to the types.json file
-    with open(self.getPromptFolder() + '/' + self.application_name + '/types-detailed.json', 'w') as file:
+    with open('applications/' + self.application_name + '/types-detailed.json', 'w') as file:
         json.dump(types, file, indent=4)
 
     self.generateAllPrompts()
