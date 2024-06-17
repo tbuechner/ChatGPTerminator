@@ -17,7 +17,7 @@ class OnePassAgent(Agent):
 
 
     def runPrompt(self):
-        with open(self.getPromptApplicationFolder() + '/generated/prompt.md', 'r') as file:
+        with open(self.getPromptFolder() + '/' + self.application_name + '/generated/prompt.md', 'r') as file:
             prompt = file.read()
 
         # print("prompt: " + prompt)
@@ -28,9 +28,6 @@ class OnePassAgent(Agent):
     def getPromptFolder(self):
         return 'agents/' + self.agent_name + '-prompts'
 
-
-    def getPromptApplicationFolder(self):
-        return self.getPromptFolder() + '/' + self.application_name
 
 
     def generateAllPrompts(self):

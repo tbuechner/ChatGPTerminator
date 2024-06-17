@@ -70,7 +70,7 @@ class GPTerminator:
         # self.agent = TextualDiffAgent(self, 'okr')
         # self.agent = TextualDiffAgent(self, 'resource-management')
 
-        self.agent = FineGranularAgent(self, 'okr')
+        self.agent = FineGranularAgent(self, 'okr-fine-granular')
 
         # self.agent = HighLevelAgent(self)
 

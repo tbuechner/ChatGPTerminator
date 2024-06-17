@@ -22,12 +22,9 @@ class TextualDiffAgent(Agent):
     def getPromptFolder(self):
         return 'agents/' + self.agent_name + '-prompts'
 
-    def getPromptApplicationFolder(self):
-        return self.getPromptFolder() + '/' + self.application_name
-
 
     def runPrompt(self):
-        with open(self.getPromptApplicationFolder() + '/generated/prompt.md', 'r') as file:
+        with open(self.getPromptFolder() + '/' + self.application_name + '/generated/prompt.md', 'r') as file:
             prompt = file.read()
 
         # print("prompt: " + prompt)
@@ -102,7 +99,7 @@ class TextualDiffAgent(Agent):
 
 
 def applyFunctionHandler(self, function_name, arguments):
-    with open(self.getPromptApplicationFolder() + '/types.json', 'r') as file:
+    with open(self.getPromptFolder() + '/' + self.application_name + '/types.json', 'r') as file:
         types = json.load(file)
 
     print("Applying function calls")
@@ -112,7 +109,7 @@ def applyFunctionHandler(self, function_name, arguments):
         self.handleFunction(function_name, argument_dict, types)
 
     # write the types to the types.json file
-    with open(self.getPromptApplicationFolder() + '/types.json', 'w') as file:
+    with open(self.getPromptFolder() + '/' + self.application_name + '/types.json', 'w') as file:
         json.dump(types, file, indent=4)
 
     self.generateAllPrompts()
