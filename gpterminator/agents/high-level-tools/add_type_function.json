@@ -3,6 +3,6 @@
   "function": {
     "name": "add_type",
     "description": "Add a type to the data model.",
-    "parameters": {{ load_file('agents/textual-diff-tools/add_type_schema.json') }}
+    "parameters": {{ load_file('agents/high-level-tools/add_type_schema.json') }}
   }
 }

@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "add_type",
+  "content": {{ load_file('agents/high-level-tools/add_type_example.json') | tojson }}
+}

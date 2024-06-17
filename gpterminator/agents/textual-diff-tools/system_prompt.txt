@@ -1,1 +1,0 @@
-You are a helpful assistant used for generating data models for software applications.

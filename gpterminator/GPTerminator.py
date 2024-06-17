@@ -27,10 +27,9 @@ from jinja2 import Template
 
 from gpterminator.Agent import Agent
 from gpterminator.FineGranularAgent import FineGranularAgent
-from gpterminator.HighLevelAgent import HighLevelAgent
 from gpterminator.OnePassAgent import OnePassAgent
 from gpterminator.TextualAgent import TextualAgent
-from gpterminator.TextualDiffAgent import TextualDiffAgent
+from gpterminator.HighLevelAgent import HighLevelAgent
 from gpterminator.Utils import get_file_name, renderTemplate, addToFunctionName2Arguments
 
 class GPTerminator:
@@ -63,16 +62,14 @@ class GPTerminator:
         self.save_path = ""
         self.console = Console()
 
-        # self.agent = TextualDiffAgent(self, 'risk-management-textual-diff')
+        # self.agent = HighLevelAgent(self, 'risk-management-high-level')
 
-        # self.agent = TextualDiffAgent(self, 'large-safe-textual-diff')
+        # self.agent = HighLevelAgent(self, 'large-safe-high-level')
 
-        self.agent = TextualDiffAgent(self, 'okr-textual-diff')
-        # self.agent = TextualDiffAgent(self, 'resource-management-textual-diff')
+        self.agent = HighLevelAgent(self, 'okr-high-level')
+        # self.agent = HighLevelAgent(self, 'resource-management-high-level')
 
         # self.agent = FineGranularAgent(self, 'okr-fine-granular')
-
-        # self.agent = HighLevelAgent(self)
 
         # self.agent = OnePassAgent(self, 'okr')
         # self.agent = OnePassAgent(self, 'risk-management')
@@ -255,12 +252,10 @@ class GPTerminator:
                     agent_and_application = raw_cmd[1].split()
                     agent_name = agent_and_application[1]
                     application_name = agent_and_application[2]
-                    if agent_name == "textual-diff":
-                        self.agent = TextualDiffAgent(self, application_name)
+                    if agent_name == "high-level":
+                        self.agent = HighLevelAgent(self, application_name)
                     elif agent_name == "fine-granular":
                         self.agent = FineGranularAgent(self, application_name)
-                    elif agent_name == "high-level":
-                        self.agent = HighLevelAgent(self)
                     elif agent_name == "one-pass":
                         self.agent = OnePassAgent(self, application_name)
                     elif agent_name == "textual":

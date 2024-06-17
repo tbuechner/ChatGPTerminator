@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "delete_type",
+  "content": {{ load_file('agents/high-level-tools/delete_type_example.json') | tojson }}
+}

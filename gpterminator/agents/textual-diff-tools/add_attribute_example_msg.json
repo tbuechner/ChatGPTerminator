@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "add_attribute",
-  "content": {{ load_file('agents/textual-diff-tools/add_attribute_example.json') | tojson }}
-}
