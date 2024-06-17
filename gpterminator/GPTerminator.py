@@ -67,10 +67,10 @@ class GPTerminator:
 
         # self.agent = TextualDiffAgent(self, 'large-safe-textual-diff')
 
-        # self.agent = TextualDiffAgent(self, 'okr-textual-diff')
+        self.agent = TextualDiffAgent(self, 'okr-textual-diff')
         # self.agent = TextualDiffAgent(self, 'resource-management-textual-diff')
 
-        self.agent = FineGranularAgent(self, 'okr-fine-granular')
+        # self.agent = FineGranularAgent(self, 'okr-fine-granular')
 
         # self.agent = HighLevelAgent(self)
 
@@ -249,6 +249,23 @@ class GPTerminator:
                     self.printBanner()
                 elif cmd == "apply" or cmd == "a":
                     self.agent.applyFunctionCalls()
+                elif cmd == "run" or cmd == "r":
+                    self.agent.runPrompt()
+                elif cmd.startswith("set_agent_") or cmd.startswith("sa_"):
+                    agent_name = cmd.split("_")[2]
+                    application_name = cmd.split("_")[3]
+                    if agent_name == "textual-diff":
+                        self.agent = TextualDiffAgent(self, application_name)
+                    elif agent_name == "fine-granular":
+                        self.agent = FineGranularAgent(self, application_name)
+                    elif agent_name == "high-level":
+                        self.agent = HighLevelAgent(self)
+                    elif agent_name == "one-pass":
+                        self.agent = OnePassAgent(self, application_name)
+                    elif agent_name == "textual":
+                        self.agent = TextualAgent(self)
+                    else:
+                        self.printError(f"Agent {agent_name} not found")
                 elif cmd == "run" or cmd == "r":
                     self.agent.runPrompt()
             else:
@@ -486,8 +503,3 @@ class GPTerminator:
         elif(self.config_selected == "OPENAI_CONFIG"):
             self.client = openai
             openai.api_key = self.config[self.config_selected]["API_KEY"]
-
-        self.agent.init()
-
-
-

@@ -1,6 +1,6 @@
 ### Application Description
 
-{{ load_file('agents/textual-diff/prompts/' ~ application_name ~ '/capabilities.md') }}
+{{ load_file('applications/' ~ application_name ~ '/capabilities.md') }}
 
 ### Data Modeling - Meta Model
 
@@ -10,7 +10,7 @@
 
 Here is the structured data model for the application presented in tabular format for each type with their corresponding attributes:
 
-{{ load_file('agents/textual-diff/prompts/' ~ application_name ~ '/generated/types-high-level.md') }}
+{{ load_file('agents/textual-diff-prompts/' ~ application_name ~ '/generated/types-high-level.md') }}
 
 ### Adapted Data Model
 

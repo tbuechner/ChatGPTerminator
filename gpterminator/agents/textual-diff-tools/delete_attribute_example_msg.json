@@ -1,5 +1,5 @@
 {
   "role": "function",
   "name": "delete_attribute",
-  "content": {{ load_file('agents/textual-diff/delete_attribute_example.json') | tojson }}
+  "content": {{ load_file('agents/textual-diff-tools/delete_attribute_example.json') | tojson }}
 }

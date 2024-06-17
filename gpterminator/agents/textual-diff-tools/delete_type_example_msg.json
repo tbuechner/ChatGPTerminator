@@ -1,5 +1,5 @@
 {
   "role": "function",
   "name": "delete_type",
-  "content": {{ load_file('agents/textual-diff/delete_type_example.json') | tojson }}
+  "content": {{ load_file('agents/textual-diff-tools/delete_type_example.json') | tojson }}
 }

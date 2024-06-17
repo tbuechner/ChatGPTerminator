@@ -10,8 +10,6 @@ class OnePassAgent(Agent):
         super().__init__(gpterminator)
         self.application_name = application_name
         self.agent_name = 'one-pass'
-
-    def init(self):
         self.setToolsAndExamples('agents/' + self.agent_name + '-tools')
         self.generateAllPrompts()
 

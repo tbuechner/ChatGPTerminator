@@ -8,9 +8,6 @@ class Agent:
     def __init__(self, gpterminator):
         self.gpterminator = gpterminator
 
-    def init(self):
-        pass
-
 
     def runPrompt(self):
         pass
