@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "remove_type",
+  "content": {{ load_file('agents/fine-granular/tools/remove_type_example.json') | tojson }}
+}

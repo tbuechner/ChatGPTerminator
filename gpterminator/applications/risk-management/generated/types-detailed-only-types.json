@@ -9,8 +9,7 @@
             "en": "Risks",
             "de": "Risiken"
         },
-        "iconName": "fa-exclamation-triangle",
-        "attributes": []
+        "iconName": "fa-exclamation-triangle"
     },
     {
         "internalName": "cf.cplace.mitigationAction",
@@ -22,7 +21,6 @@
             "en": "Mitigation Actions",
             "de": "Gegenma\u00dfnahmen"
         },
-        "iconName": "fa-tools",
-        "attributes": []
+        "iconName": "fa-tools"
     }
 ]

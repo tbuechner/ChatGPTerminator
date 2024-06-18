@@ -31,11 +31,7 @@ class HighLevelAgent(Agent):
 
     def generateAllPrompts(self):
         folder_name_generated = 'applications/' + self.application_name + '/generated'
-        if os.path.exists(folder_name_generated):
-            os.system("rm -r " + folder_name_generated)
-
-        # create folder folder_name_generated
-        os.mkdir(folder_name_generated)
+        self.generateFolderIfNotExists(folder_name_generated)
 
         with open('applications/' + self.application_name + '/types-high-level.json', 'r') as file:
             types = json.load(file)

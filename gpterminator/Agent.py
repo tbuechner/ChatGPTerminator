@@ -1,5 +1,6 @@
 import json
 import os
+import jsonschema
 
 from gpterminator.Utils import renderTemplate
 
@@ -57,3 +58,26 @@ class Agent:
         else:
             self.gpterminator.tools = None
 
+    def validateSchema(self, argument_dict, function_name):
+        for tool in self.gpterminator.tools:
+            if tool['function']['name'] == function_name:
+                print(f"Tool with name {function_name} found")
+                schema = tool['function']['parameters']
+                try:
+                    jsonschema.validate(instance=argument_dict, schema=schema)
+                    print("JSON object is valid")
+                    return True
+                except jsonschema.exceptions.ValidationError as ve:
+                    print("JSON object is not valid:")
+                    print(argument_dict)
+                    return False
+
+        print(f"Tool with name {function_name} not found")
+        return False
+
+    def generateFolderIfNotExists(self, folder_name_generated):
+        if os.path.exists(folder_name_generated):
+            os.system("rm -r " + folder_name_generated)
+
+        # create folder folder_name_generated
+        os.mkdir(folder_name_generated)

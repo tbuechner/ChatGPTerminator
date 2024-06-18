@@ -7,11 +7,11 @@ from gpterminator.Agent import Agent
 from gpterminator.Utils import renderTemplate
 
 
-class FineGranularAgent(Agent):
+class FineGranularOnlyTypesAgent(Agent):
     def __init__(self, gpterminator, application_name):
         super().__init__(gpterminator)
         self.application_name = application_name
-        self.agent_name = 'fine-granular'
+        self.agent_name = 'fine-granular-only-types'
         self.setToolsAndExamples('agents/' + self.agent_name + '/tools')
         self.apply_function_handler = applyFunctionHandler
         self.generateAllPrompts()
@@ -33,6 +33,13 @@ class FineGranularAgent(Agent):
     def generateAllPrompts(self):
         folder_name_generated = 'applications/' + self.application_name + '/generated'
         self.generateFolderIfNotExists(folder_name_generated)
+
+        with open('applications/' + self.application_name + '/types-detailed.json', 'r') as file:
+            types_detailed = json.load(file)
+        for type_ in types_detailed:
+            type_.pop('attributes', None)
+        with open(folder_name_generated + '/types-detailed-only-types.json', 'w') as file:
+            json.dump(types_detailed, file, indent=4)
 
         with open('applications/' + self.application_name + '/types-high-level.json', 'r') as file:
             types = json.load(file)
@@ -63,33 +70,6 @@ class FineGranularAgent(Agent):
             types.append(argument_dict)
             return
 
-        if (
-                'add_boolean_attribute' == function_name or
-                'add_date_attribute' == function_name or
-                'add_long_text_attribute' == function_name or
-                'add_number_attribute' == function_name or
-                'add_number_enumeration_attribute' == function_name or
-                'add_reference_attribute' == function_name or
-                'add_rich_string_attribute' == function_name or
-                'add_string_attribute' == function_name or
-                'add_string_enumeration_attribute' == function_name
-
-        ):
-            for type_ in types:
-                if type_['internalName'] == argument_dict['internalTypeName']:
-                    if 'attributes' not in type_:
-                        type_['attributes'] = []
-                    for attribute in type_['attributes']:
-                        if attribute['internalName'] == argument_dict['internalName']:
-                            print(f"Attribute with name {argument_dict['internalName']} already exists")
-                            return
-                    print(f"Adding attribute with name {argument_dict['internalName']} to type {argument_dict['internalTypeName']}")
-                    del argument_dict['internalTypeName']
-                    type_['attributes'].append(argument_dict)
-                    return
-            print(f"Type with name {argument_dict['typeName']} does not exist")
-            return
-
         if 'remove_type' == function_name:
             for type_ in types:
                 if type_['internalName'] == argument_dict['internalName']:
@@ -97,19 +77,6 @@ class FineGranularAgent(Agent):
                     types.remove(type_)
                     return
             print(f"Type with name {argument_dict['internalName']} not found")
-            return
-
-        if 'remove_attribute' == function_name:
-            for type_ in types:
-                if type_['internalName'] == argument_dict['internalTypeName']:
-                    for attribute in type_['attributes']:
-                        if attribute['internalName'] == argument_dict['internalName']:
-                            print(f"Removing attribute with name {argument_dict['internalName']} from type {argument_dict['internalTypeName']}")
-                            type_['attributes'].remove(attribute)
-                            return
-                    print(f"Attribute with name {argument_dict['internalName']} not found in type {argument_dict['internalTypeName']}")
-                    return
-            print(f"Type with name {argument_dict['internalTypeName']} not found")
             return
 
 

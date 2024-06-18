@@ -29,24 +29,18 @@ class OnePassAgent(Agent):
 
 
     def generateAllPrompts(self):
-        for dir in os.listdir(self.getPromptFolder()):
-            if os.path.isdir(os.path.join(self.getPromptFolder(), dir)):
-                folder_name_generated = self.getPromptFolder() + '/' + dir + '/generated'
-                if os.path.exists(folder_name_generated):
-                    os.system("rm -r " + folder_name_generated)
+        folder_name_generated = self.getPromptFolder() + '/' + dir + '/generated'
+        self.generateFolderIfNotExists(folder_name_generated)
 
-                # create folder folder_name_generated
-                os.mkdir(folder_name_generated)
+        # load content of file types.json into the variable types
+        with open(self.getPromptFolder() + '/' + dir + '/types-high-level.json', 'r') as file:
+            types = json.load(file)
 
-                # load content of file types.json into the variable types
-                with open(self.getPromptFolder() + '/' + dir + '/types-high-level.json', 'r') as file:
-                    types = json.load(file)
+        rendered = renderTemplate(self.getPromptFolder() + '/types-high-level-template.md', types)
+        with open(os.path.join(folder_name_generated, "types.md"), "w") as new_file:
+            new_file.write(rendered)
 
-                rendered = renderTemplate(self.getPromptFolder() + '/types-high-level-template.md', types)
-                with open(os.path.join(folder_name_generated, "types.md"), "w") as new_file:
-                    new_file.write(rendered)
-
-                rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', None, dir)
-                with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
-                    new_file.write(rendered)
+        rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', None, dir)
+        with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
+            new_file.write(rendered)
 

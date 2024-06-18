@@ -27,6 +27,7 @@ from jinja2 import Template
 
 from gpterminator.Agent import Agent
 from gpterminator.FineGranularAgent import FineGranularAgent
+from gpterminator.FineGranularOnlyTypesAgent import FineGranularOnlyTypesAgent
 from gpterminator.OnePassAgent import OnePassAgent
 from gpterminator.TextualAgent import TextualAgent
 from gpterminator.HighLevelAgent import HighLevelAgent
@@ -256,6 +257,8 @@ class GPTerminator:
                         self.agent = HighLevelAgent(self, application_name)
                     elif agent_name == "fine-granular":
                         self.agent = FineGranularAgent(self, application_name)
+                    elif agent_name == "fine-granular-only-types":
+                        self.agent = FineGranularOnlyTypesAgent(self, application_name)
                     elif agent_name == "one-pass":
                         self.agent = OnePassAgent(self, application_name)
                     elif agent_name == "textual":
