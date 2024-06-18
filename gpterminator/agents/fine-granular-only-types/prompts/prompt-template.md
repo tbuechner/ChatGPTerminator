@@ -16,7 +16,7 @@ Here is the current detailed data model in JSON - filtered so that it only conta
 {{ load_file('applications/' ~ application_name ~ '/generated/types-detailed-only-types.json') }}
 ```
 
-### Task: Generate a Detailed Data Model Based on the High-Level Data Model
+### Task: Generate Types Based on the High-Level Data Model
 
 Provide instructions for how to adapt the types in the detailed data model so that it fits with the high-level data model to meet the specific requirements of the organization or project.
 
@@ -26,7 +26,7 @@ Do not add types that are already present in the detailed data model.
 
 This is only about the types in the detailed data model. Attributes are not considered here.
 
-If you think the types in the detailed data model fit the types in the high-level data model and the requirements of the application - give this as the response: "The current data model meets the requirements of the application."
+If you think the types in the detailed data model fit the types in the high-level data model and the requirements of the application - give this as the response: "The types of the detailed data model meets the requirements of the application."
 
 The following instructions refer to the details of the detailed data model:
 

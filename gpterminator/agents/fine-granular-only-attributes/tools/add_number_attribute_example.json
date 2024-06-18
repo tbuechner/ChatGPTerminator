@@ -1,0 +1,17 @@
+{
+  "internalTypeName": "cf.cplace.solution.safe.program",
+  "internalName": "cf.cplace.solution.safe.progress",
+  "localizedName": {
+    "en": "Progress",
+    "de": "Fortschritt"
+  },
+  "constraint": {
+    "attributeType": "number",
+    "precision": 0,
+    "localizedTextAfterSupplier": {
+      "en": "%",
+      "de": "%"
+    }
+  },
+  "multiplicity": "maximalOne"
+}

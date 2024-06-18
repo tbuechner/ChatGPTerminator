@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "internalTypeName": {
+      "type": "string",
+      "description": "The internal name of the type the attribute belongs to."
+    },
+    "internalName": {
+      "type": "string",
+      "description": "The internal name of the attribute, which is used in the database. Internal names usually contain only lowercase and uppercase letters and dots. They are similar to java package names."
+    },
+    "localizedName": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "de": {
+          "type": "string"
+        }
+      },
+      "description": "The localized name of the attribute, which is used in the user interface.",
+      "required": [
+        "en",
+        "de"
+      ],
+      "additionalProperties": false
+    },
+    "shortHelp": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "de": {
+          "type": "string"
+        }
+      },
+      "description": "Short help text for the attribute, which explains the meaning of the attribute in a few words and is shown in the UI.",
+      "required": [
+        "en",
+        "de"
+      ],
+      "additionalProperties": false
+    },
+    "constraint": {
+      "type": "object",
+      "properties": {
+        "attributeType": {
+          "const": "string"
+        }
+      },
+      "required": [
+        "attributeType"],
+      "additionalProperties": false
+    },
+    "multiplicity": {
+      "type": "string",
+      "description": "Specifies the multiplicity/cardinality of the attribute.",
+      "enum": [
+        "maximalOne",
+        "exactlyOne",
+        "anyNumber",
+        "atLeastOne"
+      ]
+    }
+  },
+  "required": [
+    "internalTypeName",
+    "internalName",
+    "localizedName",
+    "shortHelp",
+    "constraint",
+    "multiplicity"],
+  "additionalProperties": false
+}
