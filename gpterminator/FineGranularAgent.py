@@ -12,7 +12,7 @@ class FineGranularAgent(Agent):
         super().__init__(gpterminator)
         self.application_name = application_name
         self.agent_name = 'fine-granular'
-        self.setToolsAndExamples('agents/' + self.agent_name + '-tools')
+        self.setToolsAndExamples('agents/' + self.agent_name + '/tools')
         self.apply_function_handler = applyFunctionHandler
         self.generateAllPrompts()
 
@@ -27,7 +27,7 @@ class FineGranularAgent(Agent):
 
 
     def getPromptFolder(self):
-        return 'agents/' + self.agent_name + '-prompts'
+        return 'agents/' + self.agent_name + '/prompts'
 
 
     def generateAllPrompts(self):

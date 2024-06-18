@@ -11,13 +11,13 @@ class HighLevelAgent(Agent):
         super().__init__(gpterminator)
         self.application_name = application_name
         self.agent_name = 'high-level'
-        self.setToolsAndExamples('agents/' + self.agent_name + '-tools')
+        self.setToolsAndExamples('agents/' + self.agent_name + '/tools')
         self.apply_function_handler = applyFunctionHandler
         self.generateAllPrompts()
 
 
     def getPromptFolder(self):
-        return 'agents/' + self.agent_name + '-prompts'
+        return 'agents/' + self.agent_name + '/prompts'
 
 
     def runPrompt(self):
