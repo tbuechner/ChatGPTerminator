@@ -14,7 +14,7 @@ Here is a given high-level data model for the application presented in tabular f
 
 ### Detailed Data Model
 
-Here is the current detailed data model in JSON. This is specifically about the attributes of the types:
+Here is the current detailed data model in JSON. Your task is specifically about the attributes of the types:
 
 ```json
 {{ load_file('applications/' ~ application_name ~ '/types-detailed.json') }}
