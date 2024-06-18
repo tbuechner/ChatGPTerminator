@@ -11,10 +11,10 @@ class OnePassAgent(Agent):
         self.application_name = application_name
         self.agent_name = 'one-pass'
         self.setToolsAndExamples('agents/' + self.agent_name + '/tools')
+
+
+    def runPrompt(self, additional_args=None):
         self.generateAllPrompts()
-
-
-    def runPrompt(self):
         with open('applications/' + self.application_name + '/generated/prompt.md', 'r') as file:
             prompt = file.read()
 

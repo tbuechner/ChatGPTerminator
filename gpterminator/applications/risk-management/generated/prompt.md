@@ -5,18 +5,38 @@ I want to build an application which can be used to manage risks. It should be p
 Mitigation actions should be represented in a separate type.
 
 
+### Data Modeling - Meta Model
+
+In order to implement the application, I would need to create a data model that stores the necessary information for managing data needed for the application.
+
+The data model consists of types and attributes. Types are the entities that represent different concepts within the application, while attributes define the properties of these entities.
+
+The following attribute types exist:
+
+* Text: Used for storing textual information.
+* Number: Used for storing numerical values.
+* Date: Used for storing date and time information.
+* Reference: Used for establishing relationships between entities.
+* Text Enumeration: Used for defining a set of predefined values for an attribute.
+* Number Enumeration: Used for defining a set of predefined numerical values for an attribute.
+* Boolean: Used for storing true/false values.
+* Rich Text: Used for storing formatted text.
+
+There exists a built-in user type, we do not need a separate type for it. There can be references towards the built-in user type.
+
+We do not need an explicit ID attribute for each type - unless there is a specific reason to have it.
+
+The name of the reference should be the name of the type it is referring to. For example, if a Task refers to a Key Result, the reference should be named Key Result. If there are multiple references to the same type, use a descriptive name for the reference.
+
+
 ### High-Level Data Model
 
-Here is a high-level data model for the application presented in tabular format - one table for each type with their corresponding attributes:
+Here is a given high-level data model for the application presented in tabular format, which solves the application described above. One table for each type with their corresponding attributes:
 
 
 ### Risk
 | Attribute    | Type                  | Description                      |
 |--------------|-----------------------|----------------------------------|
-| Description | Text | Detailed description of the risk | 
-| Probability | Number | Probability of the risk occurring | 
-| Status | Text Enumeration | Current status of the risk (e.g., Open, In Progress, Mitigated, Closed) | 
-| ResponsiblePerson | Reference | User who is responsible for the risk | 
 
 ### MitigationAction
 | Attribute    | Type                  | Description                      |
@@ -32,7 +52,7 @@ Here is a high-level data model for the application presented in tabular format 
 
 ### Detailed Data Model
 
-Here is the current detailed data model in JSON - filtered so that it only contains the types:
+Here is the current detailed data model in JSON. Your task is specifically about the attributes of the types:
 
 ```json
 [
@@ -58,23 +78,118 @@ Here is the current detailed data model in JSON - filtered so that it only conta
             "en": "Mitigation Actions",
             "de": "Gegenma\u00dfnahmen"
         },
-        "iconName": "fa-tools"
+        "iconName": "fa-tools",
+        "attributes": [
+            {
+                "internalName": "cf.cplace.mitigationAction.risk",
+                "localizedName": {
+                    "en": "Risk",
+                    "de": "Risiko"
+                },
+                "shortHelp": {
+                    "en": "The risk that this mitigation action is related to",
+                    "de": "Das Risiko, mit dem diese Gegenma\u00dfnahme zusammenh\u00e4ngt"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.risk",
+                    "targetEntityClass": "cf.cplace.platform.assets.file.Page",
+                    "isHierarchy": false
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.responsiblePerson",
+                "localizedName": {
+                    "en": "Responsible Person",
+                    "de": "Verantwortliche Person"
+                },
+                "shortHelp": {
+                    "en": "User who is responsible for this mitigation action",
+                    "de": "Benutzer, der f\u00fcr diese Gegenma\u00dfnahme verantwortlich ist"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.platform.assets.group.Person",
+                    "targetEntityClass": "cf.cplace.platform.assets.group.Person",
+                    "isHierarchy": false
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.description",
+                "localizedName": {
+                    "en": "Description",
+                    "de": "Beschreibung"
+                },
+                "shortHelp": {
+                    "en": "Detailed description of the mitigation action",
+                    "de": "Detaillierte Beschreibung der Gegenma\u00dfnahme"
+                },
+                "constraint": {
+                    "attributeType": "richString"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.comments",
+                "localizedName": {
+                    "en": "Comments",
+                    "de": "Bemerkungen"
+                },
+                "shortHelp": {
+                    "en": "Additional comments regarding the mitigation action",
+                    "de": "Zus\u00e4tzliche Bemerkungen zur Gegenma\u00dfnahme"
+                },
+                "constraint": {
+                    "attributeType": "richString"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.dueDate",
+                "localizedName": {
+                    "en": "Due Date",
+                    "de": "F\u00e4lligkeitsdatum"
+                },
+                "shortHelp": {
+                    "en": "The date by which the mitigation action should be completed",
+                    "de": "Datum, bis zu dem die Gegenma\u00dfnahme abgeschlossen sein sollte"
+                },
+                "constraint": {
+                    "attributeType": "date",
+                    "specificity": "DAY",
+                    "dateFormat": "DAY_YEAR_LONG"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.effectiveness",
+                "localizedName": {
+                    "en": "Effectiveness",
+                    "de": "Wirksamkeit"
+                },
+                "shortHelp": {
+                    "en": "The effectiveness rating of the mitigation action (e.g., 1 to 5)",
+                    "de": "Wirksamkeitsbewertung der Gegenma\u00dfnahme (z. B. 1 bis 5)"
+                },
+                "constraint": {
+                    "attributeType": "number",
+                    "precision": "0"
+                },
+                "multiplicity": "maximalOne"
+            }
+        ]
     }
 ]
 ```
 
-### Task: Generate a Detailed Data Model Based on the High-Level Data Model
+### Task: Generate Attributes in a Detailed Data Model Based on the High-Level Data Model
 
-Provide instructions for how to adapt the types in the detailed data model so that it fits with the high-level data model to meet the specific requirements of the organization or project.
+Check carefully if the attributes in the detailed data model fit the high-level data model. Do this check by going through the types in the high-level data model and comparing their attributes with the attributes of the corresponding type in the detailed data model. 
 
-Pay attention to whether all types which are present in the high-level data model are also present in the detailed data model. If not, you may need to add them.
+For each type in the high-level data model, check if the attributes in the detailed data model exist and are correct. If not, you may need to add or remove them.
 
-Do not add types that are already present in the detailed data model.
-
-This is only about the types in the detailed data model. Attributes are not considered here.
-
-If you think the types in the detailed data model fit the types in the high-level data model and the requirements of the application - give this as the response: "The current data model meets the requirements of the application."
-
-The following instructions refer to the details of the detailed data model:
+If you think the attributes in the detailed data model fit the high-level data model and the requirements of the application - give this as the response: "The current data model and the attributes meets the requirements of the application."
 
 

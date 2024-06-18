@@ -14,10 +14,10 @@ class FineGranularOnlyTypesAgent(Agent):
         self.agent_name = 'fine-granular-only-types'
         self.setToolsAndExamples('agents/' + self.agent_name + '/tools')
         self.apply_function_handler = applyFunctionHandler
+
+
+    def runPrompt(self, additional_args=None):
         self.generateAllPrompts()
-
-
-    def runPrompt(self):
         with open('applications/' + self.application_name + '/generated/prompt.md', 'r') as file:
             prompt = file.read()
 

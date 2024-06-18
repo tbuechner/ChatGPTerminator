@@ -249,7 +249,8 @@ class GPTerminator:
                 elif cmd == "apply" or cmd == "a":
                     self.agent.applyFunctionCalls()
                 elif cmd == "run" or cmd == "r":
-                    self.agent.runPrompt()
+                    # raw_cmd[1].split() is an array - give me the array without the first element
+                    self.agent.runPrompt(raw_cmd[1].split()[1:])
                 elif cmd == "set" or cmd == "s":
                     agent_and_application = raw_cmd[1].split()
                     agent_name = agent_and_application[1]

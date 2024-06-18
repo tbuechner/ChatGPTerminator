@@ -14,10 +14,10 @@ class FineGranularAgent(Agent):
         self.agent_name = 'fine-granular'
         self.setToolsAndExamples('agents/' + self.agent_name + '/tools')
         self.apply_function_handler = applyFunctionHandler
+
+
+    def runPrompt(self, additional_args=None):
         self.generateAllPrompts()
-
-
-    def runPrompt(self):
         with open('applications/' + self.application_name + '/generated/prompt.md', 'r') as file:
             prompt = file.read()
 
@@ -135,8 +135,6 @@ def applyFunctionHandler(self, function_name, arguments):
     # write the types to the types.json file
     with open('applications/' + self.application_name + '/types-detailed.json', 'w') as file:
         json.dump(types, file, indent=4)
-
-    self.generateAllPrompts()
 
     self.gpterminator.msg_hist = self.gpterminator.msg_hist[:1]
     self.gpterminator.prompt_count = 0

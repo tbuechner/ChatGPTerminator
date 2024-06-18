@@ -14,49 +14,70 @@ class FineGranularOnlyAttributesAgent(Agent):
         self.agent_name = 'fine-granular-only-attributes'
         self.setToolsAndExamples('agents/' + self.agent_name + '/tools')
         self.apply_function_handler = applyFunctionHandler
-        self.generateAllPrompts()
 
 
-    def runPrompt(self):
-        with open('applications/' + self.application_name + '/generated/prompt.md', 'r') as file:
-            prompt = file.read()
+    def runPrompt(self, additional_args=None):
+        # additional_args is an array, get the first element
+        type_index = additional_args[0] if additional_args else None
 
-        # print("prompt: " + prompt)
+        if type_index:
+            # convert type_index into an integer
+            type_index = int(type_index)
+            self.generateAllPrompts(type_index)
 
-        self.gpterminator.getResponse(prompt)
+            with open('applications/' + self.application_name + '/generated/prompt.md', 'r') as file:
+                prompt = file.read()
+
+            # print("prompt: " + prompt)
+
+            self.gpterminator.getResponse(prompt)
+        else:
+            print("Please provide a type index as an additional argument")
+            return
 
 
     def getPromptFolder(self):
         return 'agents/' + self.agent_name + '/prompts'
 
 
-    def generateAllPrompts(self):
+    def generateAllPrompts(self, type_index):
         folder_name_generated = 'applications/' + self.application_name + '/generated'
         self.generateFolderIfNotExists(folder_name_generated)
 
-        with open('applications/' + self.application_name + '/types-detailed.json', 'r') as file:
-            types_detailed = json.load(file)
-        for type_ in types_detailed:
-            type_.pop('attributes', None)
-        with open(folder_name_generated + '/types-detailed-only-types.json', 'w') as file:
-            json.dump(types_detailed, file, indent=4)
-
         with open('applications/' + self.application_name + '/types-high-level.json', 'r') as file:
-            types = json.load(file)
+            types_high_level = json.load(file)
+
+        for i, type_ in enumerate(types_high_level):
+            if i != type_index:
+                type_.pop('attributes', None)
+            else:
+                type_name = type_['name']
 
         rendered = renderTemplate(self.getPromptFolder() + '/types-high-level-template.md', {
-            'types': types,
+            'types': types_high_level,
             'application_name': self.application_name
         })
         with open(os.path.join(folder_name_generated, "types-high-level.md"), "w") as new_file:
             new_file.write(rendered)
+
+        with open('applications/' + self.application_name + '/types-detailed.json', 'r') as file:
+            types_detailed = json.load(file)
+
+        # iterate over the types and remove the attributes for all types except the one with the given index
+        for i, type_ in enumerate(types_detailed):
+            if i != type_index:
+                type_.pop('attributes', None)
+
+        with open(folder_name_generated + '/types-detailed-only-attributes-of-index-type.json', 'w') as file:
+            json.dump(types_detailed, file, indent=4)
 
         with open('applications/' + self.application_name + '/prompt-detailed.md', 'r') as file:
             prompt_detailed = file.read()
 
         rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', {
             'application_name': self.application_name,
-            'prompt_detailed': prompt_detailed
+            'prompt_detailed': prompt_detailed,
+            'type_name': type_name
         })
         with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
             new_file.write(rendered)
@@ -125,8 +146,6 @@ def applyFunctionHandler(self, function_name, arguments):
     # write the types to the types.json file
     with open('applications/' + self.application_name + '/types-detailed.json', 'w') as file:
         json.dump(types, file, indent=4)
-
-    self.generateAllPrompts()
 
     self.gpterminator.msg_hist = self.gpterminator.msg_hist[:1]
     self.gpterminator.prompt_count = 0

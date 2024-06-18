@@ -2,10 +2,6 @@
 ### Risk
 | Attribute    | Type                  | Description                      |
 |--------------|-----------------------|----------------------------------|
-| Description | Text | Detailed description of the risk | 
-| Probability | Number | Probability of the risk occurring | 
-| Status | Text Enumeration | Current status of the risk (e.g., Open, In Progress, Mitigated, Closed) | 
-| ResponsiblePerson | Reference | User who is responsible for the risk | 
 
 ### MitigationAction
 | Attribute    | Type                  | Description                      |
