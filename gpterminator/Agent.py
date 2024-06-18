@@ -70,6 +70,12 @@ class Agent:
                 except jsonschema.exceptions.ValidationError as ve:
                     print("JSON object is not valid:")
                     print(argument_dict)
+
+                    print("Validation error message:", ve.message)
+                    print("Path to error:", list(ve.path))
+                    print("Schema path:", list(ve.schema_path))
+                    print("Schema:", ve.schema)
+
                     return False
 
         print(f"Tool with name {function_name} not found")
