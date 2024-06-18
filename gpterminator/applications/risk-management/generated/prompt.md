@@ -98,6 +98,39 @@ Here is the current detailed data model in JSON. This is specifically about the 
                     "attributeType": "text"
                 },
                 "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.risk.status",
+                "localizedName": {
+                    "en": "Status",
+                    "de": "Status"
+                },
+                "shortHelp": {
+                    "en": "Current status of the risk (e.g., Open, In Progress, Mitigated, Closed)",
+                    "de": "Aktueller Status des Risikos (z.B. Offen, In Bearbeitung, Abgemildert, Geschlossen)"
+                },
+                "constraint": {
+                    "attributeType": "text"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.risk.responsiblePerson",
+                "localizedName": {
+                    "en": "Responsible Person",
+                    "de": "Verantwortliche Person"
+                },
+                "shortHelp": {
+                    "en": "User who is responsible for the risk",
+                    "de": "Benutzer, der f\u00fcr das Risiko verantwortlich ist"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.platform.assets.group.Person",
+                    "targetEntityClass": "cf.cplace.platform.assets.group.Person",
+                    "isHierarchy": false
+                },
+                "multiplicity": "maximalOne"
             }
         ]
     },
@@ -124,6 +157,104 @@ Here is the current detailed data model in JSON. This is specifically about the 
                     "precision": "0"
                 },
                 "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.status",
+                "localizedName": {
+                    "en": "Status",
+                    "de": "Status"
+                },
+                "shortHelp": {
+                    "en": "Current status of the mitigation action (e.g., Planned, In Progress, Completed)",
+                    "de": "Aktueller Status der Gegenma\u00dfnahme (z.B. Geplant, In Bearbeitung, Abgeschlossen)"
+                },
+                "constraint": {
+                    "attributeType": "text"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.risk",
+                "localizedName": {
+                    "en": "Risk",
+                    "de": "Risiko"
+                },
+                "shortHelp": {
+                    "en": "The risk that this mitigation action is related to",
+                    "de": "Das Risiko, mit dem diese Gegenma\u00dfnahme in Zusammenhang steht"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.risk",
+                    "targetEntityClass": "cf.cplace.platform.assets.file.Page",
+                    "isHierarchy": false
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.responsiblePerson",
+                "localizedName": {
+                    "en": "Responsible Person",
+                    "de": "Verantwortliche Person"
+                },
+                "shortHelp": {
+                    "en": "User who is responsible for this mitigation action",
+                    "de": "Benutzer, der f\u00fcr diese Gegenma\u00dfnahme verantwortlich ist"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.platform.assets.group.Person",
+                    "targetEntityClass": "cf.cplace.platform.assets.group.Person",
+                    "isHierarchy": false
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.description",
+                "localizedName": {
+                    "en": "Description",
+                    "de": "Beschreibung"
+                },
+                "shortHelp": {
+                    "en": "Detailed description of the mitigation action",
+                    "de": "Detaillierte Beschreibung der Gegenma\u00dfnahme"
+                },
+                "constraint": {
+                    "attributeType": "text"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.comments",
+                "localizedName": {
+                    "en": "Comments",
+                    "de": "Kommentare"
+                },
+                "shortHelp": {
+                    "en": "Additional comments regarding the mitigation action",
+                    "de": "Weitere Kommentare zu der Gegenma\u00dfnahme"
+                },
+                "constraint": {
+                    "attributeType": "text"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.dueDate",
+                "localizedName": {
+                    "en": "Due Date",
+                    "de": "F\u00e4lligkeitsdatum"
+                },
+                "shortHelp": {
+                    "en": "The date by which the mitigation action should be completed",
+                    "de": "Das Datum, bis zu dem die Gegenma\u00dfnahme abgeschlossen sein soll"
+                },
+                "constraint": {
+                    "attributeType": "date",
+                    "specificity": "date",
+                    "dateFormat": "yyyy-MM-dd"
+                },
+                "multiplicity": "maximalOne"
             }
         ]
     }
@@ -139,19 +270,6 @@ Pay attention to whether all types which are present in the high-level data mode
 Do not add types that are already present in the detailed data model.
 
 Pay attention to whether all attributes which are present in the high-level data model are also present in the detailed data model. If not, you may need to add them.
-
-This may include adding new types, modifying existing attributes, or creating references between entities.
-
-The following operations can be performed on the detailed data model:
-
-* Add a new type.
-* Add a boolean attribute to a type.
-* Add a date attribute to a type.
-* Add a number attribute to a type.
-* Add a string attribute to a type.
-* Add a reference attribute to a type.
-* Add a string enumeration attribute to a type.
-* Add a integer enumeration attribute to a type.
 
 If you think the detailed data model fits the high-level data model and the requirements of the application - give this as the response: "The current data model meets the requirements of the application."
 

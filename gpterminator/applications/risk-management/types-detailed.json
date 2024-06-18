@@ -37,6 +37,39 @@
                     "attributeType": "text"
                 },
                 "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.risk.status",
+                "localizedName": {
+                    "en": "Status",
+                    "de": "Status"
+                },
+                "shortHelp": {
+                    "en": "Current status of the risk (e.g., Open, In Progress, Mitigated, Closed)",
+                    "de": "Aktueller Status des Risikos (z.B. Offen, In Bearbeitung, Abgemildert, Geschlossen)"
+                },
+                "constraint": {
+                    "attributeType": "text"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.risk.responsiblePerson",
+                "localizedName": {
+                    "en": "Responsible Person",
+                    "de": "Verantwortliche Person"
+                },
+                "shortHelp": {
+                    "en": "User who is responsible for the risk",
+                    "de": "Benutzer, der f\u00fcr das Risiko verantwortlich ist"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.platform.assets.group.Person",
+                    "targetEntityClass": "cf.cplace.platform.assets.group.Person",
+                    "isHierarchy": false
+                },
+                "multiplicity": "maximalOne"
             }
         ]
     },
@@ -61,6 +94,104 @@
                 "constraint": {
                     "attributeType": "number",
                     "precision": "0"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.status",
+                "localizedName": {
+                    "en": "Status",
+                    "de": "Status"
+                },
+                "shortHelp": {
+                    "en": "Current status of the mitigation action (e.g., Planned, In Progress, Completed)",
+                    "de": "Aktueller Status der Gegenma\u00dfnahme (z.B. Geplant, In Bearbeitung, Abgeschlossen)"
+                },
+                "constraint": {
+                    "attributeType": "text"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.risk",
+                "localizedName": {
+                    "en": "Risk",
+                    "de": "Risiko"
+                },
+                "shortHelp": {
+                    "en": "The risk that this mitigation action is related to",
+                    "de": "Das Risiko, mit dem diese Gegenma\u00dfnahme in Zusammenhang steht"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.risk",
+                    "targetEntityClass": "cf.cplace.platform.assets.file.Page",
+                    "isHierarchy": false
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.responsiblePerson",
+                "localizedName": {
+                    "en": "Responsible Person",
+                    "de": "Verantwortliche Person"
+                },
+                "shortHelp": {
+                    "en": "User who is responsible for this mitigation action",
+                    "de": "Benutzer, der f\u00fcr diese Gegenma\u00dfnahme verantwortlich ist"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.platform.assets.group.Person",
+                    "targetEntityClass": "cf.cplace.platform.assets.group.Person",
+                    "isHierarchy": false
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.description",
+                "localizedName": {
+                    "en": "Description",
+                    "de": "Beschreibung"
+                },
+                "shortHelp": {
+                    "en": "Detailed description of the mitigation action",
+                    "de": "Detaillierte Beschreibung der Gegenma\u00dfnahme"
+                },
+                "constraint": {
+                    "attributeType": "text"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.comments",
+                "localizedName": {
+                    "en": "Comments",
+                    "de": "Kommentare"
+                },
+                "shortHelp": {
+                    "en": "Additional comments regarding the mitigation action",
+                    "de": "Weitere Kommentare zu der Gegenma\u00dfnahme"
+                },
+                "constraint": {
+                    "attributeType": "text"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.dueDate",
+                "localizedName": {
+                    "en": "Due Date",
+                    "de": "F\u00e4lligkeitsdatum"
+                },
+                "shortHelp": {
+                    "en": "The date by which the mitigation action should be completed",
+                    "de": "Das Datum, bis zu dem die Gegenma\u00dfnahme abgeschlossen sein soll"
+                },
+                "constraint": {
+                    "attributeType": "date",
+                    "specificity": "date",
+                    "dateFormat": "yyyy-MM-dd"
                 },
                 "multiplicity": "maximalOne"
             }

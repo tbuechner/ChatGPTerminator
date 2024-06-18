@@ -30,19 +30,6 @@ Do not add types that are already present in the detailed data model.
 
 Pay attention to whether all attributes which are present in the high-level data model are also present in the detailed data model. If not, you may need to add them.
 
-This may include adding new types, modifying existing attributes, or creating references between entities.
-
-The following operations can be performed on the detailed data model:
-
-* Add a new type.
-* Add a boolean attribute to a type.
-* Add a date attribute to a type.
-* Add a number attribute to a type.
-* Add a string attribute to a type.
-* Add a reference attribute to a type.
-* Add a string enumeration attribute to a type.
-* Add a integer enumeration attribute to a type.
-
 If you think the detailed data model fits the high-level data model and the requirements of the application - give this as the response: "The current data model meets the requirements of the application."
 
 The following instructions refer to the details of the detailed data model:
