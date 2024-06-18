@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "add_type",
-    "description": "Add a new type to the data model. This is similar to adding a new table to a SQL database.",
-    "parameters": {{ load_file('agents/fine-granular-tools/add_type_schema.json') }}
-  }
-}

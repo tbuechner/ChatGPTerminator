@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "add_long_text_attribute",
-    "description": "Add a new long text attribute to a type. Long text attributes are used for large amounts of text.",
-    "parameters": {{ load_file('agents/fine-granular-tools/add_long_text_attribute_schema.json') }}
-  }
-}
