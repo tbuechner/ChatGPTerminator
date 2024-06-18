@@ -21,7 +21,7 @@ def get_file_name(save_path):
     file_name = f"{new_file_number:04d}"
     return file_name
 
-def renderTemplate(template_file, types=None, application_name=None):
+def renderTemplate(template_file, args=None):
     # Read the template file
     with open(template_file, "r") as file:
         template_string = file.read()
@@ -29,12 +29,15 @@ def renderTemplate(template_file, types=None, application_name=None):
     # Create a template object
     template = Template(template_string)
 
-    # Render the template with the file contents
-    rendered_string = template.render(
-        load_file=loadFile,
-        types=types,
-        application_name=application_name
-    )
+    # if args is null or empty, create an empty dictionary
+    if args is None:
+        args = {}
+
+    # if args does not have the key 'load_file', add it
+    if 'load_file' not in args:
+        args['load_file'] = loadFile
+
+    rendered_string = template.render(args)
 
     return rendered_string
 

@@ -2,7 +2,7 @@
   "type": "function",
   "function": {
     "name": "add_string_enumeration_attribute",
-    "description": "Add a new text enumeration attribute to a type. String enumeration attributes are used if there is a given set of allowed strings.",
+    "description": "Add a new text enumeration attribute to a type. String enumeration attributes are used if there is a given set of allowed strings. The 'constraintType' must be set to 'textEnumeration'.",
     "parameters": {{ load_file('agents/fine-granular/tools/add_rich_string_attribute_schema.json') }}
   }
 }

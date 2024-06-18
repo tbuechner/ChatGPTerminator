@@ -32,7 +32,9 @@ Pay attention to whether all attributes which are present in the high-level data
 
 If you think the detailed data model fits the high-level data model and the requirements of the application - give this as the response: "The current data model meets the requirements of the application."
 
+{% if prompt_detailed %}
 The following instructions refer to the details of the detailed data model:
 
-{{ load_file('applications/' ~ application_name ~ '/prompt-detailed.md') }}
+{{ prompt_detailed }}
+{% endif %}
 

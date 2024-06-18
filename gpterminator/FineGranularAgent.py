@@ -37,11 +37,20 @@ class FineGranularAgent(Agent):
         with open('applications/' + self.application_name + '/types-high-level.json', 'r') as file:
             types = json.load(file)
 
-        rendered = renderTemplate(self.getPromptFolder() + '/types-high-level-template.md', types, self.application_name)
+        rendered = renderTemplate(self.getPromptFolder() + '/types-high-level-template.md', {
+            'types': types,
+            'application_name': self.application_name
+        })
         with open(os.path.join(folder_name_generated, "types-high-level.md"), "w") as new_file:
             new_file.write(rendered)
 
-        rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', None, self.application_name)
+        with open('applications/' + self.application_name + '/prompt-detailed.md', 'r') as file:
+            prompt_detailed = file.read()
+
+        rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', {
+            'application_name': self.application_name,
+            'prompt_detailed': prompt_detailed
+        })
         with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
             new_file.write(rendered)
 

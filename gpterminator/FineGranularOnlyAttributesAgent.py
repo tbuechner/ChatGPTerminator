@@ -7,11 +7,11 @@ from gpterminator.Agent import Agent
 from gpterminator.Utils import renderTemplate
 
 
-class FineGranularOnlyTypesAgent(Agent):
+class FineGranularOnlyAttributesAgent(Agent):
     def __init__(self, gpterminator, application_name):
         super().__init__(gpterminator)
         self.application_name = application_name
-        self.agent_name = 'fine-granular-only-types'
+        self.agent_name = 'fine-granular-only-attributes'
         self.setToolsAndExamples('agents/' + self.agent_name + '/tools')
         self.apply_function_handler = applyFunctionHandler
         self.generateAllPrompts()
@@ -70,23 +70,46 @@ class FineGranularOnlyTypesAgent(Agent):
         if not self.validateSchema(argument_dict, function_name):
             return
 
-        if 'add_type' == function_name:
+        if (
+                'add_boolean_attribute' == function_name or
+                'add_date_attribute' == function_name or
+                'add_long_text_attribute' == function_name or
+                'add_number_attribute' == function_name or
+                'add_number_enumeration_attribute' == function_name or
+                'add_reference_attribute' == function_name or
+                'add_rich_string_attribute' == function_name or
+                'add_string_attribute' == function_name or
+                'add_string_enumeration_attribute' == function_name
+
+        ):
             for type_ in types:
-                if type_['internalName'] == argument_dict['internalName']:
-                    print(f"Type with name {argument_dict['internalName']} already exists")
+                if type_['internalName'] == argument_dict['internalTypeName']:
+                    if 'attributes' not in type_:
+                        type_['attributes'] = []
+                    for attribute in type_['attributes']:
+                        if attribute['internalName'] == argument_dict['internalName']:
+                            print(f"Attribute with name {argument_dict['internalName']} already exists")
+                            return
+                    print(f"Adding attribute with name {argument_dict['internalName']} to type {argument_dict['internalTypeName']}")
+                    del argument_dict['internalTypeName']
+                    type_['attributes'].append(argument_dict)
                     return
-            print(f"Adding type with name {argument_dict['internalName']}")
-            types.append(argument_dict)
+            print(f"Type with name {argument_dict['typeName']} does not exist")
             return
 
-        if 'remove_type' == function_name:
+        if 'remove_attribute' == function_name:
             for type_ in types:
-                if type_['internalName'] == argument_dict['internalName']:
-                    print(f"Removing type with name {argument_dict['internalName']}")
-                    types.remove(type_)
+                if type_['internalName'] == argument_dict['internalTypeName']:
+                    for attribute in type_['attributes']:
+                        if attribute['internalName'] == argument_dict['internalName']:
+                            print(f"Removing attribute with name {argument_dict['internalName']} from type {argument_dict['internalTypeName']}")
+                            type_['attributes'].remove(attribute)
+                            return
+                    print(f"Attribute with name {argument_dict['internalName']} not found in type {argument_dict['internalTypeName']}")
                     return
-            print(f"Type with name {argument_dict['internalName']} not found")
+            print(f"Type with name {argument_dict['internalTypeName']} not found")
             return
+
 
 
 def applyFunctionHandler(self, function_name, arguments):

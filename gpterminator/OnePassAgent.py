@@ -27,7 +27,6 @@ class OnePassAgent(Agent):
         return 'agents/' + self.agent_name + '/prompts'
 
 
-
     def generateAllPrompts(self):
         folder_name_generated = self.getPromptFolder() + '/' + dir + '/generated'
         self.generateFolderIfNotExists(folder_name_generated)
@@ -36,11 +35,15 @@ class OnePassAgent(Agent):
         with open(self.getPromptFolder() + '/' + dir + '/types-high-level.json', 'r') as file:
             types = json.load(file)
 
-        rendered = renderTemplate(self.getPromptFolder() + '/types-high-level-template.md', types)
+        rendered = renderTemplate(self.getPromptFolder() + '/types-high-level-template.md', {
+            'types': types
+        })
         with open(os.path.join(folder_name_generated, "types.md"), "w") as new_file:
             new_file.write(rendered)
 
-        rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', None, dir)
+        rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', {
+            'application_name': self.application_name
+        })
         with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
             new_file.write(rendered)
 

@@ -28,7 +28,9 @@ This is only about the types in the detailed data model. Attributes are not cons
 
 If you think the types in the detailed data model fit the types in the high-level data model and the requirements of the application - give this as the response: "The types of the detailed data model meets the requirements of the application."
 
+{% if prompt_detailed %}
 The following instructions refer to the details of the detailed data model:
 
-{{ load_file('applications/' ~ application_name ~ '/prompt-detailed.md') }}
+{{ prompt_detailed }}
+{% endif %}
 

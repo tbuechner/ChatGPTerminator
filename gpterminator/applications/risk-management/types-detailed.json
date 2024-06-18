@@ -10,7 +10,57 @@
             "de": "Risiken"
         },
         "iconName": "fa-exclamation-triangle",
-        "attributes": []
+        "attributes": [
+            {
+                "internalName": "cf.cplace.risk.description",
+                "localizedName": {
+                    "en": "Description",
+                    "de": "Beschreibung"
+                },
+                "shortHelp": {
+                    "en": "Detailed description of the risk",
+                    "de": "Detaillierte Beschreibung des Risikos"
+                },
+                "constraint": {
+                    "attributeType": "string"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.risk.probability",
+                "localizedName": {
+                    "en": "Probability",
+                    "de": "Wahrscheinlichkeit"
+                },
+                "shortHelp": {
+                    "en": "Probability of the risk occurring",
+                    "de": "Wahrscheinlichkeit des Eintritts des Risikos"
+                },
+                "constraint": {
+                    "attributeType": "number",
+                    "precision": "0"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.risk.responsiblePerson",
+                "localizedName": {
+                    "en": "Responsible Person",
+                    "de": "Verantwortliche Person"
+                },
+                "shortHelp": {
+                    "en": "User who is responsible for the risk",
+                    "de": "Benutzer, der f\u00fcr das Risiko verantwortlich ist"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.platform.assets.group.Person",
+                    "targetEntityClass": "cf.cplace.platform.assets.group.Person",
+                    "isHierarchy": false
+                },
+                "multiplicity": "maximalOne"
+            }
+        ]
     },
     {
         "internalName": "cf.cplace.mitigationAction",
@@ -23,6 +73,106 @@
             "de": "Gegenma\u00dfnahmen"
         },
         "iconName": "fa-tools",
-        "attributes": []
+        "attributes": [
+            {
+                "internalName": "cf.cplace.mitigationAction.risk",
+                "localizedName": {
+                    "en": "Risk",
+                    "de": "Risiko"
+                },
+                "shortHelp": {
+                    "en": "The risk that this mitigation action is related to",
+                    "de": "Das Risiko, mit dem diese Gegenma\u00dfnahme zusammenh\u00e4ngt"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.risk",
+                    "targetEntityClass": "cf.cplace.platform.assets.file.Page",
+                    "isHierarchy": false
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.responsiblePerson",
+                "localizedName": {
+                    "en": "Responsible Person",
+                    "de": "Verantwortliche Person"
+                },
+                "shortHelp": {
+                    "en": "User who is responsible for this mitigation action",
+                    "de": "Benutzer, der f\u00fcr diese Gegenma\u00dfnahme verantwortlich ist"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetInternalTypeNames": "cf.cplace.platform.assets.group.Person",
+                    "targetEntityClass": "cf.cplace.platform.assets.group.Person",
+                    "isHierarchy": false
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.description",
+                "localizedName": {
+                    "en": "Description",
+                    "de": "Beschreibung"
+                },
+                "shortHelp": {
+                    "en": "Detailed description of the mitigation action",
+                    "de": "Detaillierte Beschreibung der Gegenma\u00dfnahme"
+                },
+                "constraint": {
+                    "attributeType": "richString"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.comments",
+                "localizedName": {
+                    "en": "Comments",
+                    "de": "Bemerkungen"
+                },
+                "shortHelp": {
+                    "en": "Additional comments regarding the mitigation action",
+                    "de": "Zus\u00e4tzliche Bemerkungen zur Gegenma\u00dfnahme"
+                },
+                "constraint": {
+                    "attributeType": "richString"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.dueDate",
+                "localizedName": {
+                    "en": "Due Date",
+                    "de": "F\u00e4lligkeitsdatum"
+                },
+                "shortHelp": {
+                    "en": "The date by which the mitigation action should be completed",
+                    "de": "Datum, bis zu dem die Gegenma\u00dfnahme abgeschlossen sein sollte"
+                },
+                "constraint": {
+                    "attributeType": "date",
+                    "specificity": "DAY",
+                    "dateFormat": "DAY_YEAR_LONG"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.effectiveness",
+                "localizedName": {
+                    "en": "Effectiveness",
+                    "de": "Wirksamkeit"
+                },
+                "shortHelp": {
+                    "en": "The effectiveness rating of the mitigation action (e.g., 1 to 5)",
+                    "de": "Wirksamkeitsbewertung der Gegenma\u00dfnahme (z. B. 1 bis 5)"
+                },
+                "constraint": {
+                    "attributeType": "number",
+                    "precision": "0"
+                },
+                "multiplicity": "maximalOne"
+            }
+        ]
     }
 ]
