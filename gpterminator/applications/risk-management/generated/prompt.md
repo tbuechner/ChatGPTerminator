@@ -31,7 +31,9 @@ The name of the reference should be the name of the type it is referring to. For
 
 ### High-Level Data Model
 
-Here is a given high-level data model for the application presented in tabular format, which solves the application described above. One table for each type with their corresponding attributes:
+Here is a given high-level data model for the application presented in tabular format, which solves the application described above. 
+One table for each type. 
+Only for the MitigationAction type the attributes are listed: 
 
 
 ### Risk
@@ -52,7 +54,7 @@ Here is a given high-level data model for the application presented in tabular f
 
 ### Detailed Data Model
 
-Here is the current detailed data model in JSON. Your task is specifically about the attributes of the types:
+Here is the current detailed data model in JSON. Your task is specifically about the attributes of the type MitigationAction. That's why only the attributes of this type are listed:
 
 ```json
 [
@@ -178,18 +180,59 @@ Here is the current detailed data model in JSON. Your task is specifically about
                     "precision": "0"
                 },
                 "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.status",
+                "localizedName": {
+                    "en": "Status",
+                    "de": "Status"
+                },
+                "shortHelp": {
+                    "en": "Current status of the mitigation action (e.g., Planned, In Progress, Completed)",
+                    "de": "Aktueller Status der Gegenma\u00dfnahme (z.B. Geplant, In Bearbeitung, Abgeschlossen)"
+                },
+                "constraint": {
+                    "attributeType": "textEnumeration",
+                    "defaultValues": "Planned",
+                    "elements": [
+                        {
+                            "value": "Planned",
+                            "localizedName": {
+                                "en": "Planned",
+                                "de": "Geplant"
+                            }
+                        },
+                        {
+                            "value": "In Progress",
+                            "localizedName": {
+                                "en": "In Progress",
+                                "de": "In Bearbeitung"
+                            }
+                        },
+                        {
+                            "value": "Completed",
+                            "localizedName": {
+                                "en": "Completed",
+                                "de": "Abgeschlossen"
+                            }
+                        }
+                    ]
+                },
+                "multiplicity": "exactlyOne"
             }
         ]
     }
 ]
 ```
 
+To summarize, the type MitigationAction has the following attributes:  `cf.cplace.mitigationAction.risk`,  `cf.cplace.mitigationAction.responsiblePerson`,  `cf.cplace.mitigationAction.description`,  `cf.cplace.mitigationAction.comments`,  `cf.cplace.mitigationAction.dueDate`,  `cf.cplace.mitigationAction.effectiveness`,  `cf.cplace.mitigationAction.status`, .
+
 ### Task: Generate Attributes in a Detailed Data Model Based on the High-Level Data Model
 
-Check carefully if the attributes in the detailed data model fit the high-level data model. Do this check by going through the types in the high-level data model and comparing their attributes with the attributes of the corresponding type in the detailed data model. 
+Check carefully if the attributes of type MitigationAction in the detailed data model fit the attributes of the high-level data model. 
+Do this check by going through all attributes of type MitigationAction in the high-level data model and check if the attribute in the detailed data model exists and is correct. 
+If not, you may need to add or remove the attribute.
 
-For each type in the high-level data model, check if the attributes in the detailed data model exist and are correct. If not, you may need to add or remove them.
-
-If you think the attributes in the detailed data model fit the high-level data model and the requirements of the application - give this as the response: "The current data model and the attributes meets the requirements of the application."
+If you think the attributes of type MitigationAction in the detailed data model fit the attributes of type MitigationAction in the high-level data model and the requirements of the application - give this as the response: "The attributes of type MitigationAction meet the requirements of the application."
 
 

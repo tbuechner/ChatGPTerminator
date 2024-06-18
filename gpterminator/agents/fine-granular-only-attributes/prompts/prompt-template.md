@@ -10,7 +10,7 @@
 
 Here is a given high-level data model for the application presented in tabular format, which solves the application described above. 
 One table for each type. 
-Only for the {{ type_name }} the attributes are listed: 
+Only for the {{ type_name }} type the attributes are listed: 
 
 {{ load_file('applications/' ~ application_name ~ '/generated/types-high-level.md') }}
 
@@ -21,6 +21,8 @@ Here is the current detailed data model in JSON. Your task is specifically about
 ```json
 {{ load_file('applications/' ~ application_name ~ '/generated/types-detailed-only-attributes-of-index-type.json') }}
 ```
+
+To summarize, the type {{ type_name }} has the following attributes: {% for item in attributes_detailed %} `{{ item }}`, {% endfor %}.
 
 ### Task: Generate Attributes in a Detailed Data Model Based on the High-Level Data Model
 

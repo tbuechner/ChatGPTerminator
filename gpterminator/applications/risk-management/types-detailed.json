@@ -217,6 +217,45 @@
                     "precision": "0"
                 },
                 "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.status",
+                "localizedName": {
+                    "en": "Status",
+                    "de": "Status"
+                },
+                "shortHelp": {
+                    "en": "Current status of the mitigation action (e.g., Planned, In Progress, Completed)",
+                    "de": "Aktueller Status der Gegenma\u00dfnahme (z.B. Geplant, In Bearbeitung, Abgeschlossen)"
+                },
+                "constraint": {
+                    "attributeType": "textEnumeration",
+                    "defaultValues": "Planned",
+                    "elements": [
+                        {
+                            "value": "Planned",
+                            "localizedName": {
+                                "en": "Planned",
+                                "de": "Geplant"
+                            }
+                        },
+                        {
+                            "value": "In Progress",
+                            "localizedName": {
+                                "en": "In Progress",
+                                "de": "In Bearbeitung"
+                            }
+                        },
+                        {
+                            "value": "Completed",
+                            "localizedName": {
+                                "en": "Completed",
+                                "de": "Abgeschlossen"
+                            }
+                        }
+                    ]
+                },
+                "multiplicity": "exactlyOne"
             }
         ]
     }

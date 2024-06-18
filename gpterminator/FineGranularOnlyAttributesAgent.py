@@ -63,10 +63,14 @@ class FineGranularOnlyAttributesAgent(Agent):
         with open('applications/' + self.application_name + '/types-detailed.json', 'r') as file:
             types_detailed = json.load(file)
 
+        attributes_detailed = []
         # iterate over the types and remove the attributes for all types except the one with the given index
         for i, type_ in enumerate(types_detailed):
             if i != type_index:
                 type_.pop('attributes', None)
+            else:
+                for attribute in type_['attributes']:
+                    attributes_detailed.append(attribute['internalName'])
 
         with open(folder_name_generated + '/types-detailed-only-attributes-of-index-type.json', 'w') as file:
             json.dump(types_detailed, file, indent=4)
@@ -77,7 +81,8 @@ class FineGranularOnlyAttributesAgent(Agent):
         rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', {
             'application_name': self.application_name,
             'prompt_detailed': prompt_detailed,
-            'type_name': type_name
+            'type_name': type_name,
+            'attributes_detailed': attributes_detailed
         })
         with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
             new_file.write(rendered)
