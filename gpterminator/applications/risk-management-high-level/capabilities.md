@@ -1,1 +1,0 @@
-I want to build an application which can be used to manage risks. It should be possible to identify, assess, and mitigate risks within the organization.
