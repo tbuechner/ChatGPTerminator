@@ -8,9 +8,8 @@ from gpterminator.Utils import renderTemplate
 
 
 class FineGranularOnlyTypesAgent(Agent):
-    def __init__(self, gpterminator, application_name):
+    def __init__(self, gpterminator):
         super().__init__(gpterminator)
-        self.application_name = application_name
         self.agent_name = 'fine-granular-only-types'
         self.setToolsAndExamples('agents/' + self.agent_name + '/tools')
         self.apply_function_handler = applyFunctionHandler
@@ -18,7 +17,7 @@ class FineGranularOnlyTypesAgent(Agent):
 
     def runPrompt(self, additional_args=None):
         self.generateAllPrompts()
-        with open('applications/' + self.application_name + '/generated/prompt.md', 'r') as file:
+        with open('applications/' + self.gpterminator.application_name + '/generated/prompt.md', 'r') as file:
             prompt = file.read()
 
         # print("prompt: " + prompt)
@@ -31,31 +30,31 @@ class FineGranularOnlyTypesAgent(Agent):
 
 
     def generateAllPrompts(self):
-        folder_name_generated = 'applications/' + self.application_name + '/generated'
+        folder_name_generated = 'applications/' + self.gpterminator.application_name + '/generated'
         self.generateFolderIfNotExists(folder_name_generated)
 
-        with open('applications/' + self.application_name + '/types-detailed.json', 'r') as file:
+        with open('applications/' + self.gpterminator.application_name + '/types-detailed.json', 'r') as file:
             types_detailed = json.load(file)
         for type_ in types_detailed:
             type_.pop('attributes', None)
         with open(folder_name_generated + '/types-detailed-only-types.json', 'w') as file:
             json.dump(types_detailed, file, indent=4)
 
-        with open('applications/' + self.application_name + '/types-high-level.json', 'r') as file:
+        with open('applications/' + self.gpterminator.application_name + '/types-high-level.json', 'r') as file:
             types = json.load(file)
 
         rendered = renderTemplate(self.getPromptFolder() + '/types-high-level-template.md', {
             'types': types,
-            'application_name': self.application_name
+            'application_name': self.gpterminator.application_name
         })
         with open(os.path.join(folder_name_generated, "types-high-level.md"), "w") as new_file:
             new_file.write(rendered)
 
-        with open('applications/' + self.application_name + '/prompt-detailed.md', 'r') as file:
+        with open('applications/' + self.gpterminator.application_name + '/prompt-detailed.md', 'r') as file:
             prompt_detailed = file.read()
 
         rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', {
-            'application_name': self.application_name,
+            'application_name': self.gpterminator.application_name,
             'prompt_detailed': prompt_detailed
         })
         with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
@@ -90,7 +89,7 @@ class FineGranularOnlyTypesAgent(Agent):
 
 
 def applyFunctionHandler(self, function_name, arguments):
-    with open('applications/' + self.application_name + '/types-detailed.json', 'r') as file:
+    with open('applications/' + self.gpterminator.application_name + '/types-detailed.json', 'r') as file:
         types = json.load(file)
 
     print("Applying function calls")
@@ -100,7 +99,7 @@ def applyFunctionHandler(self, function_name, arguments):
         self.handleFunction(function_name, argument_dict, types)
 
     # write the types to the types.json file
-    with open('applications/' + self.application_name + '/types-detailed.json', 'w') as file:
+    with open('applications/' + self.gpterminator.application_name + '/types-detailed.json', 'w') as file:
         json.dump(types, file, indent=4)
 
     self.generateAllPrompts()

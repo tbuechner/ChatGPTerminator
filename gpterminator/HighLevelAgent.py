@@ -7,9 +7,8 @@ from gpterminator.Utils import renderTemplate
 
 class HighLevelAgent(Agent):
 
-    def __init__(self, gpterminator, application_name):
+    def __init__(self, gpterminator):
         super().__init__(gpterminator)
-        self.application_name = application_name
         self.agent_name = 'high-level'
         self.setToolsAndExamples('agents/' + self.agent_name + '/tools')
         self.apply_function_handler = applyFunctionHandler
@@ -21,7 +20,7 @@ class HighLevelAgent(Agent):
 
     def runPrompt(self, additional_args=None):
         self.generateAllPrompts()
-        with open('applications/' + self.application_name + '/generated/prompt.md', 'r') as file:
+        with open('applications/' + self.gpterminator.application_name + '/generated/prompt.md', 'r') as file:
             prompt = file.read()
 
         # print("prompt: " + prompt)
@@ -30,21 +29,21 @@ class HighLevelAgent(Agent):
 
 
     def generateAllPrompts(self):
-        folder_name_generated = 'applications/' + self.application_name + '/generated'
+        folder_name_generated = 'applications/' + self.gpterminator.application_name + '/generated'
         self.generateFolderIfNotExists(folder_name_generated)
 
-        with open('applications/' + self.application_name + '/types-high-level.json', 'r') as file:
+        with open('applications/' + self.gpterminator.application_name + '/types-high-level.json', 'r') as file:
             types = json.load(file)
 
         rendered = renderTemplate(self.getPromptFolder() + '/types-high-level-template.md', {
             'types': types,
-            'application_name': self.application_name
+            'application_name': self.gpterminator.application_name
         })
         with open(os.path.join(folder_name_generated, "types-high-level.md"), "w") as new_file:
             new_file.write(rendered)
 
         rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', {
-            'application_name': self.application_name
+            'application_name': self.gpterminator.application_name
         })
         with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
             new_file.write(rendered)
@@ -94,7 +93,7 @@ class HighLevelAgent(Agent):
 
 
 def applyFunctionHandler(self, function_name, arguments):
-    with open('applications/' + self.application_name + '/types-high-level.json', 'r') as file:
+    with open('applications/' + self.gpterminator.application_name + '/types-high-level.json', 'r') as file:
         types = json.load(file)
 
     print("Applying function calls")
@@ -104,5 +103,5 @@ def applyFunctionHandler(self, function_name, arguments):
         self.handleFunction(function_name, argument_dict, types)
 
     # write the types to the types.json file
-    with open('applications/' + self.application_name + '/types-high-level.json', 'w') as file:
+    with open('applications/' + self.gpterminator.application_name + '/types-high-level.json', 'w') as file:
         json.dump(types, file, indent=4)

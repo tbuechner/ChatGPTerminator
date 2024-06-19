@@ -42,7 +42,8 @@ class GPTerminator:
             "new": ["n", "removes chat history and starts a new session"],
             "copy": ["c", "copies all raw text from the previous response"],
             "run": ["r", "run the types prompt of the agent"],
-            "set": ["s", "set agent and application"]
+            "setAgent": ["sag", "set agent"],
+            "setApplication": ["sap", "set application"]
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -129,22 +130,30 @@ class GPTerminator:
                     else:
                         self.agent.runPrompt(raw_cmd[1].split()[1:])
                         self.agent.applyFunctionCalls()
-                elif cmd == "set" or cmd == "s":
-                    agent_and_application = raw_cmd[1].split()
-                    agent_name = agent_and_application[1]
-                    application_name = agent_and_application[2]
+                elif cmd == "setApplication" or cmd == "sap":
+                    application_name = raw_cmd[1].split()[1]
+                    self.application_name = application_name
+                    print(f"Application set to: {application_name}")
+                elif cmd == "setAgent" or cmd == "sag":
+                    agent_name = raw_cmd[1].split()[1]
                     if agent_name == "high-level":
-                        self.agent = HighLevelAgent(self, application_name)
+                        self.agent = HighLevelAgent(self)
+                        print(f"Agent set to: {agent_name}")
                     elif agent_name == "fine-granular":
-                        self.agent = FineGranularAgent(self, application_name)
+                        self.agent = FineGranularAgent(self)
+                        print(f"Agent set to: {agent_name}")
                     elif agent_name == "fine-granular-only-types":
-                        self.agent = FineGranularOnlyTypesAgent(self, application_name)
+                        self.agent = FineGranularOnlyTypesAgent(self)
+                        print(f"Agent set to: {agent_name}")
                     elif agent_name == "fine-granular-only-attributes":
-                        self.agent = FineGranularOnlyAttributesAgent(self, application_name)
+                        self.agent = FineGranularOnlyAttributesAgent(self)
+                        print(f"Agent set to: {agent_name}")
                     elif agent_name == "one-pass":
-                        self.agent = OnePassAgent(self, application_name)
+                        self.agent = OnePassAgent(self)
+                        print(f"Agent set to: {agent_name}")
                     elif agent_name == "textual":
                         self.agent = TextualAgent(self)
+                        print(f"Agent set to: {agent_name}")
                     else:
                         self.printError(f"Agent {agent_name} not found")
             else:
@@ -227,6 +236,7 @@ class GPTerminator:
             if usr_input is not None:
                 self.prompt_count += 1
                 self.getResponse(usr_input)
+
 
     def getResponse(self, usr_prompt):
         self.msg_hist.append({"role": "user", "content": usr_prompt})
