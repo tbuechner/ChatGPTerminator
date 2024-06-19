@@ -12,3 +12,4 @@ build
 .ideapienv.sh
 
 path/to/venv/
+/gpterminator/applications/*/generated/
