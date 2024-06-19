@@ -1,31 +1,22 @@
 import configparser
 import json
 import os
-import re
 import sys
 import time
 from pathlib import Path
 
 
-import jsonschema
-import climage
 import openai
 import pyperclip
-import requests
 import tiktoken
 from prompt_toolkit import prompt
-from rich.columns import Columns
 from rich.console import Console
 from rich.live import Live
 from rich.markdown import Markdown
 from rich.panel import Panel
-from rich.syntax import Syntax
 
 from openai.lib.azure import AzureOpenAI
 
-from jinja2 import Template
-
-from gpterminator.Agent import Agent
 from gpterminator.FineGranularAgent import FineGranularAgent
 from gpterminator.FineGranularOnlyAttributesAgent import FineGranularOnlyAttributesAgent
 from gpterminator.FineGranularOnlyTypesAgent import FineGranularOnlyTypesAgent
