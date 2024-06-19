@@ -74,23 +74,53 @@ Here is the current detailed data model in JSON. Your task is specifically about
         "internalName": "cf.cplace.mitigationAction",
         "localizedNameSingular": {
             "en": "Mitigation Action",
-            "de": "Gegenma\u00dfnahme"
+            "de": "Minderungsma\u00dfnahme"
         },
         "localizedNamePlural": {
             "en": "Mitigation Actions",
-            "de": "Gegenma\u00dfnahmen"
+            "de": "Minderungsma\u00dfnahmen"
         },
         "iconName": "fa-tools",
         "attributes": [
             {
-                "internalName": "cf.cplace.mitigationAction.risk",
+                "internalName": "cf.cplace.mitigationAction.description",
+                "localizedName": {
+                    "en": "Description",
+                    "de": "Beschreibung"
+                },
+                "shortHelp": {
+                    "en": "Detailed description of the mitigation action",
+                    "de": "Detaillierte Beschreibung der Minderungsma\u00dfnahme"
+                },
+                "constraint": {
+                    "attributeType": "richString"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.comments",
+                "localizedName": {
+                    "en": "Comments",
+                    "de": "Kommentare"
+                },
+                "shortHelp": {
+                    "en": "Additional comments regarding the mitigation action",
+                    "de": "Zus\u00e4tzliche Anmerkungen zur Minderungsma\u00dfnahme"
+                },
+                "constraint": {
+                    "attributeType": "richString"
+                },
+                "multiplicity": "maximalOne"
+            },
+            {
+                "internalName": "cf.cplace.risk",
                 "localizedName": {
                     "en": "Risk",
                     "de": "Risiko"
                 },
                 "shortHelp": {
                     "en": "The risk that this mitigation action is related to",
-                    "de": "Das Risiko, mit dem diese Gegenma\u00dfnahme zusammenh\u00e4ngt"
+                    "de": "Das Risiko, mit dem diese Minderungsma\u00dfnahme in Zusammenhang steht"
                 },
                 "constraint": {
                     "attributeType": "reference",
@@ -108,43 +138,13 @@ Here is the current detailed data model in JSON. Your task is specifically about
                 },
                 "shortHelp": {
                     "en": "User who is responsible for this mitigation action",
-                    "de": "Benutzer, der f\u00fcr diese Gegenma\u00dfnahme verantwortlich ist"
+                    "de": "Benutzer, der f\u00fcr diese Minderungsma\u00dfnahme verantwortlich ist"
                 },
                 "constraint": {
                     "attributeType": "reference",
-                    "targetInternalTypeNames": "cf.cplace.platform.assets.group.Person",
+                    "targetInternalTypeNames": "cf.cplace.user",
                     "targetEntityClass": "cf.cplace.platform.assets.group.Person",
                     "isHierarchy": false
-                },
-                "multiplicity": "maximalOne"
-            },
-            {
-                "internalName": "cf.cplace.mitigationAction.description",
-                "localizedName": {
-                    "en": "Description",
-                    "de": "Beschreibung"
-                },
-                "shortHelp": {
-                    "en": "Detailed description of the mitigation action",
-                    "de": "Detaillierte Beschreibung der Gegenma\u00dfnahme"
-                },
-                "constraint": {
-                    "attributeType": "richString"
-                },
-                "multiplicity": "maximalOne"
-            },
-            {
-                "internalName": "cf.cplace.mitigationAction.comments",
-                "localizedName": {
-                    "en": "Comments",
-                    "de": "Bemerkungen"
-                },
-                "shortHelp": {
-                    "en": "Additional comments regarding the mitigation action",
-                    "de": "Zus\u00e4tzliche Bemerkungen zur Gegenma\u00dfnahme"
-                },
-                "constraint": {
-                    "attributeType": "richString"
                 },
                 "multiplicity": "maximalOne"
             },
@@ -156,28 +156,12 @@ Here is the current detailed data model in JSON. Your task is specifically about
                 },
                 "shortHelp": {
                     "en": "The date by which the mitigation action should be completed",
-                    "de": "Datum, bis zu dem die Gegenma\u00dfnahme abgeschlossen sein sollte"
+                    "de": "Das Datum, bis zu dem die Minderungsma\u00dfnahme abgeschlossen sein sollte"
                 },
                 "constraint": {
                     "attributeType": "date",
-                    "specificity": "DAY",
-                    "dateFormat": "DAY_YEAR_LONG"
-                },
-                "multiplicity": "maximalOne"
-            },
-            {
-                "internalName": "cf.cplace.mitigationAction.effectiveness",
-                "localizedName": {
-                    "en": "Effectiveness",
-                    "de": "Wirksamkeit"
-                },
-                "shortHelp": {
-                    "en": "The effectiveness rating of the mitigation action (e.g., 1 to 5)",
-                    "de": "Wirksamkeitsbewertung der Gegenma\u00dfnahme (z. B. 1 bis 5)"
-                },
-                "constraint": {
-                    "attributeType": "number",
-                    "precision": "0"
+                    "specificity": "full",
+                    "dateFormat": "yyyy-MM-dd"
                 },
                 "multiplicity": "maximalOne"
             },
@@ -188,29 +172,28 @@ Here is the current detailed data model in JSON. Your task is specifically about
                     "de": "Status"
                 },
                 "shortHelp": {
-                    "en": "Current status of the mitigation action (e.g., Planned, In Progress, Completed)",
-                    "de": "Aktueller Status der Gegenma\u00dfnahme (z.B. Geplant, In Bearbeitung, Abgeschlossen)"
+                    "en": "Current status of the mitigation action",
+                    "de": "Aktueller Status der Minderungsma\u00dfnahme"
                 },
                 "constraint": {
                     "attributeType": "textEnumeration",
-                    "defaultValues": "Planned",
                     "elements": [
                         {
-                            "value": "Planned",
+                            "value": "planned",
                             "localizedName": {
                                 "en": "Planned",
                                 "de": "Geplant"
                             }
                         },
                         {
-                            "value": "In Progress",
+                            "value": "in_progress",
                             "localizedName": {
                                 "en": "In Progress",
                                 "de": "In Bearbeitung"
                             }
                         },
                         {
-                            "value": "Completed",
+                            "value": "completed",
                             "localizedName": {
                                 "en": "Completed",
                                 "de": "Abgeschlossen"
@@ -219,13 +202,29 @@ Here is the current detailed data model in JSON. Your task is specifically about
                     ]
                 },
                 "multiplicity": "exactlyOne"
+            },
+            {
+                "internalName": "cf.cplace.mitigationAction.effectiveness",
+                "localizedName": {
+                    "en": "Effectiveness",
+                    "de": "Wirksamkeit"
+                },
+                "shortHelp": {
+                    "en": "The effectiveness rating of the mitigation action",
+                    "de": "Die Effizienzbewertung der Minderungsma\u00dfnahme"
+                },
+                "constraint": {
+                    "attributeType": "number",
+                    "precision": "0"
+                },
+                "multiplicity": "maximalOne"
             }
         ]
     }
 ]
 ```
 
-To summarize, the type MitigationAction has the following attributes:  `cf.cplace.mitigationAction.risk`,  `cf.cplace.mitigationAction.responsiblePerson`,  `cf.cplace.mitigationAction.description`,  `cf.cplace.mitigationAction.comments`,  `cf.cplace.mitigationAction.dueDate`,  `cf.cplace.mitigationAction.effectiveness`,  `cf.cplace.mitigationAction.status`, .
+To summarize, the type MitigationAction has the following attributes:  `cf.cplace.mitigationAction.description`,  `cf.cplace.mitigationAction.comments`,  `cf.cplace.risk`,  `cf.cplace.mitigationAction.responsiblePerson`,  `cf.cplace.mitigationAction.dueDate`,  `cf.cplace.mitigationAction.status`,  `cf.cplace.mitigationAction.effectiveness`, .
 
 ### Task: Generate Attributes in a Detailed Data Model Based on the High-Level Data Model
 

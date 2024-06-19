@@ -47,11 +47,8 @@ class GPTerminator:
         self.cmds = {
             "quit": ["q", "quits the program"],
             "help": ["h", "prints a list of acceptable commands"],
-            "pconf": [None, "prints out the users current config file"],
-            "setconf": [None, "switches to a new config"],
             "regen": ["re", "generates a new response from the last message"],
             "new": ["n", "removes chat history and starts a new session"],
-            "load": ["l", "loads a previously saved chatlog"],
             "ifile": [None, "allows the user to analyze files with a prompt"],
             "cpyall": ["ca", "copies all raw text from the previous response"],
             "ccpy": ["cc", "copies code blocks from the last response"],
@@ -63,20 +60,6 @@ class GPTerminator:
         self.prompt_count = 0
         self.save_path = ""
         self.console = Console()
-
-        # self.agent = HighLevelAgent(self, 'risk-management-high-level')
-
-        # self.agent = HighLevelAgent(self, 'large-safe-high-level')
-
-        self.agent = HighLevelAgent(self, 'okr-high-level')
-        # self.agent = HighLevelAgent(self, 'resource-management-high-level')
-
-        # self.agent = FineGranularAgent(self, 'okr-fine-granular')
-
-        # self.agent = OnePassAgent(self, 'okr')
-        # self.agent = OnePassAgent(self, 'risk-management')
-
-        # self.agent = TextualAgent(self)
 
 
     def loadConfig(self):
@@ -159,16 +142,6 @@ class GPTerminator:
             index += 2
 
 
-    def printConfig(self):
-        config = configparser.ConfigParser()
-        config.read(self.config_path)
-        self.console.print(f"[bold bright_black]Config Path: {self.config_path}")
-        self.console.print("[bold bright_black]Setting: value")
-        for setting in config[self.config_selected]:
-            self.console.print(
-                f"[bright_black]{setting}: {config[self.config_selected][setting]}[/]"
-            )
-
     def copyAll(self):
         if self.prompt_count == 0:
             self.printError("cannot run cpyall when there are no responses")
@@ -236,8 +209,6 @@ class GPTerminator:
                         self.copyCode()
                     else:
                         self.printError("can't copy, there is no previous response")
-                elif cmd == "pconf":
-                    self.printConfig()
                 elif cmd == "cpyall" or cmd == "ca":
                     self.copyAll()
                 elif cmd == "ifile":
@@ -247,10 +218,15 @@ class GPTerminator:
                     self.prompt_count = 0
                     self.printBanner()
                 elif cmd == "apply" or cmd == "a":
-                    self.agent.applyFunctionCalls()
+                    if not hasattr(self, "agent"):
+                        self.printError("agent not set, use the 'set' command to set the agent and application")
+                    else:
+                        self.agent.applyFunctionCalls()
                 elif cmd == "run" or cmd == "r":
-                    # raw_cmd[1].split() is an array - give me the array without the first element
-                    self.agent.runPrompt(raw_cmd[1].split()[1:])
+                    if not hasattr(self, "agent"):
+                        self.printError("agent not set, use the 'set' command to set the agent and application")
+                    else:
+                        self.agent.runPrompt(raw_cmd[1].split()[1:])
                 elif cmd == "set" or cmd == "s":
                     agent_and_application = raw_cmd[1].split()
                     agent_name = agent_and_application[1]
@@ -269,8 +245,6 @@ class GPTerminator:
                         self.agent = TextualAgent(self)
                     else:
                         self.printError(f"Agent {agent_name} not found")
-                elif cmd == "run" or cmd == "r":
-                    self.agent.runPrompt()
             else:
                 self.printError(
                     f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help"
@@ -291,6 +265,7 @@ class GPTerminator:
         self.console.print(
             f"[bright_black]Type '{self.cmd_init}quit' to quit the program; '{self.cmd_init}help' for a list of cmds[/]\n"
         )
+
 
     def checkDirs(self):
         # get paths
@@ -368,9 +343,6 @@ class GPTerminator:
             sys.exit()
         except openai.APIError as e:
             self.printError(f"OpenAI API returned an API Error: {e}")
-            sys.exit()
-        except openai.APIConnectionError as e:
-            self.printError(f"OpenAI API request failed to connect: {e}")
             sys.exit()
         except openai.BadRequestError as e:
             self.printError(f"OpenAI API request was invalid: {e}")
@@ -476,16 +448,6 @@ class GPTerminator:
                         with open(Path(self.save_path) / file_name, "w") as f:
                             json_object = json.loads(argument)
                             json.dump(json_object, f, indent=4)
-
-                    # validate arguments against the schema
-                    # q: how to validate a json against a schema in python programatically
-
-                    # schema = json.loads(self.json_schema)
-                    # try:
-                    #     jsonschema.validate(instance=json_object, schema=schema)
-                    #     print("JSON object is valid")
-                    # except jsonschema.exceptions.ValidationError as ve:
-                    #     print("JSON object is not valid.")
 
 
     def init(self):
