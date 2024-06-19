@@ -21,7 +21,8 @@
           },
           "multiplicity": {
             "type": "string",
-            "description": "The multiplicity of the attribute, which means how many values can be stored in the attribute. One of: '0..1', '1', '1..*', '*'"
+            "description": "The multiplicity of the attribute, which means how many values can be stored in the attribute.",
+            "enum": ["one, optional", "one, mandatory", "many, mandatory", "many, optional"]
           },
           "description": {
             "type": "string",

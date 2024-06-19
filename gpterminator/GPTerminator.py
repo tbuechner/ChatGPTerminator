@@ -41,8 +41,8 @@ class GPTerminator:
             "new": ["n", "removes chat history and starts a new session"],
             "copy": ["c", "copies all raw text from the previous response"],
             "run": ["r", "run the types prompt of the agent"],
-            "setAgent": ["sag", "set agent"],
-            "setApplication": ["sap", "set application"]
+            "setAgent": ["ag"],
+            "setApplication": ["ap"]
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -102,12 +102,19 @@ class GPTerminator:
             self.printError("user input is empty")
         elif user_in[0] == '!':
             raw_cmd = user_in.split('!')
-            cmd = raw_cmd[1].lower().split()[0]
-            self.runCommand(cmd, raw_cmd)
+            raw_cmd = raw_cmd[1:]
+            for i in range(len(raw_cmd)):
+                each_cmd = raw_cmd[i].strip().lower()
+
+                tokens = each_cmd.split(' ')
+                cmd = tokens[0]
+                args = tokens[1:]
+
+                self.runCommand(cmd, args)
         else:
             return user_in
 
-    def runCommand(self, cmd, raw_cmd):
+    def runCommand(self, cmd, args=None):
         if cmd in self.cmds or cmd in [shrt[0] for shrt in self.cmds.values()]:
             if cmd == "quit" or cmd == "q":
                 sys.exit()
@@ -131,13 +138,13 @@ class GPTerminator:
                 if not hasattr(self, "agent"):
                     self.printError("agent not set, use the 'set' command to set the agent and application")
                 else:
-                    self.agent.runPrompt(raw_cmd[1].split()[1:])
-            elif cmd == "setApplication" or cmd == "sap":
-                application_name = raw_cmd[1].split()[1]
+                    self.agent.runPrompt(args)
+            elif cmd == "ap":
+                application_name = args[0]
                 self.application_name = application_name
                 print(f"Application set to: {application_name}")
-            elif cmd == "setAgent" or cmd == "sag":
-                agent_name = raw_cmd[1].split()[1]
+            elif cmd == "ag":
+                agent_name = args[0]
                 if agent_name == "high-level":
                     self.agent = HighLevelAgent(self)
                     print(f"Agent set to: {agent_name}")
