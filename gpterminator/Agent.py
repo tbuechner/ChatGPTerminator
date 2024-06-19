@@ -22,6 +22,8 @@ class Agent:
                 # print(f"Function name: {function_name}")
                 # print(f"Argument: {arguments}\n")
                 self.apply_function_handler(self, function_name, arguments)
+        else:
+            print("No function calls to apply")
 
 
     def setToolsAndExamples(self, folder_name):

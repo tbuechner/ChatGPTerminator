@@ -50,8 +50,7 @@ class GPTerminator:
             "regen": ["re", "generates a new response from the last message"],
             "new": ["n", "removes chat history and starts a new session"],
             "ifile": [None, "allows the user to analyze files with a prompt"],
-            "cpyall": ["ca", "copies all raw text from the previous response"],
-            "ccpy": ["cc", "copies code blocks from the last response"],
+            "copy": ["c", "copies all raw text from the previous response"],
             "apply": ["a", "applies the function calls"],
             "run": ["r", "run types prompt"],
             "set": ["s", "set agent and application"]
@@ -94,52 +93,6 @@ class GPTerminator:
         for cmd, desc in self.cmds.items():
             short = "" if desc[0] is None else f"({desc[0]})"
             self.console.print(f"[bright_black]{self.cmd_init}{cmd} {short}: {desc[1]}[/]")
-
-    def copyCode(self):
-        last_resp = self.msg_hist[-1]["content"]
-        code_block_list = []
-        index = 1
-        while True:
-            try:
-                code_block = last_resp.split("```")[index]
-                lexer = code_block.split("\n")[0]
-                code_block = "\n".join(code_block.split("\n")[1:])
-                code_block_list.append(code_block)
-            except:
-                lst_len = len(code_block_list)
-                if lst_len == 1:
-                    pyperclip.copy(code_block_list[0])
-                    self.console.print(f"[bright_black]Copied text to keyboard...[/]")
-                elif lst_len > 1:
-                    choice_list = []
-                    for num, code_block in enumerate(code_block_list):
-                        code_block = Syntax(code_block, lexer)
-                        choice = Panel(
-                            code_block,
-                            title=f"[bright_black]Option[/] [red]{num + 1}[/]",
-                            border_style="bright_black",
-                            style="bold",
-                        )
-                        choice_list.append(choice)
-                    self.console.print(Columns(choice_list))
-                    while True:
-                        self.console.print(
-                            f"[yellow]|{self.cmd_init}|[/][bold green] Which code block do you want [/bold green][bold gray]> [/bold gray]",
-                            end="",
-                        )
-                        try:
-                            idx = int(input())
-                            if idx >= 1 and idx <= len(code_block_list):
-                                break
-                        except:
-                            pass
-                        self.printError("incorrect input, try again")
-                    pyperclip.copy(code_block_list[idx - 1])
-                    self.console.print(f"[bright_black]Copied text to keyboard...[/]")
-                else:
-                    self.printError("could not find code in previous response")
-                return
-            index += 2
 
 
     def copyAll(self):
@@ -204,12 +157,7 @@ class GPTerminator:
                         return last_msg
                     else:
                         self.printError("can't regenenerate, there is no previous prompt")
-                elif cmd == "ccpy" or cmd == "cc":
-                    if self.prompt_count > 0:
-                        self.copyCode()
-                    else:
-                        self.printError("can't copy, there is no previous response")
-                elif cmd == "cpyall" or cmd == "ca":
+                elif cmd == "copy" or cmd == "c":
                     self.copyAll()
                 elif cmd == "ifile":
                     self.analyzeFile()
