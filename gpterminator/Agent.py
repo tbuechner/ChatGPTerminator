@@ -22,6 +22,10 @@ class Agent:
                 # print(f"Function name: {function_name}")
                 # print(f"Argument: {arguments}\n")
                 self.apply_function_handler(self, function_name, arguments)
+
+            self.msg_hist = self.msg_hist[:1]
+            self.prompt_count = 0
+            print("Session has been reset. You can now run the prompt again.")
         else:
             print("No function calls to apply")
 

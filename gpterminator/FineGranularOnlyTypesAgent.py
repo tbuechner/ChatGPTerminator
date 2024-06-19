@@ -104,8 +104,3 @@ def applyFunctionHandler(self, function_name, arguments):
         json.dump(types, file, indent=4)
 
     self.generateAllPrompts()
-
-    self.gpterminator.msg_hist = self.gpterminator.msg_hist[:1]
-    self.gpterminator.prompt_count = 0
-
-    print("Session has been reset. You can now run the prompt again.")
