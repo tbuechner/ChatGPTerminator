@@ -26,6 +26,7 @@ class HighLevelAgent(Agent):
         # print("prompt: " + prompt)
 
         self.gpterminator.getResponse(prompt)
+        self.generateAllPrompts()
 
 
     def generateAllPrompts(self):
@@ -43,7 +44,8 @@ class HighLevelAgent(Agent):
             new_file.write(rendered)
 
         rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', {
-            'application_name': self.gpterminator.application_name
+            'application_name': self.gpterminator.application_name,
+            'high_level_data_model_is_empty': len(types) == 0,
         })
         with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
             new_file.write(rendered)

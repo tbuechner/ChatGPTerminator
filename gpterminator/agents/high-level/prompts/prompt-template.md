@@ -8,9 +8,17 @@
 
 ### Current Data Model
 
+{% if high_level_data_model_is_empty %}
+
+The current data model is empty.
+
+{% else %}
+
 Here is the structured data model for the application presented in tabular format for each type with their corresponding attributes:
 
 {{ load_file('applications/' ~ application_name ~ '/generated/types-high-level.md') }}
+
+{% endif %}
 
 ### Adapted Data Model
 

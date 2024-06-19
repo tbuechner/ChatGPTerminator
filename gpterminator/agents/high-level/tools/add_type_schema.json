@@ -19,12 +19,16 @@
             "type": "string",
             "description": "The type of the attribute. One of: Text, Number, Date, Boolean, Reference"
           },
+          "multiplicity": {
+            "type": "string",
+            "description": "The multiplicity of the attribute, which means how many values can be stored in the attribute. One of: '0..1', '1', '1..*', '*'"
+          },
           "description": {
             "type": "string",
             "description": "Description of the attribute. Descriptive text to be used in the UI"
           }
         },
-        "required": ["name", "type", "description"]
+        "required": ["name", "type", "multiplicity","description"]
       }
     }
   },

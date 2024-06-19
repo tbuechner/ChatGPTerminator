@@ -34,7 +34,6 @@ class GPTerminator:
         self.presence_penalty = ""
         self.frequency_penalty = ""
         self.msg_hist = []
-        self.cmd_init = ""
         self.cmds = {
             "quit": ["q", "quits the program"],
             "help": ["h", "prints a list of acceptable commands"],
@@ -64,7 +63,6 @@ class GPTerminator:
         self.config = configparser.ConfigParser()
         self.config.read(self.config_path)
 
-        self.cmd_init = self.config["COMMON"]["CommandInitiator"]
         self.save_path = self.config["COMMON"]["SavePath"]
         self.temperature = self.config["COMMON"]["Temperature"]
         self.presence_penalty = self.config["COMMON"]["PresencePenalty"]
@@ -82,7 +80,7 @@ class GPTerminator:
         self.console.print(f"[bold bright_black]Command : description[/]")
         for cmd, desc in self.cmds.items():
             short = "" if desc[0] is None else f"({desc[0]})"
-            self.console.print(f"[bright_black]{self.cmd_init}{cmd} {short}: {desc[1]}[/]")
+            self.console.print(f"[bright_black]!{cmd} {short}: {desc[1]}[/]")
 
 
     def copyAll(self):
@@ -102,66 +100,69 @@ class GPTerminator:
         user_in = prompt().strip()
         if user_in == "":
             self.printError("user input is empty")
-        elif user_in[0] == self.cmd_init:
-            raw_cmd = user_in.split(self.cmd_init)
+        elif user_in[0] == '!':
+            raw_cmd = user_in.split('!')
             cmd = raw_cmd[1].lower().split()[0]
-            if cmd in self.cmds or cmd in [shrt[0] for shrt in self.cmds.values()]:
-                if cmd == "quit" or cmd == "q":
-                    sys.exit()
-                elif cmd == "help" or cmd == "h":
-                    self.printCmds()
-                elif cmd == "regen" or cmd == "re":
-                    if self.prompt_count > 0:
-                        self.msg_hist.pop(-1)
-                        last_msg = self.msg_hist.pop(-1)["content"]
-                        self.prompt_count -= 1
-                        return last_msg
-                    else:
-                        self.printError("can't regenenerate, there is no previous prompt")
-                elif cmd == "copy" or cmd == "c":
-                    self.copyAll()
-                elif cmd == "new" or cmd == "n":
-                    self.msg_hist = self.msg_hist[:1]
-                    self.prompt_count = 0
-                    self.printBanner()
-                elif cmd == "run" or cmd == "r":
-                    if not hasattr(self, "agent"):
-                        self.printError("agent not set, use the 'set' command to set the agent and application")
-                    else:
-                        self.agent.runPrompt(raw_cmd[1].split()[1:])
-                        self.agent.applyFunctionCalls()
-                elif cmd == "setApplication" or cmd == "sap":
-                    application_name = raw_cmd[1].split()[1]
-                    self.application_name = application_name
-                    print(f"Application set to: {application_name}")
-                elif cmd == "setAgent" or cmd == "sag":
-                    agent_name = raw_cmd[1].split()[1]
-                    if agent_name == "high-level":
-                        self.agent = HighLevelAgent(self)
-                        print(f"Agent set to: {agent_name}")
-                    elif agent_name == "fine-granular":
-                        self.agent = FineGranularAgent(self)
-                        print(f"Agent set to: {agent_name}")
-                    elif agent_name == "fine-granular-only-types":
-                        self.agent = FineGranularOnlyTypesAgent(self)
-                        print(f"Agent set to: {agent_name}")
-                    elif agent_name == "fine-granular-only-attributes":
-                        self.agent = FineGranularOnlyAttributesAgent(self)
-                        print(f"Agent set to: {agent_name}")
-                    elif agent_name == "one-pass":
-                        self.agent = OnePassAgent(self)
-                        print(f"Agent set to: {agent_name}")
-                    elif agent_name == "textual":
-                        self.agent = TextualAgent(self)
-                        print(f"Agent set to: {agent_name}")
-                    else:
-                        self.printError(f"Agent {agent_name} not found")
-            else:
-                self.printError(
-                    f"{self.cmd_init}{cmd} in not in the list of commands, type {self.cmd_init}help"
-                )
+            self.runCommand(cmd, raw_cmd)
         else:
             return user_in
+
+    def runCommand(self, cmd, raw_cmd):
+        if cmd in self.cmds or cmd in [shrt[0] for shrt in self.cmds.values()]:
+            if cmd == "quit" or cmd == "q":
+                sys.exit()
+            elif cmd == "help" or cmd == "h":
+                self.printCmds()
+            elif cmd == "regen" or cmd == "re":
+                if self.prompt_count > 0:
+                    self.msg_hist.pop(-1)
+                    last_msg = self.msg_hist.pop(-1)["content"]
+                    self.prompt_count -= 1
+                    return last_msg
+                else:
+                    self.printError("can't regenenerate, there is no previous prompt")
+            elif cmd == "copy" or cmd == "c":
+                self.copyAll()
+            elif cmd == "new" or cmd == "n":
+                self.msg_hist = self.msg_hist[:1]
+                self.prompt_count = 0
+                self.printBanner()
+            elif cmd == "run" or cmd == "r":
+                if not hasattr(self, "agent"):
+                    self.printError("agent not set, use the 'set' command to set the agent and application")
+                else:
+                    self.agent.runPrompt(raw_cmd[1].split()[1:])
+            elif cmd == "setApplication" or cmd == "sap":
+                application_name = raw_cmd[1].split()[1]
+                self.application_name = application_name
+                print(f"Application set to: {application_name}")
+            elif cmd == "setAgent" or cmd == "sag":
+                agent_name = raw_cmd[1].split()[1]
+                if agent_name == "high-level":
+                    self.agent = HighLevelAgent(self)
+                    print(f"Agent set to: {agent_name}")
+                elif agent_name == "fine-granular":
+                    self.agent = FineGranularAgent(self)
+                    print(f"Agent set to: {agent_name}")
+                elif agent_name == "fine-granular-only-types":
+                    self.agent = FineGranularOnlyTypesAgent(self)
+                    print(f"Agent set to: {agent_name}")
+                elif agent_name == "fine-granular-only-attributes":
+                    self.agent = FineGranularOnlyAttributesAgent(self)
+                    print(f"Agent set to: {agent_name}")
+                elif agent_name == "one-pass":
+                    self.agent = OnePassAgent(self)
+                    print(f"Agent set to: {agent_name}")
+                elif agent_name == "textual":
+                    self.agent = TextualAgent(self)
+                    print(f"Agent set to: {agent_name}")
+                else:
+                    self.printError(f"Agent {agent_name} not found")
+        else:
+            self.printError(
+                f"!{cmd} in not in the list of commands, type !help"
+            )
+
 
     def printBanner(self):
         welcome_ascii = """                                                        
@@ -174,7 +175,7 @@ class GPTerminator:
         self.console.print(f"[bright_black]Version: v0.1.11[/]")
         self.console.print(f"[bright_black]Model: {self.model}[/]")
         self.console.print(
-            f"[bright_black]Type '{self.cmd_init}quit' to quit the program; '{self.cmd_init}help' for a list of cmds[/]\n"
+            f"[bright_black]Type '!quit' to quit the program; '!help' for a list of cmds[/]\n"
         )
 
 
@@ -345,6 +346,9 @@ class GPTerminator:
         self.console.print(md)
         self.console.print()
         self.msg_hist.append({"role": "assistant", "content": full_reply_content_shortened})
+
+        if self.agent is not None:
+            self.agent.applyFunctionCalls()
 
     def saveFunctionCalls(self, function_name_2_arguments, full_reply_content):
         if full_reply_content:

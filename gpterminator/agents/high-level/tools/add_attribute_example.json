@@ -3,6 +3,7 @@
   "attribute": {
     "name": "Description",
     "type": "Text",
+    "multiplicity": "1",
     "description": "Detailed description of the risk"
   }
 }
