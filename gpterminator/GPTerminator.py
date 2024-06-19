@@ -49,7 +49,6 @@ class GPTerminator:
             "help": ["h", "prints a list of acceptable commands"],
             "regen": ["re", "generates a new response from the last message"],
             "new": ["n", "removes chat history and starts a new session"],
-            "ifile": [None, "allows the user to analyze files with a prompt"],
             "copy": ["c", "copies all raw text from the previous response"],
             "run": ["r", "run the types prompt of the agent"],
             "set": ["s", "set agent and application"]
@@ -103,35 +102,6 @@ class GPTerminator:
         self.console.print(f"[bright_black]Copied text to keyboard...[/]")
 
 
-    def analyzeFile(self):
-        while True:
-            self.console.print(
-                f"[yellow]|!|[/][bold green] Provide the file path to analyze [/bold green][bold gray]> [/bold gray]",
-                end="",
-            )
-            user_in = prompt().strip()
-            if os.path.exists(user_in):
-                with open(user_in, "r") as file:
-                    file_content = file.read()
-                break
-            else:
-                self.printError(f"{user_in} cannot be found")
-
-        while True:
-            self.console.print(
-                f"[yellow]|{self.prompt_count}|[/][bold green] Prompt for {user_in} [/bold green][bold gray]> [/bold gray]",
-                end="",
-            )
-            user_prmt = prompt().strip()
-            if user_prmt != "":
-                break
-            else:
-                self.printError(f"you cannot have an empty prompt")
-
-        msg = f"{user_prmt}: '{file_content}'"
-        self.prompt_count += 1
-        self.getResponse(msg)
-
     def queryUser(self):
         self.console.print(
             f"[yellow]|{self.prompt_count}|[/][bold green] Input [/bold green][bold gray]> [/bold gray]",
@@ -158,8 +128,6 @@ class GPTerminator:
                         self.printError("can't regenenerate, there is no previous prompt")
                 elif cmd == "copy" or cmd == "c":
                     self.copyAll()
-                elif cmd == "ifile":
-                    self.analyzeFile()
                 elif cmd == "new" or cmd == "n":
                     self.msg_hist = self.msg_hist[:1]
                     self.prompt_count = 0
