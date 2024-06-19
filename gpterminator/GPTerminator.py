@@ -51,8 +51,7 @@ class GPTerminator:
             "new": ["n", "removes chat history and starts a new session"],
             "ifile": [None, "allows the user to analyze files with a prompt"],
             "copy": ["c", "copies all raw text from the previous response"],
-            "apply": ["a", "applies the function calls"],
-            "run": ["r", "run types prompt"],
+            "run": ["r", "run the types prompt of the agent"],
             "set": ["s", "set agent and application"]
         }
         self.api_key = ""
@@ -165,16 +164,12 @@ class GPTerminator:
                     self.msg_hist = self.msg_hist[:1]
                     self.prompt_count = 0
                     self.printBanner()
-                elif cmd == "apply" or cmd == "a":
-                    if not hasattr(self, "agent"):
-                        self.printError("agent not set, use the 'set' command to set the agent and application")
-                    else:
-                        self.agent.applyFunctionCalls()
                 elif cmd == "run" or cmd == "r":
                     if not hasattr(self, "agent"):
                         self.printError("agent not set, use the 'set' command to set the agent and application")
                     else:
                         self.agent.runPrompt(raw_cmd[1].split()[1:])
+                        self.agent.applyFunctionCalls()
                 elif cmd == "set" or cmd == "s":
                     agent_and_application = raw_cmd[1].split()
                     agent_name = agent_and_application[1]
