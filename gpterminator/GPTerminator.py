@@ -17,13 +17,10 @@ from rich.panel import Panel
 
 from openai.lib.azure import AzureOpenAI
 
-from gpterminator.FineGranularAgent import FineGranularAgent
 from gpterminator.FineGranularAttributesAgent import FineGranularAttributesAgent
 from gpterminator.FineGranularTypesAgent import FineGranularTypesAgent
-from gpterminator.OnePassAgent import OnePassAgent
-from gpterminator.TextualAgent import TextualAgent
 from gpterminator.HighLevelAgent import HighLevelAgent
-from gpterminator.Utils import get_file_name, renderTemplate, addToFunctionName2Arguments
+from gpterminator.Utils import get_file_name, addToFunctionName2Arguments
 
 class GPTerminator:
     def __init__(self):
@@ -148,20 +145,11 @@ class GPTerminator:
                 if agent_name == "high-level":
                     self.agent = HighLevelAgent(self)
                     print(f"Agent set to: {agent_name}")
-                elif agent_name == "fine-granular":
-                    self.agent = FineGranularAgent(self)
-                    print(f"Agent set to: {agent_name}")
                 elif agent_name == "fine-granular-types":
                     self.agent = FineGranularTypesAgent(self)
                     print(f"Agent set to: {agent_name}")
                 elif agent_name == "fine-granular-attributes":
                     self.agent = FineGranularAttributesAgent(self)
-                    print(f"Agent set to: {agent_name}")
-                elif agent_name == "one-pass":
-                    self.agent = OnePassAgent(self)
-                    print(f"Agent set to: {agent_name}")
-                elif agent_name == "textual":
-                    self.agent = TextualAgent(self)
                     print(f"Agent set to: {agent_name}")
                 else:
                     self.printError(f"Agent {agent_name} not found")

@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "remove_type",
-    "description": "Remove an existing type from the data model. This is similar to removing a table from a SQL database.",
-    "parameters": {{ load_file('agents/fine-granular/tools/remove_type_schema.json') }}
-  }
-}

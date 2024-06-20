@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "add_string_attribute",
-  "content": {{ load_file('agents/fine-granular/tools/add_string_attribute_example.json') | tojson }}
-}

@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "generate_data_model",
-  "content": {{ load_file('agents/one-pass/generate_data_model_schema_example.json') | tojson }}
-}

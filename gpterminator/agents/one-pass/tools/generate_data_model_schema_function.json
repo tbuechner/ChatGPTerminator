@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "generate_data_model",
-    "description": "Generate a data model from the body of the input text",
-    "parameters": {{ load_file('agents/one-pass/generate_data_model_schema_schema.json') }}
-  }
-}
