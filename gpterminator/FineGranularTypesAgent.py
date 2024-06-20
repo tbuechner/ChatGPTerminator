@@ -75,6 +75,7 @@ class FineGranularTypesAgent(Agent):
                     print(f"Type with name {argument_dict['internalName']} already exists")
                     return
             print(f"Adding type with name {argument_dict['internalName']}")
+            argument_dict['attributes'] = []
             types.append(argument_dict)
             return
 

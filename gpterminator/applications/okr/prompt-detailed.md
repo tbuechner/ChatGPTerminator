@@ -1,0 +1,1 @@
+Use the english words "key result" and "objective" in the german localized names of the types.

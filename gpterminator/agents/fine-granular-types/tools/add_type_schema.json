@@ -33,13 +33,6 @@
     "iconName": {
       "type": "string",
       "description": "The name of the icon that represents the type in the user interface. It is a Font Awesome icon name."
-    },
-    "attributes": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {}
-      }
     }
   },
   "additionalProperties": false
