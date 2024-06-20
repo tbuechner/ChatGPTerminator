@@ -12,6 +12,6 @@ build
 .ideapienv.sh
 
 path/to/venv/
-/gpterminator/applications/*/generated/
-/gpterminator/applications/*/types-detailed.json
-/gpterminator/applications/*/types-high-level.json
+gpterminator/applications/*/generated/
+gpterminator/applications/*/types-detailed.json
+gpterminator/applications/*/types-high-level.json
