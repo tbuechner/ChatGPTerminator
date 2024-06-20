@@ -4,7 +4,7 @@ import os
 import jsonschema
 
 from gpterminator.Agent import Agent
-from gpterminator.Utils import renderTemplate
+from gpterminator.Utils import renderTemplate, generateFolderIfNotExists
 
 
 class FineGranularAgent(Agent):
@@ -31,7 +31,7 @@ class FineGranularAgent(Agent):
 
     def generateAllPrompts(self):
         folder_name_generated = 'applications/' + self.gpterminator.application_name + '/generated'
-        self.generateFolderIfNotExists(folder_name_generated)
+        generateFolderIfNotExists(folder_name_generated)
 
         with open('applications/' + self.gpterminator.application_name + '/types-high-level.json', 'r') as file:
             types = json.load(file)

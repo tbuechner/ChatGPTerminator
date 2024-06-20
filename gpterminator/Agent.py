@@ -86,10 +86,3 @@ class Agent:
 
         print(f"Tool with name {function_name} not found")
         return False
-
-    def generateFolderIfNotExists(self, folder_name_generated):
-        if os.path.exists(folder_name_generated):
-            os.system("rm -r " + folder_name_generated)
-
-        # create folder folder_name_generated
-        os.mkdir(folder_name_generated)

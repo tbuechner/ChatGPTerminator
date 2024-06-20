@@ -51,3 +51,10 @@ def addToFunctionName2Arguments(function_name, function_arguments, function_name
         function_name_2_arguments[function_name].append(function_arguments)
     else:
         function_name_2_arguments[function_name] = [function_arguments]
+
+def generateFolderIfNotExists(folder_name_generated):
+    if os.path.exists(folder_name_generated):
+        os.system("rm -r " + folder_name_generated)
+
+    # create folder folder_name_generated
+    os.mkdir(folder_name_generated)
