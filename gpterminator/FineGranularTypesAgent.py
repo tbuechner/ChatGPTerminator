@@ -7,7 +7,7 @@ from gpterminator.Agent import Agent
 from gpterminator.Utils import renderTemplate, generateFolderIfNotExists
 
 
-class FineGranularOnlyTypesAgent(Agent):
+class FineGranularTypesAgent(Agent):
     def __init__(self, gpterminator):
         super().__init__(gpterminator)
         self.agent_name = 'fine-granular-types'

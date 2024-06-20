@@ -18,8 +18,8 @@ from rich.panel import Panel
 from openai.lib.azure import AzureOpenAI
 
 from gpterminator.FineGranularAgent import FineGranularAgent
-from gpterminator.FineGranularOnlyAttributesAgent import FineGranularOnlyAttributesAgent
-from gpterminator.FineGranularOnlyTypesAgent import FineGranularOnlyTypesAgent
+from gpterminator.FineGranularAttributesAgent import FineGranularAttributesAgent
+from gpterminator.FineGranularTypesAgent import FineGranularTypesAgent
 from gpterminator.OnePassAgent import OnePassAgent
 from gpterminator.TextualAgent import TextualAgent
 from gpterminator.HighLevelAgent import HighLevelAgent
@@ -152,10 +152,10 @@ class GPTerminator:
                     self.agent = FineGranularAgent(self)
                     print(f"Agent set to: {agent_name}")
                 elif agent_name == "fine-granular-types":
-                    self.agent = FineGranularOnlyTypesAgent(self)
+                    self.agent = FineGranularTypesAgent(self)
                     print(f"Agent set to: {agent_name}")
                 elif agent_name == "fine-granular-attributes":
-                    self.agent = FineGranularOnlyAttributesAgent(self)
+                    self.agent = FineGranularAttributesAgent(self)
                     print(f"Agent set to: {agent_name}")
                 elif agent_name == "one-pass":
                     self.agent = OnePassAgent(self)
