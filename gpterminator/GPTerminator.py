@@ -41,8 +41,8 @@ class GPTerminator:
             "new": ["n", "removes chat history and starts a new session"],
             "copy": ["c", "copies all raw text from the previous response"],
             "run": ["r", "run the types prompt of the agent"],
-            "setAgent": ["ag"],
-            "setApplication": ["ap"]
+            "setAgent": ["agent"],
+            "setApplication": ["app"]
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -139,11 +139,11 @@ class GPTerminator:
                     self.printError("agent not set, use the 'set' command to set the agent and application")
                 else:
                     self.agent.runPrompt(args)
-            elif cmd == "ap":
+            elif cmd == "app":
                 application_name = args[0]
                 self.application_name = application_name
                 print(f"Application set to: {application_name}")
-            elif cmd == "ag":
+            elif cmd == "agent":
                 agent_name = args[0]
                 if agent_name == "high-level":
                     self.agent = HighLevelAgent(self)
@@ -151,10 +151,10 @@ class GPTerminator:
                 elif agent_name == "fine-granular":
                     self.agent = FineGranularAgent(self)
                     print(f"Agent set to: {agent_name}")
-                elif agent_name == "fine-granular-only-types":
+                elif agent_name == "fine-granular-types":
                     self.agent = FineGranularOnlyTypesAgent(self)
                     print(f"Agent set to: {agent_name}")
-                elif agent_name == "fine-granular-only-attributes":
+                elif agent_name == "fine-granular-attributes":
                     self.agent = FineGranularOnlyAttributesAgent(self)
                     print(f"Agent set to: {agent_name}")
                 elif agent_name == "one-pass":

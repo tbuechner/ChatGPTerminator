@@ -10,7 +10,7 @@ from gpterminator.Utils import renderTemplate
 class FineGranularOnlyAttributesAgent(Agent):
     def __init__(self, gpterminator):
         super().__init__(gpterminator)
-        self.agent_name = 'fine-granular-only-attributes'
+        self.agent_name = 'fine-granular-attributes'
         self.setToolsAndExamples('agents/' + self.agent_name + '/tools')
         self.apply_function_handler = applyFunctionHandler
 

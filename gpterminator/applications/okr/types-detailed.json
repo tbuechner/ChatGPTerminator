@@ -1,6 +1,6 @@
 [
     {
-        "internalName": "cf.cplace.solution.okr.cycle",
+        "internalName": "cf.cplace.cycle",
         "localizedNameSingular": {
             "en": "Cycle",
             "de": "Zyklus"
@@ -12,131 +12,147 @@
         "iconName": "fa-redo",
         "attributes": [
             {
-                "internalName": "cf.cplace.solution.okr.year",
+                "internalName": "cf.cplace.cycle.name",
                 "localizedName": {
-                    "en": "Year",
-                    "de": "Jahr"
+                    "en": "Name",
+                    "de": "Name"
+                },
+                "shortHelp": {
+                    "en": "Name of the cycle",
+                    "de": "Name des Zyklus"
                 },
                 "constraint": {
-                    "attributeType": "number"
-                },
-                "multiplicity": "maximalOne"
-            },
-            {
-                "internalName": "cf.cplace.solution.okr.quarter",
-                "localizedName": {
-                    "en": "Quarter",
-                    "de": "Quartal"
-                },
-                "shortHelp": null,
-                "constraint": {
-                    "attributeType": "textEnumeration",
-                    "elements": [
-                        {
-                            "value": "Q1",
-                            "localizedName": {
-                                "en": "Q1",
-                                "de": "Q1"
-                            }
-                        },
-                        {
-                            "value": "Q2",
-                            "localizedName": {
-                                "en": "Q2",
-                                "de": "Q2"
-                            }
-                        },
-                        {
-                            "value": "Q3",
-                            "localizedName": {
-                                "en": "Q3",
-                                "de": "Q3"
-                            }
-                        },
-                        {
-                            "value": "Q4",
-                            "localizedName": {
-                                "en": "Q4",
-                                "de": "Q4"
-                            }
-                        }
-                    ]
+                    "attributeType": "string"
                 },
                 "multiplicity": "exactlyOne"
             },
             {
-                "internalName": "cf.cplace.solution.okr.status",
+                "internalName": "cf.cplace.cycle.startDate",
                 "localizedName": {
-                    "en": "Status",
-                    "de": "Status"
+                    "en": "Start Date",
+                    "de": "Startdatum"
                 },
-                "shortHelp": null,
+                "shortHelp": {
+                    "en": "Start date of the cycle",
+                    "de": "Startdatum des Zyklus"
+                },
                 "constraint": {
-                    "attributeType": "textEnumeration",
-                    "elements": [
-                        {
-                            "value": "Planning",
-                            "localizedName": {
-                                "en": "Planning",
-                                "de": "Planung"
-                            }
-                        },
-                        {
-                            "value": "Active",
-                            "localizedName": {
-                                "en": "Active",
-                                "de": "Aktiv"
-                            }
-                        },
-                        {
-                            "value": "Reviewing",
-                            "localizedName": {
-                                "en": "Reviewing",
-                                "de": "In \u00dcberpr\u00fcfung"
-                            }
-                        },
-                        {
-                            "value": "Completed",
-                            "localizedName": {
-                                "en": "Completed",
-                                "de": "Abgeschlossen"
-                            }
-                        }
-                    ]
+                    "attributeType": "date",
+                    "specificity": "DAY",
+                    "dateFormat": "DAY_YEAR_LONG"
+                },
+                "multiplicity": "exactlyOne"
+            },
+            {
+                "internalName": "cf.cplace.cycle.endDate",
+                "localizedName": {
+                    "en": "End Date",
+                    "de": "Enddatum"
+                },
+                "shortHelp": {
+                    "en": "End date of the cycle",
+                    "de": "Enddatum des Zyklus"
+                },
+                "constraint": {
+                    "attributeType": "date",
+                    "specificity": "DAY",
+                    "dateFormat": "DAY_YEAR_LONG"
                 },
                 "multiplicity": "exactlyOne"
             }
         ]
     },
     {
-        "internalName": "cf.cplace.solution.okr.keyResult",
+        "internalName": "cf.cplace.objective",
         "localizedNameSingular": {
-            "en": "Key Result",
-            "de": "Schl\u00fcsselergebnis"
+            "en": "Objective",
+            "de": "Ziel"
         },
         "localizedNamePlural": {
-            "en": "Key Results",
-            "de": "Schl\u00fcsselergebnisse"
+            "en": "Objectives",
+            "de": "Ziele"
         },
-        "iconName": "fa-key",
+        "iconName": "fa-bullseye",
         "attributes": [
             {
-                "internalName": "cf.cplace.solution.okr.progress",
+                "internalName": "cf.cplace.objective.title",
                 "localizedName": {
-                    "en": "Progress",
-                    "de": "Fortschritt"
+                    "en": "Title",
+                    "de": "Titel"
                 },
                 "shortHelp": {
-                    "en": "Percent completion of the key result",
-                    "de": "Prozentualer Abschluss des Schl\u00fcsselergebnisses"
+                    "en": "Title (required) for the objective",
+                    "de": "Titel (erforderlich) f\u00fcr das Ziel"
                 },
                 "constraint": {
-                    "attributeType": "number"
+                    "attributeType": "string"
+                },
+                "multiplicity": "exactlyOne"
+            },
+            {
+                "internalName": "cf.cplace.objective.description",
+                "localizedName": {
+                    "en": "Description",
+                    "de": "Beschreibung"
+                },
+                "shortHelp": {
+                    "en": "Detailed description of the objective",
+                    "de": "Detaillierte Beschreibung der Zielsetzung"
+                },
+                "constraint": {
+                    "attributeType": "string"
                 },
                 "multiplicity": "maximalOne"
             },
             {
-                "internalName": "cf.cplace.solution.okr.description",
+                "internalName": "cf.cplace.objective.cycle",
+                "localizedName": {
+                    "en": "Cycle",
+                    "de": "Zyklus"
+                },
+                "shortHelp": {
+                    "en": "The cycle during which this objective is pursued",
+                    "de": "Der Zyklus, in dem dieses Ziel verfolgt wird"
+                },
+                "constraint": {
+                    "attributeType": "reference",
+                    "targetEntityClass": "cf.cplace.platform.assets.file.Page",
+                    "targetInternalTypeNames": "cf.cplace.cycle",
+                    "isHierarchy": false
+                },
+                "multiplicity": "exactlyOne"
+            }
+        ]
+    },
+    {
+        "internalName": "cf.cplace.keyResult",
+        "localizedNameSingular": {
+            "en": "Key Result",
+            "de": "Schl\u00fcsselresultat"
+        },
+        "localizedNamePlural": {
+            "en": "Key Results",
+            "de": "Schl\u00fcsselresultate"
+        },
+        "iconName": "fa-chart-line",
+        "attributes": [
+            {
+                "internalName": "cf.cplace.keyResult.title",
+                "localizedName": {
+                    "en": "Title",
+                    "de": "Titel"
+                },
+                "shortHelp": {
+                    "en": "Title of the key result",
+                    "de": "Titel des Schl\u00fcsselergebnisses"
+                },
+                "constraint": {
+                    "attributeType": "string"
+                },
+                "multiplicity": "exactlyOne"
+            },
+            {
+                "internalName": "cf.cplace.keyResult.description",
                 "localizedName": {
                     "en": "Description",
                     "de": "Beschreibung"
@@ -151,185 +167,96 @@
                 "multiplicity": "maximalOne"
             },
             {
-                "internalName": "cf.cplace.solution.okr.status",
-                "localizedName": {
-                    "en": "Status",
-                    "de": "Status"
-                },
-                "shortHelp": {
-                    "en": "Status of the key result such as 'Pending', 'On Track', 'At Risk', 'Completed'",
-                    "de": "Status des Schl\u00fcsselergebnisses wie 'Ausstehend', 'Im Plan', 'Gef\u00e4hrdet', 'Abgeschlossen'"
-                },
-                "constraint": {
-                    "attributeType": "textEnumeration",
-                    "elements": [
-                        {
-                            "value": "Pending",
-                            "localizedName": {
-                                "en": "Pending",
-                                "de": "Ausstehend"
-                            }
-                        },
-                        {
-                            "value": "On Track",
-                            "localizedName": {
-                                "en": "On Track",
-                                "de": "Im Plan"
-                            }
-                        },
-                        {
-                            "value": "At Risk",
-                            "localizedName": {
-                                "en": "At Risk",
-                                "de": "Gef\u00e4hrdet"
-                            }
-                        },
-                        {
-                            "value": "Completed",
-                            "localizedName": {
-                                "en": "Completed",
-                                "de": "Abgeschlossen"
-                            }
-                        }
-                    ]
-                },
-                "multiplicity": "maximalOne"
-            },
-            {
-                "internalName": "cf.cplace.solution.okr.objective",
+                "internalName": "cf.cplace.keyResult.objective",
                 "localizedName": {
                     "en": "Objective",
                     "de": "Ziel"
                 },
                 "shortHelp": {
-                    "en": "Reference to the objective this key result is part of",
-                    "de": "Referenz auf das Ziel, zu dem dieses Schl\u00fcsselergebnis geh\u00f6rt"
+                    "en": "The objective to which this key result belongs",
+                    "de": "Das Ziel, zu dem dieses Schl\u00fcsselergebnis geh\u00f6rt"
                 },
                 "constraint": {
                     "attributeType": "reference",
-                    "targetInternalTypeNames": "cf.cplace.solution.okr.objective",
                     "targetEntityClass": "cf.cplace.platform.assets.file.Page",
-                    "isHierarchy": "false"
+                    "targetInternalTypeNames": "cf.cplace.objective",
+                    "isHierarchy": false
                 },
-                "multiplicity": "maximalOne"
-            }
-        ]
-    },
-    {
-        "internalName": "cf.cplace.solution.okr.objective",
-        "localizedNameSingular": {
-            "en": "Objective",
-            "de": "Ziel"
-        },
-        "localizedNamePlural": {
-            "en": "Objectives",
-            "de": "Ziele"
-        },
-        "iconName": "fa-bullseye",
-        "attributes": [
-            {
-                "internalName": "cf.cplace.solution.okr.title",
-                "localizedName": {
-                    "en": "Title",
-                    "de": "Titel"
-                },
-                "shortHelp": {
-                    "en": "The title or main idea of the objective",
-                    "de": "Der Titel oder die Hauptidee des Ziels"
-                },
-                "constraint": {
-                    "attributeType": "string"
-                },
-                "multiplicity": "maximalOne"
+                "multiplicity": "exactlyOne"
             },
             {
-                "internalName": "cf.cplace.solution.okr.status",
+                "internalName": "cf.cplace.keyResult.currentValue",
                 "localizedName": {
-                    "en": "Status",
-                    "de": "Status"
+                    "en": "Current Value",
+                    "de": "Aktueller Wert"
                 },
                 "shortHelp": {
-                    "en": "Possible statuses: 'Not Started', 'In Progress', 'Completed'",
-                    "de": "M\u00f6gliche Status: 'Nicht gestartet', 'In Bearbeitung', 'Abgeschlossen'"
+                    "en": "Current value of this key result",
+                    "de": "Aktueller Wert dieses Schl\u00fcsselergebnisses"
                 },
                 "constraint": {
-                    "attributeType": "textEnumeration",
-                    "elements": [
-                        {
-                            "value": "Not Started",
-                            "localizedName": {
-                                "en": "Not Started",
-                                "de": "Nicht gestartet"
-                            }
-                        },
-                        {
-                            "value": "In Progress",
-                            "localizedName": {
-                                "en": "In Progress",
-                                "de": "In Bearbeitung"
-                            }
-                        },
-                        {
-                            "value": "Completed",
-                            "localizedName": {
-                                "en": "Completed",
-                                "de": "Abgeschlossen"
-                            }
-                        }
-                    ]
+                    "attributeType": "number",
+                    "precision": "0",
+                    "localizedTextAfterSupplier": {
+                        "en": "",
+                        "de": ""
+                    }
                 },
-                "multiplicity": "maximalOne"
+                "multiplicity": "exactlyOne"
             },
             {
-                "internalName": "cf.cplace.solution.okr.owner",
+                "internalName": "cf.cplace.keyResult.targetValue",
                 "localizedName": {
-                    "en": "Owner",
-                    "de": "Verantwortlicher"
+                    "en": "Target Value",
+                    "de": "Zielwert"
                 },
                 "shortHelp": {
-                    "en": "Reference to the user in charge of the objective",
-                    "de": "Verweis auf den f\u00fcr das Ziel verantwortlichen Benutzer"
+                    "en": "Target value of this key result",
+                    "de": "Zielwert dieses Schl\u00fcsselergebnisses"
                 },
                 "constraint": {
-                    "attributeType": "reference",
-                    "targetInternalTypeNames": "cf.cplace.platform.assets.group.Person",
-                    "targetEntityClass": "cf.cplace.platform.assets.group.Person",
-                    "isHierarchy": "false"
+                    "attributeType": "number",
+                    "precision": "0",
+                    "localizedTextAfterSupplier": {
+                        "en": "",
+                        "de": ""
+                    }
                 },
-                "multiplicity": "maximalOne"
+                "multiplicity": "exactlyOne"
             },
             {
-                "internalName": "cf.cplace.solution.okr.cycle",
+                "internalName": "cf.cplace.keyResult.startDate",
                 "localizedName": {
-                    "en": "Cycle",
-                    "de": "Zyklus"
+                    "en": "Start Date",
+                    "de": "Startdatum"
                 },
                 "shortHelp": {
-                    "en": "Reference to the cycle this objective belongs to",
-                    "de": "Referenz auf den Zyklus, zu dem dieses Ziel geh\u00f6rt"
+                    "en": "Start date of the key result",
+                    "de": "Startdatum des Schl\u00fcsselergebnisses"
                 },
                 "constraint": {
-                    "attributeType": "reference",
-                    "targetInternalTypeNames": "cf.cplace.solution.okr.cycle",
-                    "targetEntityClass": "cf.cplace.platform.assets.file.Page",
-                    "isHierarchy": "false"
+                    "attributeType": "date",
+                    "specificity": "DAY",
+                    "dateFormat": "DAY_YEAR_LONG"
                 },
-                "multiplicity": "maximalOne"
+                "multiplicity": "exactlyOne"
             },
             {
-                "internalName": "cf.cplace.solution.okr.description",
+                "internalName": "cf.cplace.keyResult.endDate",
                 "localizedName": {
-                    "en": "Description",
-                    "de": "Beschreibung"
+                    "en": "End Date",
+                    "de": "Enddatum"
                 },
                 "shortHelp": {
-                    "en": "Detailed description of the objective",
-                    "de": "Detaillierte Beschreibung des Ziels"
+                    "en": "End date of the key result",
+                    "de": "Enddatum des Schl\u00fcsselergebnisses"
                 },
                 "constraint": {
-                    "attributeType": "richString"
+                    "attributeType": "date",
+                    "specificity": "DAY",
+                    "dateFormat": "DAY_YEAR_LONG"
                 },
-                "multiplicity": "maximalOne"
+                "multiplicity": "exactlyOne"
             }
         ]
     }

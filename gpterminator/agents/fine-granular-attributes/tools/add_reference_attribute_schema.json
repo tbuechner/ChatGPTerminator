@@ -54,7 +54,10 @@
           "const": "reference"
         },
         "targetInternalTypeNames": {
-          "type": "string",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
           "description": "The internal type name of the entity that is referenced by the attribute."
         },
         "targetEntityClass": {
