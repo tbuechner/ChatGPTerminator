@@ -126,7 +126,6 @@
     "internalTypeName",
     "internalName",
     "localizedName",
-    "shortHelp",
     "constraint",
     "multiplicity"
   ],

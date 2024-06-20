@@ -74,7 +74,6 @@
     "internalTypeName",
     "internalName",
     "localizedName",
-    "shortHelp",
     "constraint",
     "multiplicity"],
   "additionalProperties": false

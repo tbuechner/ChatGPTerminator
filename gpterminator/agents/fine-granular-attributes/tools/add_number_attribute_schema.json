@@ -92,5 +92,11 @@
       ]
     }
   },
+  "required": [
+    "internalTypeName",
+    "internalName",
+    "localizedName",
+    "constraint",
+    "multiplicity"],
   "additionalProperties": false
 }
