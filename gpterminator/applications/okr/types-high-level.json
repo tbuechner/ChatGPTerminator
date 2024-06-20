@@ -1,2 +1,95 @@
 [
+    {
+        "name": "Cycle",
+        "attributes": [
+            {
+                "name": "Name",
+                "type": "Text",
+                "multiplicity": "one, mandatory",
+                "description": "Name of the cycle"
+            },
+            {
+                "name": "Start Date",
+                "type": "Date",
+                "multiplicity": "one, mandatory",
+                "description": "Start date of the cycle"
+            },
+            {
+                "name": "End Date",
+                "type": "Date",
+                "multiplicity": "one, mandatory",
+                "description": "End date of the cycle"
+            }
+        ]
+    },
+    {
+        "name": "Objective",
+        "attributes": [
+            {
+                "name": "Title",
+                "type": "Text",
+                "multiplicity": "one, mandatory",
+                "description": "The title of the objective."
+            },
+            {
+                "name": "Description",
+                "type": "Text",
+                "multiplicity": "one, optional",
+                "description": "A description of the objective."
+            },
+            {
+                "name": "Owner",
+                "type": "Reference",
+                "multiplicity": "one, mandatory",
+                "description": "The user responsible for the objective."
+            },
+            {
+                "name": "Cycle",
+                "type": "Reference",
+                "multiplicity": "one, mandatory",
+                "description": "The cycle to which the objective belongs."
+            }
+        ]
+    },
+    {
+        "name": "Key Result",
+        "attributes": [
+            {
+                "name": "Title",
+                "type": "Text",
+                "multiplicity": "one, mandatory",
+                "description": "The title of the key result."
+            },
+            {
+                "name": "Description",
+                "type": "Text",
+                "multiplicity": "one, optional",
+                "description": "A description of the key result."
+            },
+            {
+                "name": "Target Value",
+                "type": "Number",
+                "multiplicity": "one, mandatory",
+                "description": "The target value to achieve."
+            },
+            {
+                "name": "Current Value",
+                "type": "Number",
+                "multiplicity": "one, optional",
+                "description": "The current value achieved."
+            },
+            {
+                "name": "Objective",
+                "type": "Reference",
+                "multiplicity": "one, mandatory",
+                "description": "The objective to which this key result contributes."
+            },
+            {
+                "name": "Owner",
+                "type": "Reference",
+                "multiplicity": "one, mandatory",
+                "description": "The user responsible for the key result."
+            }
+        ]
+    }
 ]

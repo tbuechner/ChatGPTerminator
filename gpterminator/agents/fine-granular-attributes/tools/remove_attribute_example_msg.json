@@ -1,5 +1,5 @@
 {
   "role": "function",
   "name": "remove_attribute",
-  "content": {{ load_file('agents/fine-granular/tools/remove_attribute_example.json') | tojson }}
+  "content": {{ load_file('agents/fine-granular-attributes/tools/remove_attribute_example.json') | tojson }}
 }

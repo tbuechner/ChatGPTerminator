@@ -3,6 +3,6 @@
   "function": {
     "name": "add_string_attribute",
     "description": "Add a new string attribute to a type.",
-    "parameters": {{ load_file('agents/fine-granular/tools/add_string_attribute_schema.json') }}
+    "parameters": {{ load_file('agents/fine-granular-attributes/tools/add_string_attribute_schema.json') }}
   }
 }

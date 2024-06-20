@@ -3,6 +3,6 @@
   "function": {
     "name": "remove_attribute",
     "description": "Remove an attribute from a type.",
-    "parameters": {{ load_file('agents/fine-granular/tools/remove_attribute_schema.json') }}
+    "parameters": {{ load_file('agents/fine-granular-attributes/tools/remove_attribute_schema.json') }}
   }
 }

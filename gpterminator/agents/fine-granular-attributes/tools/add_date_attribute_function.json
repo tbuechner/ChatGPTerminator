@@ -3,6 +3,6 @@
   "function": {
     "name": "add_date_attribute",
     "description": "Add a new date attribute to a type.",
-    "parameters": {{ load_file('agents/fine-granular/tools/add_date_attribute_schema.json') }}
+    "parameters": {{ load_file('agents/fine-granular-attributes/tools/add_date_attribute_schema.json') }}
   }
 }
