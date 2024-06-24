@@ -1,1 +1,87 @@
-[]
+[
+    {
+        "internalName": "cf.cplace.cycle",
+        "localizedNameSingular": {
+            "en": "Cycle",
+            "de": "Cycle"
+        },
+        "localizedNamePlural": {
+            "en": "Cycles",
+            "de": "Cycles"
+        },
+        "attributes": [
+            {
+                "internalName": "cf.cplace.name",
+                "localizedName": {
+                    "en": "Name",
+                    "de": "Name"
+                },
+                "constraint": {
+                    "attributeType": "string"
+                },
+                "multiplicity": "exactlyOne"
+            },
+            {
+                "internalName": "cf.cplace.startDate",
+                "localizedName": {
+                    "en": "Start Date",
+                    "de": "Startdatum"
+                },
+                "constraint": {
+                    "specificity": "DAY",
+                    "dateFormat": "DAY_YEAR_LONG",
+                    "attributeType": "date"
+                },
+                "multiplicity": "exactlyOne"
+            },
+            {
+                "internalName": "cf.cplace.endDate",
+                "localizedName": {
+                    "en": "End Date",
+                    "de": "Enddatum"
+                },
+                "constraint": {
+                    "specificity": "DAY",
+                    "dateFormat": "DAY_YEAR_LONG",
+                    "attributeType": "date"
+                },
+                "multiplicity": "exactlyOne"
+            },
+            {
+                "internalName": "cf.cplace.description",
+                "localizedName": {
+                    "en": "Description",
+                    "de": "Beschreibung"
+                },
+                "constraint": {
+                    "attributeType": "richString"
+                },
+                "multiplicity": "maximalOne"
+            }
+        ]
+    },
+    {
+        "internalName": "cf.cplace.objective",
+        "localizedNameSingular": {
+            "en": "Objective",
+            "de": "Objective"
+        },
+        "localizedNamePlural": {
+            "en": "Objectives",
+            "de": "Objectives"
+        },
+        "attributes": []
+    },
+    {
+        "internalName": "cf.cplace.keyResult",
+        "localizedNameSingular": {
+            "en": "Key Result",
+            "de": "Key Result"
+        },
+        "localizedNamePlural": {
+            "en": "Key Results",
+            "de": "Key Results"
+        },
+        "attributes": []
+    }
+]

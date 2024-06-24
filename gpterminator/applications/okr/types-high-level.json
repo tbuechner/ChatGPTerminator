@@ -6,19 +6,25 @@
                 "name": "Name",
                 "type": "Text",
                 "multiplicity": "one, mandatory",
-                "description": "Name of the cycle"
+                "description": "The name of the cycle."
             },
             {
-                "name": "Start Date",
+                "name": "StartDate",
                 "type": "Date",
                 "multiplicity": "one, mandatory",
-                "description": "Start date of the cycle"
+                "description": "The start date of the cycle."
             },
             {
-                "name": "End Date",
+                "name": "EndDate",
                 "type": "Date",
                 "multiplicity": "one, mandatory",
-                "description": "End date of the cycle"
+                "description": "The end date of the cycle."
+            },
+            {
+                "name": "Description",
+                "type": "Rich Text",
+                "multiplicity": "one, optional",
+                "description": "A detailed description of the cycle."
             }
         ]
     },
@@ -33,21 +39,21 @@
             },
             {
                 "name": "Description",
-                "type": "Text",
+                "type": "Rich Text",
                 "multiplicity": "one, optional",
-                "description": "A description of the objective."
-            },
-            {
-                "name": "Owner",
-                "type": "Reference",
-                "multiplicity": "one, mandatory",
-                "description": "The user responsible for the objective."
+                "description": "A detailed description of the objective."
             },
             {
                 "name": "Cycle",
                 "type": "Reference",
                 "multiplicity": "one, mandatory",
-                "description": "The cycle to which the objective belongs."
+                "description": "Reference to the cycle this objective belongs to."
+            },
+            {
+                "name": "Owner",
+                "type": "Reference",
+                "multiplicity": "one, mandatory",
+                "description": "Reference to the user who owns this objective."
             }
         ]
     },
@@ -62,33 +68,33 @@
             },
             {
                 "name": "Description",
-                "type": "Text",
+                "type": "Rich Text",
                 "multiplicity": "one, optional",
-                "description": "A description of the key result."
-            },
-            {
-                "name": "Target Value",
-                "type": "Number",
-                "multiplicity": "one, mandatory",
-                "description": "The target value to achieve."
-            },
-            {
-                "name": "Current Value",
-                "type": "Number",
-                "multiplicity": "one, optional",
-                "description": "The current value achieved."
+                "description": "A detailed description of the key result."
             },
             {
                 "name": "Objective",
                 "type": "Reference",
                 "multiplicity": "one, mandatory",
-                "description": "The objective to which this key result contributes."
+                "description": "Reference to the objective this key result belongs to."
             },
             {
-                "name": "Owner",
-                "type": "Reference",
+                "name": "Target",
+                "type": "Number",
                 "multiplicity": "one, mandatory",
-                "description": "The user responsible for the key result."
+                "description": "The target value for the key result."
+            },
+            {
+                "name": "CurrentValue",
+                "type": "Number",
+                "multiplicity": "one, optional",
+                "description": "The current value achieved for the key result."
+            },
+            {
+                "name": "MeasurementUnit",
+                "type": "Text",
+                "multiplicity": "one, mandatory",
+                "description": "The unit of measurement for the key result."
             }
         ]
     }
