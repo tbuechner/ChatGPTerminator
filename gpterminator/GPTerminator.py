@@ -17,6 +17,7 @@ from rich.panel import Panel
 
 from openai.lib.azure import AzureOpenAI
 
+from gpterminator.Choice import FunctionCall, Textual, addTextualChoice
 from gpterminator.FineGranularAttributesAgent import FineGranularAttributesAgent
 from gpterminator.FineGranularTypesAgent import FineGranularTypesAgent
 from gpterminator.HighLevelAgent import HighLevelAgent
@@ -278,6 +279,8 @@ class GPTerminator:
 
         start_time = time.time()
 
+        choices = []
+
         function_name_2_arguments = {}
         full_reply_content_shortened = ""
         function_name = None
@@ -305,10 +308,14 @@ class GPTerminator:
                                 full_reply_content_shortened += "Function: " + function_name + "\n"
                                 function_arguments = ""
 
+                                # append new function call object to choices
+                                choices.append(FunctionCall(chunk.id, function_name, function_arguments))
+
                     if chunk_message.content is not None:
                         log += f"textual answer\n"
                         log += f"content: {chunk_message.content}\n"
                         full_reply_content_shortened += "".join(chunk_message.content)
+                        addTextualChoice(choices, chunk.id, chunk_message.content)
 
                     encoding = tiktoken.encoding_for_model(self.model)
                     num_tokens = len(encoding.encode(full_reply_content_shortened))
@@ -336,6 +343,8 @@ class GPTerminator:
         self.console.print(md)
         self.console.print()
         self.msg_hist.append({"role": "assistant", "content": full_reply_content_shortened})
+
+        print("choices: " + str(choices))
 
         if self.agent is not None:
             self.agent.applyFunctionCalls()
