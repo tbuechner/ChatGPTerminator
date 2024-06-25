@@ -279,7 +279,6 @@ class GPTerminator:
         start_time = time.time()
 
         function_name_2_arguments = {}
-        # full_reply_content = ""
         full_reply_content_shortened = ""
         function_name = None
         function_arguments = ""
@@ -299,20 +298,16 @@ class GPTerminator:
                             if tool_call.function.name is not None:
                                 log += f"tool_call.function.name: {tool_call.function.name}\n"
                                 if function_name is not None:
-                                    # full_reply_content += "\n```\n"
                                     addToFunctionName2Arguments(function_name, function_arguments, function_name_2_arguments)
 
                                 function_name = tool_call.function.name
 
-                                # full_reply_content += "Function: " + function_name + "\n"
                                 full_reply_content_shortened += "Function: " + function_name + "\n"
-                                # full_reply_content += "```json\n"
                                 function_arguments = ""
 
-                            # full_reply_content += "".join(function_call_arguments)
-
                     if chunk_message.content is not None:
-                        # full_reply_content += "".join(chunk_message.content)
+                        log += f"textual answer\n"
+                        log += f"content: {chunk_message.content}\n"
                         full_reply_content_shortened += "".join(chunk_message.content)
 
                     encoding = tiktoken.encoding_for_model(self.model)

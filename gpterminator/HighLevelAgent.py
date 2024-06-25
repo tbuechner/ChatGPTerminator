@@ -26,6 +26,7 @@ class HighLevelAgent(Agent):
         # print("prompt: " + prompt)
 
         self.gpterminator.getResponse(prompt)
+
         self.generateAllPrompts()
 
 
