@@ -295,13 +295,12 @@ class GPTerminator:
                             function_call_arguments = tool_call.function.arguments
                             log += f"function_call_arguments: {function_call_arguments}\n"
 
-                            addFunctionCall(self.choices, chunk.id, tool_call.function.name, function_call_arguments)
+                            panel_content += addFunctionCall(self.choices, chunk.id, tool_call.function.name, function_call_arguments)
 
                     if chunk_message.content is not None:
                         log += f"textual answer\n"
                         log += f"content: {chunk_message.content}\n"
-                        panel_content += "".join(chunk_message.content)
-                        addTextualChoice(self.choices, chunk.id, chunk_message.content)
+                        panel_content += addTextualChoice(self.choices, chunk.id, chunk_message.content)
 
                     encoding = tiktoken.encoding_for_model(self.model)
                     num_tokens = len(encoding.encode(panel_content))

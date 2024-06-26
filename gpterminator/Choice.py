@@ -58,16 +58,19 @@ def addTextualChoice(choices, id, content):
     for c in choices:
         if c.id == id:
             c.content += content
-            return
+            return content
     choices.append(Textual(id, content))
+    return content
 
 def addFunctionCall(choices, id, function_name, arguments):
     if function_name is not None:
         choices.append(FunctionCall(id, function_name, arguments))
+        return f"Function call {function_name}"
     else:
         # get last element of choices
         last = choices[-1]
         last.arguments += arguments
+        return arguments
 
 def getFunctionCalls(choices):
     return [c for c in choices if isinstance(c, FunctionCall)]

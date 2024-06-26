@@ -6,19 +6,19 @@
                 "name": "Name",
                 "type": "Text",
                 "multiplicity": "one, mandatory",
-                "description": "Name of the cycle."
+                "description": "Name of the cycle"
             },
             {
-                "name": "Start Date",
+                "name": "StartDate",
                 "type": "Date",
                 "multiplicity": "one, mandatory",
-                "description": "Start date of the cycle."
+                "description": "Start date of the cycle"
             },
             {
-                "name": "End Date",
+                "name": "EndDate",
                 "type": "Date",
                 "multiplicity": "one, mandatory",
-                "description": "End date of the cycle."
+                "description": "End date of the cycle"
             }
         ]
     },
@@ -29,66 +29,54 @@
                 "name": "Title",
                 "type": "Text",
                 "multiplicity": "one, mandatory",
-                "description": "Title of the objective."
+                "description": "Title of the objective"
+            },
+            {
+                "name": "Description",
+                "type": "Rich Text",
+                "multiplicity": "one, optional",
+                "description": "Detailed description of the objective"
             },
             {
                 "name": "Cycle",
                 "type": "Reference",
                 "multiplicity": "one, mandatory",
-                "description": "Reference to the cycle."
-            },
-            {
-                "name": "Description",
-                "type": "Rich Text",
-                "multiplicity": "one, optional",
-                "description": "Detailed description of the objective."
-            },
-            {
-                "name": "Owner",
-                "type": "Reference",
-                "multiplicity": "one, mandatory",
-                "description": "Reference to the owner (user) of the objective."
+                "description": "Reference to the cycle"
             }
         ]
     },
     {
-        "name": "Key Result",
+        "name": "KeyResult",
         "attributes": [
             {
                 "name": "Title",
                 "type": "Text",
                 "multiplicity": "one, mandatory",
-                "description": "Title of the key result."
-            },
-            {
-                "name": "Objective",
-                "type": "Reference",
-                "multiplicity": "one, mandatory",
-                "description": "Reference to the objective."
+                "description": "Title of the key result"
             },
             {
                 "name": "Description",
                 "type": "Rich Text",
                 "multiplicity": "one, optional",
-                "description": "Detailed description of the key result."
+                "description": "Detailed description of the key result"
             },
             {
-                "name": "Target Value",
-                "type": "Number",
-                "multiplicity": "one, mandatory",
-                "description": "Target value for the key result."
-            },
-            {
-                "name": "Current Value",
-                "type": "Number",
-                "multiplicity": "one, optional",
-                "description": "Current value of the key result."
-            },
-            {
-                "name": "Owner",
+                "name": "Objective",
                 "type": "Reference",
                 "multiplicity": "one, mandatory",
-                "description": "Reference to the owner (user) of the key result."
+                "description": "Reference to the objective"
+            },
+            {
+                "name": "TargetValue",
+                "type": "Number",
+                "multiplicity": "one, mandatory",
+                "description": "Target value for the key result"
+            },
+            {
+                "name": "CurrentValue",
+                "type": "Number",
+                "multiplicity": "one, optional",
+                "description": "Current value for the key result"
             }
         ]
     }
