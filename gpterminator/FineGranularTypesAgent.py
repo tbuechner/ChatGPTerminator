@@ -25,12 +25,10 @@ class FineGranularTypesAgent(Agent):
 
         self.gpterminator.getResponse(prompt)
 
-        if(not Choice.hasTextualChoice(self.gpterminator.choices)):
-            self.runPrompt()
-
+        self.checkIfPromptAgain(additional_args)
 
     def wasSuccessful(self):
-        return Choice.isSuccessful(self.gpterminator.choices, "The types of the detailed data model meets the requirements of the application.")
+        return Choice.isSuccessful(self.gpterminator.choices, "The types of the detailed data model meet the requirements of the application.")
 
 
     def getPromptFolder(self):

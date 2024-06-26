@@ -28,7 +28,7 @@ Make sure, that the types in the detailed data model appear in the same order as
 
 This is only about the types in the detailed data model. Attributes are not considered here.
 
-If you think the types in the detailed data model fit the types in the high-level data model, appear in the same order, and meet the requirements of the application - give this as the response: "The types of the detailed data model meets the requirements of the application."
+If you think the types in the detailed data model fit the types in the high-level data model, appear in the same order, and meet the requirements of the application - give this as the response: "The types of the detailed data model meet the requirements of the application."
 
 {% if prompt_detailed %}
 The following instructions refer to the details of the detailed data model:

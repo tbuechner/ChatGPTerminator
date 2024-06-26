@@ -2,6 +2,7 @@ import json
 import os
 import jsonschema
 
+from gpterminator import Choice
 from gpterminator.Choice import getFunctionCalls
 from gpterminator.Utils import renderTemplate
 
@@ -11,7 +12,7 @@ class Agent:
         self.gpterminator = gpterminator
 
 
-    def runPrompt(self):
+    def runPrompt(self, additional_args=None):
         pass
 
 
@@ -63,6 +64,14 @@ class Agent:
             self.gpterminator.tools = tools
         else:
             self.gpterminator.tools = None
+
+
+    def checkIfPromptAgain(self, additional_args=None):
+        if(Choice.hasFunctionCall(self.gpterminator.choices)):
+            self.runPrompt(additional_args)
+        else:
+            print("No function call found in the choices, exiting agent...")
+
 
     def validateSchema(self, argument_dict, function_name):
         for tool in self.gpterminator.tools:

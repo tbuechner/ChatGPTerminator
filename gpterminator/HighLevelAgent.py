@@ -32,8 +32,7 @@ class HighLevelAgent(Agent):
 
         self.gpterminator.getResponse(prompt)
 
-        if(not Choice.hasTextualChoice(self.gpterminator.choices)):
-            self.runPrompt()
+        self.checkIfPromptAgain(additional_args)
 
 
     def generateAllPrompts(self):

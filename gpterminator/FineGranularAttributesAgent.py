@@ -32,8 +32,7 @@ class FineGranularAttributesAgent(Agent):
 
             self.gpterminator.getResponse(prompt)
 
-            if(not Choice.hasTextualChoice(self.gpterminator.choices)):
-                self.runPrompt(additional_args)
+            self.checkIfPromptAgain(additional_args)
 
         else:
             print("Please provide a type index as an additional argument")

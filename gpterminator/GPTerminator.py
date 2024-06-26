@@ -163,17 +163,23 @@ class GPTerminator:
                     print(f"Agent set to: {self.agent.agent_name}")
                     self.agent.runPrompt()
 
-                    if(self.agent.wasSuccessful()):
+                    if not self.agent.wasSuccessful():
+                        print("High-level agent was not successful")
+                    else:
                         self.agent = FineGranularTypesAgent(self)
                         print(f"Agent set to: {self.agent.agent_name}")
                         self.agent.runPrompt()
-                        if(self.agent.wasSuccessful()):
+                        if not self.agent.wasSuccessful():
+                            print("Fine-granular types agent was not successful")
+                        else:
                             self.agent = FineGranularAttributesAgent(self)
                             print(f"Agent set to: {self.agent.agent_name}")
                             number_of_types = self.agent.getNumberOfTypes()
                             for i in range(number_of_types):
-                                self.agent.runPrompt([i])
-                                if(self.agent.wasSuccessful()):
+                                print(f"Running agent on type {i}")
+                                args = [str(i)]
+                                self.agent.runPrompt(args)
+                                if not self.agent.wasSuccessful():
                                     break
         else:
             self.printError(
