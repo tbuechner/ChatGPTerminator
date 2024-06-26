@@ -39,9 +39,11 @@ class GPTerminator:
             "new": ["n", "removes chat history and starts a new session"],
             "copy": ["c", "copies all raw text from the previous response"],
             "run": ["r", "run the types prompt of the agent"],
-            "setAgent": ["agent"],
-            "setApplication": ["app"],
-            "dataModelCreation": ["dm", "full data model creation process"]
+            "set-agent": ["agent", "set the agent to use"],
+            "set-application": ["app", "set the application to work on"],
+            "data-model-high-level": ["dm-hl", "run the high-level data model creation process"],
+            "data-model-fine-granular": ["dm-fg", "generate fine-granular data model from high-level data model"],
+            "data-model-full-process": ["dm-fp", "full data model creation process"]
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -138,11 +140,11 @@ class GPTerminator:
                     self.printError("agent or application not set")
                 else:
                     self.agent.runPrompt(args)
-            elif cmd == "app":
+            elif cmd == "set-application" or cmd == "app":
                 application_name = args[0]
                 self.application_name = application_name
                 print(f"Application set to: {application_name}")
-            elif cmd == "agent":
+            elif cmd == "set-agent" or cmd == "agent":
                 agent_name = args[0]
                 if agent_name == "high-level":
                     self.agent = HighLevelAgent(self)
@@ -155,48 +157,61 @@ class GPTerminator:
                     print(f"Agent set to: {agent_name}")
                 else:
                     self.printError(f"Agent {agent_name} not found")
-            elif cmd == "dataModelCreation" or cmd == "dm":
+            elif cmd == "data-model-full-process" or cmd == "dm-fp":
                 if not hasattr(self, "application_name"):
                     self.printError("application not set")
                 else:
-                    self.agent = HighLevelAgent(self)
-                    print(f"Agent set to: {self.agent.agent_name}")
-                    self.agent.runPrompt()
-
-                    if not self.agent.wasSuccessful():
-                        print("High-level agent was not successful")
-                    else:
-                        self.agent = FineGranularTypesAgent(self)
-                        print(f"Agent set to: {self.agent.agent_name}")
-                        self.agent.runPrompt()
-                        if not self.agent.wasSuccessful():
-                            print("Fine-granular types agent was not successful")
-                        else:
-                            self.agent = FineGranularAttributesAgent(self)
-                            print(f"Agent set to: {self.agent.agent_name}")
-                            number_of_types = self.agent.getNumberOfTypes()
-                            for i in range(number_of_types):
-                                print(f"Running agent on type {i}")
-                                args = [str(i)]
-                                self.agent.runPrompt(args)
-                                if not self.agent.wasSuccessful():
-                                    break
-                            print("Fine-granular attributes agent was successful")
+                    if self.runHighLevelDataModelCreationProcess():
+                        self.runFineGranularDataModelCreationProcess()
+            elif cmd == "data-model-fine-granular" or cmd == "dm-fg":
+                if not hasattr(self, "application_name"):
+                    self.printError("application not set")
+                else:
+                    self.runFineGranularDataModelCreationProcess()
+            elif cmd == "data-model-high-level" or cmd == "dm-hl":
+                if not hasattr(self, "application_name"):
+                    self.printError("application not set")
+                else:
+                    self.runHighLevelDataModelCreationProcess()
         else:
             self.printError(
                 f"!{cmd} in not in the list of commands, type !help"
             )
 
 
+    def runHighLevelDataModelCreationProcess(self):
+        self.agent = HighLevelAgent(self)
+        print(f"Agent set to: {self.agent.agent_name}")
+        self.agent.runPrompt()
+        if not self.agent.wasSuccessful():
+            print("High-level agent was not successful")
+        else:
+            print("High-level agent was successful")
+        return self.agent.wasSuccessful()
+
+
+    def runFineGranularDataModelCreationProcess(self):
+        self.agent = FineGranularTypesAgent(self)
+        print(f"Agent set to: {self.agent.agent_name}")
+        self.agent.runPrompt()
+        if not self.agent.wasSuccessful():
+            print("Fine-granular types agent was not successful")
+            return False
+        else:
+            self.agent = FineGranularAttributesAgent(self)
+            print(f"Agent set to: {self.agent.agent_name}")
+            number_of_types = self.agent.getNumberOfTypes()
+            for i in range(number_of_types):
+                print(f"Running agent on type {i}")
+                args = [str(i)]
+                self.agent.runPrompt(args)
+                if not self.agent.wasSuccessful():
+                    return False
+            print("Fine-granular attributes agent was successful")
+            return True
+
+
     def printBanner(self):
-        welcome_ascii = """                                                        
- _____ _____ _____               _         _           
-|   __|  _  |_   _|___ ___ _____|_|___ ___| |_ ___ ___ 
-|  |  |   __| | | | -_|  _|     | |   | .'|  _| . |  _|
-|_____|__|    |_| |___|_| |_|_|_|_|_|_|__,|_| |___|_|  
-"""
-        self.console.print(f"[bold green]{welcome_ascii}[/bold green]", end="")
-        self.console.print(f"[bright_black]Version: v0.1.11[/]")
         self.console.print(f"[bright_black]Model: {self.model}[/]")
         self.console.print(
             f"[bright_black]Type '!quit' to quit the program; '!help' for a list of cmds[/]\n"
