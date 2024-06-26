@@ -281,7 +281,7 @@ class GPTerminator:
 
         self.choices = []
 
-        full_reply_content_shortened = ""
+        panel_content = ""
         log = ""
 
         with Live(md, console=self.console, transient=True) as live:
@@ -300,18 +300,18 @@ class GPTerminator:
                     if chunk_message.content is not None:
                         log += f"textual answer\n"
                         log += f"content: {chunk_message.content}\n"
-                        full_reply_content_shortened += "".join(chunk_message.content)
+                        panel_content += "".join(chunk_message.content)
                         addTextualChoice(self.choices, chunk.id, chunk_message.content)
 
                     encoding = tiktoken.encoding_for_model(self.model)
-                    num_tokens = len(encoding.encode(full_reply_content_shortened))
+                    num_tokens = len(encoding.encode(panel_content))
                     time_elapsed_s = time.time() - start_time
                     subtitle_str = f"[bright_black]Tokens:[/] [bold red]{num_tokens}[/] | "
                     subtitle_str += (
                         f"[bright_black]Time Elapsed:[/][bold yellow] {time_elapsed_s:.1f}s [/]"
                     )
                     md = Panel(
-                        Markdown(full_reply_content_shortened, self.code_theme),
+                        Markdown(panel_content, self.code_theme),
                         border_style="bright_black",
                         title="[bright_black]Assistant[/]",
                         title_align="left",
@@ -329,8 +329,6 @@ class GPTerminator:
 
         for choice in self.choices:
             self.msg_hist.append(choice.getMsgForHistory())
-
-        self.msg_hist.append({"role": "assistant", "content": full_reply_content_shortened})
 
         if self.agent is not None:
             self.agent.applyFunctionCalls()
