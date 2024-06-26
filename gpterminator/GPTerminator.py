@@ -181,6 +181,7 @@ class GPTerminator:
                                 self.agent.runPrompt(args)
                                 if not self.agent.wasSuccessful():
                                     break
+                            print("Fine-granular attributes agent was successful")
         else:
             self.printError(
                 f"!{cmd} in not in the list of commands, type !help"

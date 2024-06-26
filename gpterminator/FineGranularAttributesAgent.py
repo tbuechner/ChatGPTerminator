@@ -134,7 +134,7 @@ class FineGranularAttributesAgent(Agent):
                     del argument_dict['internalTypeName']
                     type_['attributes'].append(argument_dict)
                     return
-            print(f"Type with name {argument_dict['typeName']} does not exist")
+            print(f"Type with name {argument_dict['internalTypeName']} does not exist")
             return
 
         if 'remove_attribute' == function_name:
