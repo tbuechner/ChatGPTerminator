@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the attribute. Descriptive name to be used in the UI"
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of the attribute. One of: Text, Number, Date, Boolean, Reference"
+    },
+    "multiplicity": {
+      "type": "string",
+      "description": "The multiplicity of the attribute, which means how many values can be stored in the attribute.",
+      "enum": ["one, optional", "one, mandatory", "many, mandatory", "many, optional"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the attribute. Descriptive text to be used in the UI"
+    }
+  },
+  "required": ["name", "type", "multiplicity", "description"],
+  "additionalProperties": false
+}

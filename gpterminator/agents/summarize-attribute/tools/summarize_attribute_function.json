@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "summarize_attribute",
+    "description": "Summarize a fine granular representation of an attribute of a type into a high-level description.",
+    "parameters": {{ load_file('agents/summarize-attribute/tools/summarize_attribute_schema.json') }}
+  }
+}

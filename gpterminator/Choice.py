@@ -81,6 +81,9 @@ def hasTextualChoice(choices):
 def hasFunctionCall(choices):
     return any(isinstance(c, FunctionCall) for c in choices)
 
+def hasOneFunctionCall(choices):
+    return len([c for c in choices if isinstance(c, FunctionCall)]) == 1
+
 def isSuccessful(choices, success_message):
     # return if there is one choice, this is a TextualChoice, and the content contains the success message as a substring
     return len(choices) == 1 and isinstance(choices[0], Textual) and success_message in choices[0].content

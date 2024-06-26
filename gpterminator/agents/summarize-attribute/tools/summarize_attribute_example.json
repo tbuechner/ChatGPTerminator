@@ -1,0 +1,6 @@
+{
+  "name": "Description",
+  "type": "Text",
+  "multiplicity": "one, optional",
+  "description": "Detailed description of the risk"
+}

@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "summarize_attribute",
+  "content": {{ load_file('agents/summarize-attribute/tools/summarize_attribute_example.json') | tojson }}
+}

@@ -21,6 +21,7 @@ from gpterminator.Choice import FunctionCall, Textual, addTextualChoice, addFunc
 from gpterminator.FineGranularAttributesAgent import FineGranularAttributesAgent
 from gpterminator.FineGranularTypesAgent import FineGranularTypesAgent
 from gpterminator.HighLevelAgent import HighLevelAgent
+from gpterminator.SummarizeTypeAgent import SummarizeTypeAgent
 from gpterminator.Utils import get_file_name
 
 class GPTerminator:
@@ -43,7 +44,8 @@ class GPTerminator:
             "set-application": ["app", "set the application to work on"],
             "data-model-high-level": ["dm-hl", "run the high-level data model creation process"],
             "data-model-fine-granular": ["dm-fg", "generate fine-granular data model from high-level data model"],
-            "data-model-full-process": ["dm-fp", "full data model creation process"]
+            "data-model-full-process": ["dm-fp", "full data model creation process"],
+            "summarize-data-model": ["sum", "summarize the data model"]
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -173,10 +175,34 @@ class GPTerminator:
                     self.printError("application not set")
                 else:
                     self.runHighLevelDataModelCreationProcess()
+            elif cmd == "summarize-data-model" or cmd == "sum":
+                if not hasattr(self, "application_name"):
+                    self.printError("application not set")
+                else:
+                    self.summarizeDataModel()
         else:
             self.printError(
                 f"!{cmd} in not in the list of commands, type !help"
             )
+
+
+    def summarizeDataModel(self):
+        self.agent = SummarizeTypeAgent(self)
+        self.agent.resetSummary()
+        with open('applications/' + self.application_name + '/types-detailed.json', 'r') as file:
+            types_detailed = json.load(file)
+        # iterate over types_detailed and maintain an index
+        for i in range(len(types_detailed)):
+            type_ = types_detailed[i]
+            # remove the attribute 'attributes' from type_
+            type_.pop('attributes', None)
+            self.agent.runPrompt(type_)
+            if not self.agent.wasSuccessful():
+                print("High-level agent was not successful")
+            else:
+                print("High-level agent was successful")
+        self.agent.saveSummary()
+
 
 
     def runHighLevelDataModelCreationProcess(self):
