@@ -2,6 +2,7 @@ import json
 import os
 import jsonschema
 
+from gpterminator.Choice import getFunctionCalls
 from gpterminator.Utils import renderTemplate
 
 
@@ -15,17 +16,16 @@ class Agent:
 
 
     def applyFunctionCalls(self):
-        # print("applyFunctionCalls, self.function_name_2_arguments: " + str(self.function_name_2_arguments))
-        if self.gpterminator.function_name_2_arguments and self.apply_function_handler is not None:
-            # iterate over the function_name_2_arguments dictionary
-            for function_name, arguments in self.gpterminator.function_name_2_arguments.items():
-                # print(f"Function name: {function_name}")
-                # print(f"Argument: {arguments}\n")
-                self.apply_function_handler(self, function_name, arguments)
+        function_calls = getFunctionCalls(self.gpterminator.choices)
+
+        if function_calls is not None and len(function_calls) > 0:
+            for function_call in function_calls:
+                self.apply_function_handler(self, function_call.function_name, function_call.arguments)
 
             self.gpterminator.msg_hist = self.gpterminator.msg_hist[:1]
             self.gpterminator.prompt_count = 0
             print("Session has been reset. You can now run the prompt again.")
+
         else:
             print("No function calls to apply")
 

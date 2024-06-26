@@ -46,12 +46,6 @@ def loadFile(file_path):
     with open(file_path, "r") as file:
         return file.read()
 
-def addToFunctionName2Arguments(function_name, function_arguments, function_name_2_arguments):
-    if function_name in function_name_2_arguments:
-        function_name_2_arguments[function_name].append(function_arguments)
-    else:
-        function_name_2_arguments[function_name] = [function_arguments]
-
 def generateFolderIfNotExists(folder_name_generated):
     if os.path.exists(folder_name_generated):
         os.system("rm -r " + folder_name_generated)

@@ -137,15 +137,14 @@ class FineGranularAttributesAgent(Agent):
 
 
 
-def applyFunctionHandler(self, function_name, arguments):
+def applyFunctionHandler(self, function_name, argument):
     with open('applications/' + self.gpterminator.application_name + '/types-detailed.json', 'r') as file:
         types = json.load(file)
 
-    print("Applying function calls")
-    for argument in arguments:
-        argument_dict = json.loads(argument)
-        print(f"Function: {function_name}")
-        self.handleFunction(function_name, argument_dict, types)
+    print("Applying function call")
+    argument_dict = json.loads(argument)
+    print(f"Function: {function_name}")
+    self.handleFunction(function_name, argument_dict, types)
 
     # write the types to the types.json file
     with open('applications/' + self.gpterminator.application_name + '/types-detailed.json', 'w') as file:

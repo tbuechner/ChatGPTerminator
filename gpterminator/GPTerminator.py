@@ -17,11 +17,11 @@ from rich.panel import Panel
 
 from openai.lib.azure import AzureOpenAI
 
-from gpterminator.Choice import FunctionCall, Textual, addTextualChoice
+from gpterminator.Choice import FunctionCall, Textual, addTextualChoice, addFunctionCall
 from gpterminator.FineGranularAttributesAgent import FineGranularAttributesAgent
 from gpterminator.FineGranularTypesAgent import FineGranularTypesAgent
 from gpterminator.HighLevelAgent import HighLevelAgent
-from gpterminator.Utils import get_file_name, addToFunctionName2Arguments
+from gpterminator.Utils import get_file_name
 
 class GPTerminator:
     def __init__(self):
@@ -279,12 +279,9 @@ class GPTerminator:
 
         start_time = time.time()
 
-        choices = []
+        self.choices = []
 
-        function_name_2_arguments = {}
         full_reply_content_shortened = ""
-        function_name = None
-        function_arguments = ""
         log = ""
 
         with Live(md, console=self.console, transient=True) as live:
@@ -296,26 +293,15 @@ class GPTerminator:
                         for tool_call in chunk_message.tool_calls:
                             log += f"tool_call\n"
                             function_call_arguments = tool_call.function.arguments
-                            function_arguments += function_call_arguments
                             log += f"function_call_arguments: {function_call_arguments}\n"
-                            if tool_call.function.name is not None:
-                                log += f"tool_call.function.name: {tool_call.function.name}\n"
-                                if function_name is not None:
-                                    addToFunctionName2Arguments(function_name, function_arguments, function_name_2_arguments)
 
-                                function_name = tool_call.function.name
-
-                                full_reply_content_shortened += "Function: " + function_name + "\n"
-                                function_arguments = ""
-
-                                # append new function call object to choices
-                                choices.append(FunctionCall(chunk.id, function_name, function_arguments))
+                            addFunctionCall(self.choices, chunk.id, tool_call.function.name, function_call_arguments)
 
                     if chunk_message.content is not None:
                         log += f"textual answer\n"
                         log += f"content: {chunk_message.content}\n"
                         full_reply_content_shortened += "".join(chunk_message.content)
-                        addTextualChoice(choices, chunk.id, chunk_message.content)
+                        addTextualChoice(self.choices, chunk.id, chunk_message.content)
 
                     encoding = tiktoken.encoding_for_model(self.model)
                     num_tokens = len(encoding.encode(full_reply_content_shortened))
@@ -334,35 +320,30 @@ class GPTerminator:
                     )
                     live.update(md)
 
-        if function_name is not None:
-            addToFunctionName2Arguments(function_name, function_arguments, function_name_2_arguments)
-
-        self.saveFunctionCalls(function_name_2_arguments, full_reply_content_shortened)
-        self.function_name_2_arguments = function_name_2_arguments
+        # print("choices: " + str(self.choices))
+        self.saveChoices()
 
         self.console.print(md)
         self.console.print()
         self.msg_hist.append({"role": "assistant", "content": full_reply_content_shortened})
 
-        print("choices: " + str(choices))
-
         if self.agent is not None:
             self.agent.applyFunctionCalls()
 
-    def saveFunctionCalls(self, function_name_2_arguments, full_reply_content):
-        if full_reply_content:
-            file_name = f"{get_file_name(self.save_path)}-text.md"
-            with open(Path(self.save_path) / file_name, "w") as f:
-                f.write(full_reply_content)
-
-        if function_name_2_arguments:
-            for function_name, arguments in function_name_2_arguments.items():
-                if function_name is not None and arguments is not None:
-                    for argument in arguments:
-                        file_name = f"{get_file_name(self.save_path)}-{function_name}.json"
-                        with open(Path(self.save_path) / file_name, "w") as f:
-                            json_object = json.loads(argument)
-                            json.dump(json_object, f, indent=4)
+    def saveChoices(self):
+        for choice in self.choices:
+            # if the choice is a function call
+            if isinstance(choice, FunctionCall):
+                function_name = choice.function_name
+                arguments = choice.arguments
+                file_name = f"{get_file_name(self.save_path)}-{function_name}.json"
+                with open(Path(self.save_path) / file_name, "w") as f:
+                    json_object = json.loads(arguments)
+                    json.dump(json_object, f, indent=4)
+            if isinstance(choice, Textual):
+                file_name = f"{get_file_name(self.save_path)}-text.md"
+                with open(Path(self.save_path) / file_name, "w") as f:
+                    f.write(choice.content)
 
 
     def init(self):
