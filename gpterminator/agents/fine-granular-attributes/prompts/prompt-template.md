@@ -30,7 +30,7 @@ Check carefully if the attributes of type {{ type_name }} in the detailed data m
 Do this check by going through all attributes of type {{ type_name }} in the high-level data model and check if the attribute in the detailed data model exists and is correct. 
 If not, you may need to add or remove the attribute.
 
-If you think the attributes of type {{ type_name }} in the detailed data model fit the attributes of type {{ type_name }} in the high-level data model and the requirements of the application - give this as the response: "The attributes of type {{ type_name }} meet the requirements of the application."
+If you think the attributes of type {{ type_name }} in the detailed data model fit the attributes of type {{ type_name }} in the high-level data model and the requirements of the application - give this as the response: "The attributes of this type meet the requirements of the application."
 
 {% if prompt_detailed %}
 The following instructions refer to the details of the detailed data model:

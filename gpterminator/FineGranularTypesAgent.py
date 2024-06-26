@@ -3,6 +3,7 @@ import os
 
 import jsonschema
 
+from gpterminator import Choice
 from gpterminator.Agent import Agent
 from gpterminator.Utils import renderTemplate, generateFolderIfNotExists
 
@@ -23,6 +24,13 @@ class FineGranularTypesAgent(Agent):
         # print("prompt: " + prompt)
 
         self.gpterminator.getResponse(prompt)
+
+        if(not Choice.hasTextualChoice(self.gpterminator.choices)):
+            self.runPrompt()
+
+
+    def wasSuccessful(self):
+        return Choice.isSuccessful(self.gpterminator.choices, "The types of the detailed data model meets the requirements of the application.")
 
 
     def getPromptFolder(self):

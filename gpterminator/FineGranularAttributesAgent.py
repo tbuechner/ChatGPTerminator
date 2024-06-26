@@ -3,6 +3,7 @@ import os
 
 import jsonschema
 
+from gpterminator import Choice
 from gpterminator.Agent import Agent
 from gpterminator.Utils import renderTemplate, generateFolderIfNotExists
 
@@ -30,13 +31,28 @@ class FineGranularAttributesAgent(Agent):
             # print("prompt: " + prompt)
 
             self.gpterminator.getResponse(prompt)
+
+            if(not Choice.hasTextualChoice(self.gpterminator.choices)):
+                self.runPrompt(additional_args)
+
         else:
             print("Please provide a type index as an additional argument")
             return
 
 
+    def wasSuccessful(self):
+        return Choice.isSuccessful(self.gpterminator.choices, "The attributes of this type meet the requirements of the application.")
+
+
     def getPromptFolder(self):
         return 'agents/' + self.agent_name + '/prompts'
+
+
+    def getNumberOfTypes(self):
+        with open('applications/' + self.gpterminator.application_name + '/types-high-level.json', 'r') as file:
+            types_high_level = json.load(file)
+            return len(types_high_level)
+
 
 
     def generateAllPrompts(self, type_index):

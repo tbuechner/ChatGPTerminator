@@ -40,7 +40,8 @@ class GPTerminator:
             "copy": ["c", "copies all raw text from the previous response"],
             "run": ["r", "run the types prompt of the agent"],
             "setAgent": ["agent"],
-            "setApplication": ["app"]
+            "setApplication": ["app"],
+            "dataModelCreation": ["dm", "full data model creation process"]
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -133,8 +134,8 @@ class GPTerminator:
                 self.prompt_count = 0
                 self.printBanner()
             elif cmd == "run" or cmd == "r":
-                if not hasattr(self, "agent"):
-                    self.printError("agent not set, use the 'set' command to set the agent and application")
+                if not (hasattr(self, "agent") or hasattr(self, "application_name")):
+                    self.printError("agent or application not set")
                 else:
                     self.agent.runPrompt(args)
             elif cmd == "app":
@@ -154,6 +155,26 @@ class GPTerminator:
                     print(f"Agent set to: {agent_name}")
                 else:
                     self.printError(f"Agent {agent_name} not found")
+            elif cmd == "dataModelCreation" or cmd == "dm":
+                if not hasattr(self, "application_name"):
+                    self.printError("application not set")
+                else:
+                    self.agent = HighLevelAgent(self)
+                    print(f"Agent set to: {self.agent.agent_name}")
+                    self.agent.runPrompt()
+
+                    if(self.agent.wasSuccessful()):
+                        self.agent = FineGranularTypesAgent(self)
+                        print(f"Agent set to: {self.agent.agent_name}")
+                        self.agent.runPrompt()
+                        if(self.agent.wasSuccessful()):
+                            self.agent = FineGranularAttributesAgent(self)
+                            print(f"Agent set to: {self.agent.agent_name}")
+                            number_of_types = self.agent.getNumberOfTypes()
+                            for i in range(number_of_types):
+                                self.agent.runPrompt([i])
+                                if(self.agent.wasSuccessful()):
+                                    break
         else:
             self.printError(
                 f"!{cmd} in not in the list of commands, type !help"

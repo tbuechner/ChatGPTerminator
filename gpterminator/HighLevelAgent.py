@@ -19,6 +19,10 @@ class HighLevelAgent(Agent):
         return 'agents/' + self.agent_name + '/prompts'
 
 
+    def wasSuccessful(self):
+        return Choice.isSuccessful(self.gpterminator.choices, "The current data model meets the requirements of the application.")
+
+
     def runPrompt(self, additional_args=None):
         self.generateAllPrompts()
         with open('applications/' + self.gpterminator.application_name + '/generated/prompt.md', 'r') as file:
@@ -30,8 +34,6 @@ class HighLevelAgent(Agent):
 
         if(not Choice.hasTextualChoice(self.gpterminator.choices)):
             self.runPrompt()
-
-        # self.generateAllPrompts()
 
 
     def generateAllPrompts(self):
