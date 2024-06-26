@@ -321,30 +321,19 @@ class GPTerminator:
                     live.update(md)
 
         # print("choices: " + str(self.choices))
-        self.saveChoices()
+        for choice in self.choices:
+            choice.save(self.save_path)
 
         self.console.print(md)
         self.console.print()
+
+        for choice in self.choices:
+            self.msg_hist.append(choice.getMsgForHistory())
+
         self.msg_hist.append({"role": "assistant", "content": full_reply_content_shortened})
 
         if self.agent is not None:
             self.agent.applyFunctionCalls()
-
-    def saveChoices(self):
-        for choice in self.choices:
-            # if the choice is a function call
-            if isinstance(choice, FunctionCall):
-                function_name = choice.function_name
-                arguments = choice.arguments
-                file_name = f"{get_file_name(self.save_path)}-{function_name}.json"
-                with open(Path(self.save_path) / file_name, "w") as f:
-                    json_object = json.loads(arguments)
-                    json.dump(json_object, f, indent=4)
-            if isinstance(choice, Textual):
-                file_name = f"{get_file_name(self.save_path)}-text.md"
-                with open(Path(self.save_path) / file_name, "w") as f:
-                    f.write(choice.content)
-
 
     def init(self):
         if not os.path.exists(self.save_path):
