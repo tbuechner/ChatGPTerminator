@@ -1,6 +1,7 @@
 import json
 import os
 
+from gpterminator import Choice
 from gpterminator.Agent import Agent
 from gpterminator.Utils import renderTemplate, generateFolderIfNotExists
 
@@ -27,7 +28,10 @@ class HighLevelAgent(Agent):
 
         self.gpterminator.getResponse(prompt)
 
-        self.generateAllPrompts()
+        if(not Choice.hasTextualChoice(self.gpterminator.choices)):
+            self.runPrompt()
+
+        # self.generateAllPrompts()
 
 
     def generateAllPrompts(self):

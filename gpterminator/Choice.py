@@ -74,3 +74,6 @@ def addFunctionCall(choices, id, function_name, arguments):
 
 def getFunctionCalls(choices):
     return [c for c in choices if isinstance(c, FunctionCall)]
+
+def hasTextualChoice(choices):
+    return any(isinstance(c, Textual) for c in choices)

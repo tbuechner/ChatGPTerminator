@@ -6,19 +6,25 @@
                 "name": "Name",
                 "type": "Text",
                 "multiplicity": "one, mandatory",
-                "description": "Name of the cycle"
+                "description": "The name of the cycle (e.g., Q1 2023)."
             },
             {
                 "name": "StartDate",
                 "type": "Date",
                 "multiplicity": "one, mandatory",
-                "description": "Start date of the cycle"
+                "description": "The start date of the cycle."
             },
             {
                 "name": "EndDate",
                 "type": "Date",
                 "multiplicity": "one, mandatory",
-                "description": "End date of the cycle"
+                "description": "The end date of the cycle."
+            },
+            {
+                "name": "Objectives",
+                "type": "Reference",
+                "multiplicity": "many, optional",
+                "description": "The set of objectives pursued during the cycle."
             }
         ]
     },
@@ -29,54 +35,66 @@
                 "name": "Title",
                 "type": "Text",
                 "multiplicity": "one, mandatory",
-                "description": "Title of the objective"
+                "description": "Title of the objective."
             },
             {
                 "name": "Description",
-                "type": "Rich Text",
+                "type": "Text",
                 "multiplicity": "one, optional",
-                "description": "Detailed description of the objective"
+                "description": "Detailed description of the objective."
             },
             {
                 "name": "Cycle",
                 "type": "Reference",
                 "multiplicity": "one, mandatory",
-                "description": "Reference to the cycle"
+                "description": "The cycle during which the objective is pursued."
+            },
+            {
+                "name": "KeyResults",
+                "type": "Reference",
+                "multiplicity": "many, optional",
+                "description": "The key results associated with this objective."
+            },
+            {
+                "name": "Owner",
+                "type": "Reference",
+                "multiplicity": "one, mandatory",
+                "description": "The individual responsible for the objective."
             }
         ]
     },
     {
-        "name": "KeyResult",
+        "name": "Key Result",
         "attributes": [
             {
                 "name": "Title",
                 "type": "Text",
                 "multiplicity": "one, mandatory",
-                "description": "Title of the key result"
+                "description": "Title of the key result."
             },
             {
                 "name": "Description",
-                "type": "Rich Text",
+                "type": "Text",
                 "multiplicity": "one, optional",
-                "description": "Detailed description of the key result"
+                "description": "Detailed description of the key result."
             },
             {
                 "name": "Objective",
                 "type": "Reference",
                 "multiplicity": "one, mandatory",
-                "description": "Reference to the objective"
+                "description": "The objective this key result belongs to."
             },
             {
                 "name": "TargetValue",
                 "type": "Number",
                 "multiplicity": "one, mandatory",
-                "description": "Target value for the key result"
+                "description": "The target value to be achieved."
             },
             {
                 "name": "CurrentValue",
                 "type": "Number",
                 "multiplicity": "one, optional",
-                "description": "Current value for the key result"
+                "description": "The current progress value."
             }
         ]
     }
