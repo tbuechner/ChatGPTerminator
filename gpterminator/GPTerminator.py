@@ -21,6 +21,7 @@ from gpterminator.Choice import FunctionCall, Textual, addTextualChoice, addFunc
 from gpterminator.FineGranularAttributesAgent import FineGranularAttributesAgent
 from gpterminator.FineGranularTypesAgent import FineGranularTypesAgent
 from gpterminator.HighLevelAgent import HighLevelAgent
+from gpterminator.SummarizeAttributeAgent import SummarizeAttributeAgent
 from gpterminator.SummarizeTypeAgent import SummarizeTypeAgent
 from gpterminator.Utils import get_file_name
 
@@ -188,9 +189,10 @@ class GPTerminator:
 
     def summarizeDataModel(self):
         self.agent = SummarizeTypeAgent(self)
-        self.agent.resetSummary()
         with open('applications/' + self.application_name + '/types-detailed.json', 'r') as file:
             types_detailed = json.load(file)
+            # create a deep copy of types_detailed
+            types_detailed_attributes = json.loads(json.dumps(types_detailed))
         # iterate over types_detailed and maintain an index
         for i in range(len(types_detailed)):
             type_ = types_detailed[i]
@@ -198,11 +200,23 @@ class GPTerminator:
             type_.pop('attributes', None)
             self.agent.runPrompt(type_)
             if not self.agent.wasSuccessful():
-                print("High-level agent was not successful")
+                print("Summarize type agent was not successful")
             else:
-                print("High-level agent was successful")
-        self.agent.saveSummary()
+                print("Summarize type agent was successful")
 
+        self.agent = SummarizeAttributeAgent(self, self.agent.summarized_types)
+
+        for i in range(len(types_detailed_attributes)):
+            type_ = types_detailed_attributes[i]
+            for attribute in type_['attributes']:
+                self.agent.runPrompt([attribute, i])
+                if not self.agent.wasSuccessful():
+                    print("Summarize attribute agent was not successful")
+                    return
+                else:
+                    print("Summarize type agent was successful")
+
+        self.agent.saveSummary()
 
 
     def runHighLevelDataModelCreationProcess(self):

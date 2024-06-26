@@ -6,14 +6,14 @@ from gpterminator.Agent import Agent
 from gpterminator.Utils import renderTemplate, generateFolderIfNotExists
 
 
-class SummarizeTypeAgent(Agent):
+class SummarizeAttributeAgent(Agent):
 
-    def __init__(self, gpterminator):
+    def __init__(self, gpterminator, summarized_types):
         super().__init__(gpterminator)
-        self.agent_name = 'summarize-type'
+        self.agent_name = 'summarize-attribute'
         self.setToolsAndExamples('agents/' + self.agent_name + '/tools')
         self.apply_function_handler = applyFunctionHandler
-        self.summarized_types = []
+        self.summarized_types = summarized_types
 
 
     def getPromptFolder(self):
@@ -24,9 +24,12 @@ class SummarizeTypeAgent(Agent):
         return Choice.hasOneFunctionCall(self.gpterminator.choices)
 
 
-    def runPrompt(self, type_=None):
-        if type_:
-            self.generateAllPrompts(type_)
+    def runPrompt(self, attribute_and_type_index=None):
+        if attribute_and_type_index:
+            attribute = attribute_and_type_index[0]
+            self.type_index = attribute_and_type_index[1]
+
+            self.generateAllPrompts(attribute)
 
             with open('applications/' + self.gpterminator.application_name + '/generated/prompt.md', 'r') as file:
                 prompt = file.read()
@@ -34,26 +37,40 @@ class SummarizeTypeAgent(Agent):
             self.gpterminator.getResponse(prompt)
 
         else:
-            print("Please provide a type as an additional argument")
+            print("Please provide an attribute as an additional argument")
 
 
-    def generateAllPrompts(self, type_):
+    def generateAllPrompts(self, attribute):
         folder_name_generated = 'applications/' + self.gpterminator.application_name + '/generated'
         generateFolderIfNotExists(folder_name_generated)
 
         rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', {
-            'type_representation': str(type_)
+            'attribute_representation': str(attribute)
         })
         with open(os.path.join(folder_name_generated, "prompt.md"), "w") as new_file:
             new_file.write(rendered)
 
 
     def handleFunction(self, function_name, argument_dict):
-        if 'summarize_type' == function_name:
-            self.summarized_types.append(argument_dict)
+        if 'summarize_attribute' == function_name:
+            attributes = self.summarized_types[self.type_index].get('attributes')
+            if attributes is None:
+                attributes = []
+                self.summarized_types[self.type_index]['attributes'] = attributes
+            attributes.append(argument_dict)
             return
 
         print(f"Function {function_name} not found")
+
+
+    def saveSummary(self):
+        file_name = self.getSummarizedFileName()
+        with open(file_name, "w") as new_file:
+            new_file.write(json.dumps(self.summarized_types, indent=4))
+
+
+    def getSummarizedFileName(self):
+        return 'applications/' + self.gpterminator.application_name + '/types-summarized-high-level.json'
 
 
 def applyFunctionHandler(self, function_name, argument):

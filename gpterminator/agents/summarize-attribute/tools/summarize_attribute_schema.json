@@ -17,7 +17,7 @@
     },
     "description": {
       "type": "string",
-      "description": "Description of the attribute. Descriptive text to be used in the UI"
+      "description": "Description of the attribute. Do not replicate information in the description field, which is already present in the type or multiplicity field."
     }
   },
   "required": ["name", "type", "multiplicity", "description"],
