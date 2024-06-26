@@ -103,9 +103,8 @@ def applyFunctionHandler(self, function_name, argument):
     with open('applications/' + self.gpterminator.application_name + '/types-high-level.json', 'r') as file:
         types = json.load(file)
 
-    print("Applying function call")
     argument_dict = json.loads(argument)
-    print(f"Function: {function_name}")
+    print(f"Applying function: {function_name}")
     self.handleFunction(function_name, argument_dict, types)
 
     # write the types to the types.json file
