@@ -22,6 +22,7 @@ def get_file_name(save_path):
     file_name = f"{new_file_number:04d}"
     return file_name
 
+
 def renderTemplate(template_file, args=None):
     # Read the template file
     with open(template_file, "r") as file:
@@ -42,10 +43,12 @@ def renderTemplate(template_file, args=None):
 
     return rendered_string
 
+
 def loadFile(file_path):
     # Read the contents of the file
     with open(file_path, "r") as file:
         return file.read()
+
 
 def generateFolderIfNotExists(folder_name_generated):
     if os.path.exists(folder_name_generated):
@@ -54,8 +57,76 @@ def generateFolderIfNotExists(folder_name_generated):
     # create folder folder_name_generated
     os.mkdir(folder_name_generated)
 
+
 def createEmptyFileIfNotExists(file_name):
     if not os.path.exists(file_name):
         with open(file_name, 'w') as file:
             json.dump([], file, indent=4)
 
+
+def remove_characters_between_xml_elements(elem):
+    """
+    Recursively remove all characters between XML elements.
+
+    Parameters:
+    - elem: The XML element to process.
+    """
+    if len(elem):
+        elem.text = None
+        elem.tail = None
+        for child_elem in elem:
+            remove_characters_between_xml_elements(child_elem)
+    else:
+        if elem.tail:
+            elem.tail = None
+
+
+def pretty_print_xml(elem, level=0, indentation="  "):
+    """
+    Recursively print an XML element with indentation for pretty formatting.
+
+    Parameters:
+    - elem: The XML element to print.
+    - level: The current level in the tree (used for indentation).
+    - indentation: The string used for indentation, defaulting to two spaces.
+    """
+    indent = "\n" + level * indentation
+    child_indent = "\n" + (level + 1) * indentation
+
+    # Handling element text
+    if len(elem) > 0 or elem.text:  # If the element has children or text
+        if not elem.text or not elem.text.strip():
+            elem.text = child_indent if len(elem) > 0 else ""
+    else:  # Element has no children and no text
+        if level > 0 and (not elem.tail or not elem.tail.strip()):
+            elem.tail = indent
+        return  # No further processing for truly empty elements
+
+    # Iterating through children if any
+    for child in list(elem):
+        pretty_print_xml(child, level + 1, indentation)
+
+    # Adjusting tail for the last child
+    if len(elem) > 0:
+        if not elem[-1].tail or not elem[-1].tail.strip():
+            elem[-1].tail = indent
+
+    # Handling tail text for this element
+    if level > 0 and (not elem.tail or not elem.tail.strip()):
+        elem.tail = indent
+
+
+def get_parent_map(root):
+    return {c: p for p in root.iter() for c in p}
+
+
+def remove_tags(element, tag_name):
+    for child in list(element):
+        if child.tag == tag_name:
+            parent = element
+            index = list(parent).index(child)
+            for subchild in list(child):
+                parent.insert(index, subchild)
+                index += 1
+            parent.remove(child)
+        remove_tags(child, tag_name)

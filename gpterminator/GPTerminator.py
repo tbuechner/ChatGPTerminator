@@ -3,8 +3,6 @@ import json
 import os
 import sys
 import time
-from pathlib import Path
-
 
 import openai
 import pyperclip
@@ -15,6 +13,10 @@ from rich.live import Live
 from rich.markdown import Markdown
 from rich.panel import Panel
 
+import xml.etree.ElementTree as ET
+
+from dicttoxml import dicttoxml
+
 from openai.lib.azure import AzureOpenAI
 
 from gpterminator.Choice import FunctionCall, Textual, addTextualChoice, addFunctionCall
@@ -24,7 +26,8 @@ from gpterminator.FineGranularTypesAgent import FineGranularTypesAgent
 from gpterminator.HighLevelAgent import HighLevelAgent
 from gpterminator.SummarizeAttributeAgent import SummarizeAttributeAgent
 from gpterminator.SummarizeTypeAgent import SummarizeTypeAgent
-from gpterminator.Utils import get_file_name
+from gpterminator.Utils import pretty_print_xml, get_parent_map, remove_tags
+
 
 class GPTerminator:
     def __init__(self):
@@ -48,7 +51,8 @@ class GPTerminator:
             "data-model-fine-granular": ["dm-fg", "generate fine-granular data model from high-level data model"],
             "data-model-full-process": ["dm-fp", "full data model creation process"],
             "summarize-data-model": ["sum", "summarize the data model"],
-            "compare-data-model": ["comp", "compare the high-level data models"]
+            "compare-data-model": ["comp", "compare the high-level data models"],
+            "generate-package": ["pkg", "generate a package"]
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -190,6 +194,11 @@ class GPTerminator:
                     self.agent = CompareAgent(self)
                     print(f"Agent set to: {self.agent.agent_name}")
                     self.agent.runPrompt(args)
+            elif cmd == "generate-package" or cmd == "pkg":
+                if not hasattr(self, "application_name"):
+                    self.printError("application not set")
+                else:
+                    self.generatePackage()
         else:
             self.printError(
                 f"!{cmd} in not in the list of commands, type !help"
@@ -258,6 +267,93 @@ class GPTerminator:
                     return False
             print("Fine-granular attributes agent was successful")
             return True
+
+    def generatePackage(self):
+        types_detailed_file_name = 'applications/' + self.application_name + '/types-detailed.json'
+        with open(types_detailed_file_name, 'r') as file:
+            types_detailed = json.load(file)
+
+        types_rewritten = {
+            'types': []
+        }
+
+        for type_ in types_detailed:
+            types_rewritten['types'].append({
+                'typeDef': type_
+            })
+            new_attributes = []
+            for attribute in type_['attributes']:
+                new_attributes.append({
+                    'attributes': attribute
+                })
+
+                multiplicity = attribute['multiplicity']
+                del attribute['multiplicity']
+
+                constraint = attribute['constraint']
+                attribute_type = constraint['attributeType']
+                if 'string' == attribute_type:
+                    constraint_factory_type = 'stringConstraint'
+                if 'longText' == attribute_type:
+                    constraint_factory_type = 'longConstraint'
+                if 'textEnumeration' == attribute_type:
+                    constraint_factory_type = 'textEnumerationConstraint'
+                if 'numberEnumeration' == attribute_type:
+                    constraint_factory_type = 'numberEnumerationConstraint'
+                if 'reference' == attribute_type:
+                    constraint_factory_type = 'referenceConstraint'
+                if 'date' == attribute_type:
+                    constraint_factory_type = 'dateConstraint'
+                if 'number' == attribute_type:
+                    constraint_factory_type = 'numberConstraint'
+                if 'boolean' == attribute_type:
+                    constraint_factory_type = 'booleanConstraint'
+                if 'richString' == attribute_type:
+                    constraint_factory_type = 'richStringConstraint'
+
+                if constraint_factory_type is None:
+                    print(f"ERROR: No constraint factory type found for attribute type {attribute_type}")
+
+                target_internal_type_names = constraint.get('targetInternalTypeNames', None)
+
+                del attribute['constraint']
+
+                attribute['constraintFactory'] = {
+                    'multiplicity': {
+                     'key': multiplicity
+                    },
+                    'type': constraint_factory_type,
+                    'targetInternalTypeNames': target_internal_type_names
+                }
+
+            type_['attributesWrapper'] = new_attributes
+            del type_['attributes']
+
+        with open('applications/' + self.application_name + '/types-detailed-rewritten.json', 'w') as file:
+            json.dump(types_rewritten, file, indent=4)
+
+        xml_bytes = dicttoxml(types_rewritten, attr_type=False)
+
+        root_elem = ET.fromstring(xml_bytes)
+
+        remove_tags(root_elem, 'item')
+        remove_tags(root_elem, 'attributesWrapper')
+
+        for cf in root_elem.findall('.//constraintFactory'):
+            # find child with tag 'type'
+            cf_type = cf.find('type').text
+            cf.set('type', cf_type)
+
+        pretty_print_xml(root_elem)
+
+        # Convert the ElementTree to a string
+        xml_str = ET.tostring(root_elem, encoding='unicode')
+
+        # save the XML string to a file
+        with open('applications/' + self.application_name + '/types-detailed.xml', 'w') as file:
+            file.write(xml_str)
+
+        pass
 
 
     def printBanner(self):
@@ -442,3 +538,28 @@ class GPTerminator:
         elif(self.config_selected == "OPENAI_CONFIG"):
             self.client = openai
             openai.api_key = self.config[self.config_selected]["API_KEY"]
+
+
+def createPackage():
+    # Create the new XML structure
+    package = ET.Element("package", xmlVersion="1.8")
+    inner_package = ET.SubElement(package, "package", internalName="cf.cplace.template.okr", version="10")
+
+    name = ET.SubElement(inner_package, "name")
+    ET.SubElement(name, "de").text = "Solution Template - Objectives & Key Results"
+    ET.SubElement(name, "en").text = "Solution Template - Objectives & Key Results"
+
+    ET.SubElement(inner_package, "cplaceRelease").text = "24.1"
+    ET.SubElement(inner_package, "publishDate").text = "2024-01-25T14:49:25.893+01:00"
+
+    slots = ET.SubElement(inner_package, "slots")
+    attribute = ET.SubElement(slots, "slot", internalName="cf.cplace.okr.okr")
+
+    slot_name = ET.SubElement(attribute, "name")
+    ET.SubElement(slot_name, "de").text = "Objectives Key Results"
+    ET.SubElement(slot_name, "en").text = "Objectives Key Results"
+
+    workspace = ET.SubElement(attribute, "workspace")
+    ET.SubElement(workspace, "name").text = "OKR"
+
+    return package
