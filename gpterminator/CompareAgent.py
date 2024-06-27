@@ -30,10 +30,12 @@ class CompareAgent(Agent):
         folder_name_generated = 'applications/' + self.gpterminator.application_name + '/generated'
         generateFolderIfNotExists(folder_name_generated)
 
-        with open('applications/' + self.gpterminator.application_name + '/types-high-level.json', 'r') as file:
+        high_level_file_name = 'applications/' + self.gpterminator.application_name + '/types-high-level.json'
+        with open(high_level_file_name, 'r') as file:
             types = json.load(file)
 
-        with open('applications/' + self.gpterminator.application_name + '/types-summarized-high-level.json', 'r') as file:
+        summarized_file_name = 'applications/' + self.gpterminator.application_name + '/types-summarized-high-level.json'
+        with open(summarized_file_name, 'r') as file:
             types_summarized = json.load(file)
 
         rendered = renderTemplate(self.getPromptFolder() + '/types-high-level-template.md', {

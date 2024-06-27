@@ -1,3 +1,4 @@
+import json
 import os
 import re
 
@@ -52,3 +53,9 @@ def generateFolderIfNotExists(folder_name_generated):
 
     # create folder folder_name_generated
     os.mkdir(folder_name_generated)
+
+def createEmptyFileIfNotExists(file_name):
+    if not os.path.exists(file_name):
+        with open(file_name, 'w') as file:
+            json.dump([], file, indent=4)
+

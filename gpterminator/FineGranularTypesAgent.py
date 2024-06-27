@@ -5,7 +5,7 @@ import jsonschema
 
 from gpterminator import Choice
 from gpterminator.Agent import Agent
-from gpterminator.Utils import renderTemplate, generateFolderIfNotExists
+from gpterminator.Utils import renderTemplate, generateFolderIfNotExists, createEmptyFileIfNotExists
 
 
 class FineGranularTypesAgent(Agent):
@@ -39,8 +39,12 @@ class FineGranularTypesAgent(Agent):
         folder_name_generated = 'applications/' + self.gpterminator.application_name + '/generated'
         generateFolderIfNotExists(folder_name_generated)
 
-        with open('applications/' + self.gpterminator.application_name + '/types-detailed.json', 'r') as file:
+        types_detailed_file_name = 'applications/' + self.gpterminator.application_name + '/types-detailed.json'
+        createEmptyFileIfNotExists(types_detailed_file_name)
+
+        with open(types_detailed_file_name, 'r') as file:
             types_detailed = json.load(file)
+
         for type_ in types_detailed:
             type_.pop('attributes', None)
         with open(folder_name_generated + '/types-detailed-only-types.json', 'w') as file:

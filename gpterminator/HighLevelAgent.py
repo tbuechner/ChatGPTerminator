@@ -3,7 +3,7 @@ import os
 
 from gpterminator import Choice
 from gpterminator.Agent import Agent
-from gpterminator.Utils import renderTemplate, generateFolderIfNotExists
+from gpterminator.Utils import renderTemplate, generateFolderIfNotExists, createEmptyFileIfNotExists
 
 
 class HighLevelAgent(Agent):
@@ -39,7 +39,11 @@ class HighLevelAgent(Agent):
         folder_name_generated = 'applications/' + self.gpterminator.application_name + '/generated'
         generateFolderIfNotExists(folder_name_generated)
 
-        with open('applications/' + self.gpterminator.application_name + '/types-high-level.json', 'r') as file:
+        types_file_name = 'applications/' + self.gpterminator.application_name + '/types-high-level.json'
+
+        createEmptyFileIfNotExists(types_file_name)
+
+        with open(types_file_name, 'r') as file:
             types = json.load(file)
 
         rendered = renderTemplate(self.getPromptFolder() + '/types-high-level-template.md', {

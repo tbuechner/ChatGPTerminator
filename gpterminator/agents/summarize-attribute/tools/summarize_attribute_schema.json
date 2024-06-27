@@ -4,7 +4,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "The name of the attribute. Descriptive name to be used in the UI"
+      "description": "The name of the attribute. Descriptive name to be used in the UI. The name should be without spaces, e.g., SecurityGroup, LoadBalancer, etc."
     },
     "type": {
       "type": "string",
@@ -17,7 +17,7 @@
     },
     "description": {
       "type": "string",
-      "description": "Description of the attribute. Do not replicate information in the description field, which is already present in the type or multiplicity field."
+      "description": "Description of the attribute. Do not replicate information in the description field, which is already present in the type or multiplicity field. The name should be a noun without spaces, e.g., SecurityGroup, LoadBalancer, etc."
     }
   },
   "required": ["name", "type", "multiplicity", "description"],
