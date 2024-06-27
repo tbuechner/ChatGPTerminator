@@ -340,10 +340,28 @@ class GPTerminator:
         remove_tags(root_elem, 'item', ['types'])
         remove_tags(root_elem, 'item', ['typeDef'])
 
+        # transform_xml(root_elem)
+
         for cf in root_elem.findall('.//constraintFactory'):
             # find child with tag 'type'
             cf_type = cf.find('type').text
             cf.set('type', cf_type)
+
+        parent_map = get_parent_map(root_elem)
+        for each in root_elem.findall('.//constraintFactory/targetInternalTypeNames'):
+            # find child tags with tag 'item'
+            names = []
+            items = each.findall('item')
+            for item in items:
+                names.append(item.text)
+
+            constraint_factory = parent_map[each]
+            constraint_factory.remove(each)
+
+            for name_ in names:
+                # add a new child tag with tag 'targetInternalTypeName' and text name_
+                new_element = ET.SubElement(constraint_factory, 'targetInternalTypeName')
+                new_element.text = name_
 
         pretty_print_xml(root_elem)
 
