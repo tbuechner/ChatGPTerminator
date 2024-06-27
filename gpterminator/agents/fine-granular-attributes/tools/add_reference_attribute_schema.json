@@ -51,7 +51,8 @@
       "type": "object",
       "properties": {
         "attributeType": {
-          "const": "reference"
+          "type": "string",
+          "enum": ["reference"]
         },
         "targetInternalTypeNames": {
           "type": "array",

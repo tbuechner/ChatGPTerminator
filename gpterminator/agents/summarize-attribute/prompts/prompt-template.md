@@ -1,3 +1,7 @@
+### Data Modeling - Meta Model
+
+{{ load_file('agents/meta-model.md') }}
+
 ### Fine-Granular Attribute Representation
 
 {{ attribute_representation }}

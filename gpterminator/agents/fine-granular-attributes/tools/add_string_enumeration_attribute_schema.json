@@ -51,7 +51,8 @@
       "type": "object",
       "properties": {
         "attributeType": {
-          "const": "textEnumeration"
+          "type": "string",
+          "enum": ["textEnumeration"]
         },
         "defaultValues": {
           "type": "string"

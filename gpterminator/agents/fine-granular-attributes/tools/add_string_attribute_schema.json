@@ -51,7 +51,8 @@
       "type": "object",
       "properties": {
         "attributeType": {
-          "const": "string"
+          "type": "string",
+          "enum": ["string"]
         }
       },
       "required": [

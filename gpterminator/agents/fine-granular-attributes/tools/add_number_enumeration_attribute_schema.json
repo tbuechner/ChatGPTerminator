@@ -51,7 +51,8 @@
       "type": "object",
       "properties": {
         "attributeType": {
-          "const": "numberEnumeration"
+          "type": "string",
+          "enum": ["numberEnumeration"]
         },
         "precision": {
           "type": "string"

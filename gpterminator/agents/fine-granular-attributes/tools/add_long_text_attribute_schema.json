@@ -51,7 +51,8 @@
       "type": "object",
       "properties": {
         "attributeType": {
-          "const": "longText"
+          "type": "string",
+          "enum": ["longText"]
         }
       },
       "required": [

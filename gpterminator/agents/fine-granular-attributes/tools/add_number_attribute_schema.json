@@ -51,7 +51,8 @@
       "type": "object",
       "properties": {
         "attributeType": {
-          "const": "number"
+          "type": "string",
+          "enum": ["number"]
         },
         "defaultValues": {
           "type": "string"

@@ -51,7 +51,8 @@
       "type": "object",
       "properties": {
         "attributeType": {
-          "const": "richString"
+          "type": "string",
+          "enum": ["richString"]
         }
       },
       "required": [

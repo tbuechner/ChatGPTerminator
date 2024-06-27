@@ -51,7 +51,8 @@
       "type": "object",
       "properties": {
         "attributeType": {
-          "const": "date"
+          "type": "string",
+          "enum": ["date"]
         },
         "specificity": {
           "type": "string"

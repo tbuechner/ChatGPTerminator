@@ -47,7 +47,8 @@
       "type": "object",
       "properties": {
         "attributeType": {
-          "const": "boolean"
+          "type": "string",
+          "enum": ["boolean"]
         },
         "defaultValues": {
           "type": "string"

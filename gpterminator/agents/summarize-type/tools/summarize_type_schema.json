@@ -4,7 +4,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "The name of the type. Descriptive name to be used in the UI. The name should be a noun without spaces, e.g., SecurityGroup, LoadBalancer, etc."
+      "description": "The name of the type. Descriptive name to be used in the UI. The name should be a capitalized noun without spaces, e.g., SecurityGroup, LoadBalancer, etc."
     }
   },
   "required": ["name"],
