@@ -4,7 +4,7 @@
 
 ### Data Modeling - Meta Model
 
-{{ load_file('meta-model.md') }}
+{{ load_file('agents/meta-model.md') }}
 
 ### High-Level Data Model
 

@@ -18,6 +18,7 @@ from rich.panel import Panel
 from openai.lib.azure import AzureOpenAI
 
 from gpterminator.Choice import FunctionCall, Textual, addTextualChoice, addFunctionCall
+from gpterminator.CompareAgent import CompareAgent
 from gpterminator.FineGranularAttributesAgent import FineGranularAttributesAgent
 from gpterminator.FineGranularTypesAgent import FineGranularTypesAgent
 from gpterminator.HighLevelAgent import HighLevelAgent
@@ -46,7 +47,8 @@ class GPTerminator:
             "data-model-high-level": ["dm-hl", "run the high-level data model creation process"],
             "data-model-fine-granular": ["dm-fg", "generate fine-granular data model from high-level data model"],
             "data-model-full-process": ["dm-fp", "full data model creation process"],
-            "summarize-data-model": ["sum", "summarize the data model"]
+            "summarize-data-model": ["sum", "summarize the data model"],
+            "compare-data-model": ["comp", "compare the high-level data models"]
         }
         self.api_key = ""
         self.prompt_count = 0
@@ -181,6 +183,13 @@ class GPTerminator:
                     self.printError("application not set")
                 else:
                     self.summarizeDataModel()
+            elif cmd == "compare-data-model" or cmd == "comp":
+                if not hasattr(self, "application_name"):
+                    self.printError("application not set")
+                else:
+                    self.agent = CompareAgent(self)
+                    print(f"Agent set to: {self.agent.agent_name}")
+                    self.agent.runPrompt(args)
         else:
             self.printError(
                 f"!{cmd} in not in the list of commands, type !help"
