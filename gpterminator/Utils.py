@@ -120,13 +120,19 @@ def get_parent_map(root):
     return {c: p for p in root.iter() for c in p}
 
 
-def remove_tags(element, tag_name):
+def remove_tags(element, tag_name, allowed_parent_tags):
+    # Helper function to determine if the parent tag is in the allowed list
+    def is_allowed_parent(parent):
+        return parent.tag in allowed_parent_tags
+
+    # Main logic to remove tags
     for child in list(element):
-        if child.tag == tag_name:
+        if child.tag == tag_name and is_allowed_parent(element):
             parent = element
             index = list(parent).index(child)
             for subchild in list(child):
                 parent.insert(index, subchild)
                 index += 1
             parent.remove(child)
-        remove_tags(child, tag_name)
+        # Recursively apply the function to child elements
+        remove_tags(child, tag_name, allowed_parent_tags)

@@ -336,8 +336,9 @@ class GPTerminator:
 
         root_elem = ET.fromstring(xml_bytes)
 
-        remove_tags(root_elem, 'item')
-        remove_tags(root_elem, 'attributesWrapper')
+        remove_tags(root_elem, 'attributesWrapper', ['typeDef'])
+        remove_tags(root_elem, 'item', ['types'])
+        remove_tags(root_elem, 'item', ['typeDef'])
 
         for cf in root_elem.findall('.//constraintFactory'):
             # find child with tag 'type'
