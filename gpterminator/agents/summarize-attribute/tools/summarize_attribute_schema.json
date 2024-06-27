@@ -8,7 +8,7 @@
     },
     "type": {
       "type": "string",
-      "description": "The type of the attribute. One of: Text, Number, Date, Boolean, Reference"
+      "description": "The type of the attribute. One of: Text, Number, Date, Reference, Text Enumeration, Number Enumeration, Boolean, Rich String"
     },
     "multiplicity": {
       "type": "string",
@@ -17,7 +17,7 @@
     },
     "description": {
       "type": "string",
-      "description": "Description of the attribute. Do not replicate information in the description field, which is already present in the type or multiplicity field. The name should be a noun without spaces, e.g., SecurityGroup, LoadBalancer, etc."
+      "description": "Description of the attribute. Do not replicate information in the description field, which is already present in the type or multiplicity field."
     }
   },
   "required": ["name", "type", "multiplicity", "description"],
