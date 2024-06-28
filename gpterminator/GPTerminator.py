@@ -292,39 +292,112 @@ class GPTerminator:
 
                 constraint = attribute['constraint']
                 attribute_type = constraint['attributeType']
+
+                def getAttributeDefClass(multiplicity, single_class, multi_class):
+                    if 'exactlyOne' == multiplicity or 'maximalOne' == multiplicity:
+                        return single_class
+                    else:
+                        return multi_class
+
+
                 if 'string' == attribute_type:
                     constraint_factory_type = 'stringConstraint'
+                    attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleStringAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiStringAttributeDef')
                 if 'longText' == attribute_type:
                     constraint_factory_type = 'longConstraint'
+                    attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleStringAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiStringAttributeDef')
                 if 'textEnumeration' == attribute_type:
                     constraint_factory_type = 'textEnumerationConstraint'
+                    attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleStringAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiStringAttributeDef')
                 if 'numberEnumeration' == attribute_type:
                     constraint_factory_type = 'numberEnumerationConstraint'
+                    attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleNumberAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiNumberAttributeDef')
                 if 'reference' == attribute_type:
                     constraint_factory_type = 'referenceConstraint'
+                    attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleReferenceAttributeDef$SingleCustomReferenceAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiReferenceAttributeDef$MultiCustomReferenceAttributeDef')
                 if 'date' == attribute_type:
                     constraint_factory_type = 'dateConstraint'
+                    attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleDateAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiDateAttributeDef')
                 if 'number' == attribute_type:
                     constraint_factory_type = 'numberConstraint'
+                    attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleNumberAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiNumberAttributeDef')
                 if 'boolean' == attribute_type:
                     constraint_factory_type = 'booleanConstraint'
+                    attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleBooleanAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiBooleanAttributeDef')
                 if 'richString' == attribute_type:
                     constraint_factory_type = 'richStringConstraint'
+                    attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleRichStringAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiRichStringAttributeDef')
 
                 if constraint_factory_type is None:
                     print(f"ERROR: No constraint factory type found for attribute type {attribute_type}")
 
                 target_internal_type_names = constraint.get('targetInternalTypeNames', None)
+                target_entity_class = constraint.get('targetEntityClass', None)
+                is_hierarchy = constraint.get('isHierarchy', None)
+
+                date_specificity = constraint.get('specificity', None)
+                date_format = constraint.get('dateFormat', None)
+
+                precision = constraint.get('precision', None)
+                localizedTextAfterSupplier = constraint.get('localizedTextAfterSupplier', None)
+
+                elements = constraint.get('elements', None)
 
                 del attribute['constraint']
 
-                attribute['constraintFactory'] = {
+                cf_node = {
                     'multiplicity': {
-                     'key': multiplicity
+                        'key': multiplicity
                     },
                     'type': constraint_factory_type,
-                    'targetInternalTypeNames': target_internal_type_names
+                    'attributeDefClass': attribute_def_class
                 }
+
+                attribute['constraintFactory'] = cf_node
+
+                if target_internal_type_names is not None:
+                    cf_node['typeNames'] = target_internal_type_names
+                if target_entity_class is not None:
+                    cf_node['entityClass'] = target_entity_class
+                if is_hierarchy is not None:
+                    cf_node['isHierarchy'] = is_hierarchy
+                    cf_node['sameWorkspace'] = True
+
+                if date_specificity is not None:
+                    cf_node['specificity'] = date_specificity
+                if date_format is not None:
+                    cf_node['dateFormat'] = date_format
+
+                if precision is not None:
+                    cf_node['precision'] = precision
+                if localizedTextAfterSupplier is not None:
+                    cf_node['localizedTextAfterSupplier'] = localizedTextAfterSupplier
+
+                if elements is not None:
+                    values = []
+                    localized_names = []
+                    for element in elements:
+                        value = element.get('value')
+                        values.append(value)
+                        localized_name = element.get('localizedName')
+                        # iterate over all keys of localized_name
+                        localizations = []
+                        for key in localized_name.keys():
+                            localizations.append({
+                                'language': key,
+                                'value': localized_name[key]
+                            })
+
+                        localized_names.append({
+                            'key': value,
+                            'value': {
+                                'localizations': localizations
+                            }
+                        })
+
+                    cf_node['elements'] = values
+                    cf_node['element2localizedLabel'] = localized_names
+
 
             type_['attributesWrapper'] = new_attributes
             del type_['attributes']
@@ -344,11 +417,13 @@ class GPTerminator:
 
         for cf in root_elem.findall('.//constraintFactory'):
             # find child with tag 'type'
-            cf_type = cf.find('type').text
+            type_element = cf.find('type')
+            cf_type = type_element.text
             cf.set('type', cf_type)
+            cf.remove(type_element)
 
         parent_map = get_parent_map(root_elem)
-        for each in root_elem.findall('.//constraintFactory/targetInternalTypeNames'):
+        for each in root_elem.findall('.//constraintFactory/typeNames'):
             # find child tags with tag 'item'
             names = []
             items = each.findall('item')
@@ -360,7 +435,7 @@ class GPTerminator:
 
             for name_ in names:
                 # add a new child tag with tag 'targetInternalTypeName' and text name_
-                new_element = ET.SubElement(constraint_factory, 'targetInternalTypeName')
+                new_element = ET.SubElement(constraint_factory, 'typeNames')
                 new_element.text = name_
 
         pretty_print_xml(root_elem)
