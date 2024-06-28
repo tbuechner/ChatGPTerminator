@@ -153,8 +153,8 @@ class GPTerminator:
             elif cmd == "set-application" or cmd == "app":
                 application_name = args[0]
                 self.application_name = application_name
-                folder_name_generated = 'applications/' + self.application_name + '/generated'
-                generateFolderIfNotExists(folder_name_generated)
+                generateFolderIfNotExists('applications/' + self.application_name + '/generated-temp')
+                generateFolderIfNotExists('applications/' + self.application_name + '/generated')
                 print(f"Application set to: {application_name}")
             elif cmd == "set-agent" or cmd == "agent":
                 agent_name = args[0]

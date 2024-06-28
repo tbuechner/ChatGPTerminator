@@ -203,8 +203,8 @@ def generatePackage(application_name, pkg_version):
 
     new_root['package']['slots']['slot']['workspace']['types'] = types_rewritten['types']
 
-    with open('applications/' + application_name + '/types-detailed-rewritten.json', 'w') as file:
-        json.dump(new_root, file, indent=4)
+    # with open('applications/' + application_name + '/types-detailed-rewritten.json', 'w') as file:
+    #     json.dump(new_root, file, indent=4)
 
     xml_bytes = dicttoxml(new_root, attr_type=False, custom_root='solutionManagement')
 
@@ -239,11 +239,11 @@ def generatePackage(application_name, pkg_version):
     xml_str = ET.tostring(root_elem, encoding='unicode')
 
     # save the XML string to a file
-    with open('applications/' + application_name + '/export.xml', 'w') as file:
+    with open('applications/' + application_name + '/generated/export.xml', 'w') as file:
         file.write(xml_str)
 
     # zip export.xml into package.zip
-    os.system("zip -j " + 'applications/' + application_name + "/package.zip " + 'applications/' + application_name + "/export.xml")
+    os.system("zip -j " + 'applications/' + application_name + "/generated/package.zip " + 'applications/' + application_name + "/generated/export.xml")
 
 
 def rewrite_items_to_elements(root_elem, identifier, item_tag_name, element_name):
