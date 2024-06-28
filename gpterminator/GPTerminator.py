@@ -48,7 +48,7 @@ def rewrite_items_to_elements(root_elem, identifier, item_tag_name, element_name
 
 
 def rewrite_element_to_attribute(root_elem, identifier, element_name, attribute_name):
-    for cf in root_elem.findall('identifier'):
+    for cf in root_elem.findall(identifier):
         type_element = cf.find(element_name)
         cf_type = type_element.text
         cf.set(attribute_name, cf_type)
@@ -487,7 +487,14 @@ class GPTerminator:
         remove_tags(root_elem, 'item', ['typeDef'])
 
         rewrite_element_to_attribute(root_elem, './/constraintFactory', 'type', 'type')
-        rewrite_element_to_attribute(root_elem, '/', 'xmlVersion', 'xmlVersion')
+
+        xml_version_element = root_elem.find('xmlVersion')
+        root_elem.set('xmlVersion', xml_version_element.text)
+        root_elem.remove(xml_version_element)
+
+        rewrite_element_to_attribute(root_elem, './/package', 'internalName', 'internalName')
+        rewrite_element_to_attribute(root_elem, './/package', 'version', 'version')
+        rewrite_element_to_attribute(root_elem, './/slot', 'internalName', 'internalName')
 
         rewrite_items_to_elements(root_elem, './/constraintFactory/typeNames', 'item', 'typeNames')
         rewrite_items_to_elements(root_elem, './/constraintFactory/elements', 'item', 'elements')
@@ -504,8 +511,11 @@ class GPTerminator:
         xml_str = ET.tostring(root_elem, encoding='unicode')
 
         # save the XML string to a file
-        with open('applications/' + self.application_name + '/types-detailed.xml', 'w') as file:
+        with open('applications/' + self.application_name + '/export.xml', 'w') as file:
             file.write(xml_str)
+
+        # zip export.xml into package.zip
+        os.system("zip -j " + 'applications/' + self.application_name + "/package.zip " + 'applications/' + self.application_name + "/export.xml")
 
         pass
 
