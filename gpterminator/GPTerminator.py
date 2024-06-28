@@ -29,7 +29,7 @@ from gpterminator.SummarizeTypeAgent import SummarizeTypeAgent
 from gpterminator.Utils import pretty_print_xml, get_parent_map, remove_tags
 
 
-def rewrite_items_to_elemnts(root_elem, identifier, item_tag_name, element_name):
+def rewrite_items_to_elements(root_elem, identifier, item_tag_name, element_name):
     parent_map = get_parent_map(root_elem)
     for each in root_elem.findall(identifier):
         # find child tags with tag 'item'
@@ -45,6 +45,14 @@ def rewrite_items_to_elemnts(root_elem, identifier, item_tag_name, element_name)
             # add a new child tag with tag 'targetInternalTypeName' and text name_
             new_element = ET.SubElement(constraint_factory, element_name)
             new_element.text = name_
+
+
+def rewrite_element_to_attribute(root_elem, identifier, element_name, attribute_name):
+    for cf in root_elem.findall('identifier'):
+        type_element = cf.find(element_name)
+        cf_type = type_element.text
+        cf.set(attribute_name, cf_type)
+        cf.remove(type_element)
 
 
 class GPTerminator:
@@ -423,10 +431,54 @@ class GPTerminator:
             type_['attributesWrapper'] = new_attributes
             del type_['attributes']
 
-        with open('applications/' + self.application_name + '/types-detailed-rewritten.json', 'w') as file:
-            json.dump(types_rewritten, file, indent=4)
+        new_root = {
+            "xmlVersion": "1.8",
+            "package": {
+                "internalName": "cf.cplace.template.okr",
+                "version": "10",
+                "name": {
+                    "de": "Solution Template - Objectives & Key Results",
+                    "en": "Solution Template - Objectives & Key Results"
+                },
+                "cplaceRelease": "24.1",
+                "publishDate": "2024-01-25T14:49:25.893+01:00",
+                "slots": {
+                    "slot": {
+                        "internalName": "cf.cplace.okr.okr",
+                        "name": {
+                            "de": "Objectives Key Results",
+                            "en": "Objectives Key Results"
+                        },
+                        "workspace": {
+                            "name": "OKR",
+                            "apps": ["cf.cplace.platform"],
+                            "rootPage": {
+                                "page": {
+                                    "name": "Root Page",
+                                    "id": "xaji0y6dpbhsahxthv3a3zmf8",
+                                    "custom": {
+                                        "type": "default.page",
+                                        "attributes": {}
+                                    },
+                                    "widgetContainer": {
+                                        "widgetsLayout": {},
+                                        "widgets": {}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "maps": {}
+        }
 
-        xml_bytes = dicttoxml(types_rewritten, attr_type=False)
+        new_root['package']['slots']['slot']['workspace']['types'] = types_rewritten['types']
+
+        with open('applications/' + self.application_name + '/types-detailed-rewritten.json', 'w') as file:
+            json.dump(new_root, file, indent=4)
+
+        xml_bytes = dicttoxml(new_root, attr_type=False, custom_root='solutionManagement')
 
         root_elem = ET.fromstring(xml_bytes)
 
@@ -434,17 +486,11 @@ class GPTerminator:
         remove_tags(root_elem, 'item', ['types'])
         remove_tags(root_elem, 'item', ['typeDef'])
 
-        # transform_xml(root_elem)
+        rewrite_element_to_attribute(root_elem, './/constraintFactory', 'type', 'type')
+        rewrite_element_to_attribute(root_elem, '/', 'xmlVersion', 'xmlVersion')
 
-        for cf in root_elem.findall('.//constraintFactory'):
-            # find child with tag 'type'
-            type_element = cf.find('type')
-            cf_type = type_element.text
-            cf.set('type', cf_type)
-            cf.remove(type_element)
-
-        rewrite_items_to_elemnts(root_elem, './/constraintFactory/typeNames', 'item', 'typeNames')
-        rewrite_items_to_elemnts(root_elem, './/constraintFactory/elements', 'item', 'elements')
+        rewrite_items_to_elements(root_elem, './/constraintFactory/typeNames', 'item', 'typeNames')
+        rewrite_items_to_elements(root_elem, './/constraintFactory/elements', 'item', 'elements')
 
         for each in root_elem.findall('.//element2localizedLabel/item'):
             each.tag = 'entry'
