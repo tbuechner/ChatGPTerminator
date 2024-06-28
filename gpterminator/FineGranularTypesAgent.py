@@ -37,7 +37,6 @@ class FineGranularTypesAgent(Agent):
 
     def generateAllPrompts(self):
         folder_name_generated = 'applications/' + self.gpterminator.application_name + '/generated'
-        generateFolderIfNotExists(folder_name_generated)
 
         types_detailed_file_name = 'applications/' + self.gpterminator.application_name + '/types-detailed.json'
         createEmptyFileIfNotExists(types_detailed_file_name)

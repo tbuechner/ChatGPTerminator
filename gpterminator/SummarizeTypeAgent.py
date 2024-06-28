@@ -39,7 +39,6 @@ class SummarizeTypeAgent(Agent):
 
     def generateAllPrompts(self, type_):
         folder_name_generated = 'applications/' + self.gpterminator.application_name + '/generated'
-        generateFolderIfNotExists(folder_name_generated)
 
         rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', {
             'type_representation': str(type_)

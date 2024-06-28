@@ -42,7 +42,6 @@ class SummarizeAttributeAgent(Agent):
 
     def generateAllPrompts(self, attribute):
         folder_name_generated = 'applications/' + self.gpterminator.application_name + '/generated'
-        generateFolderIfNotExists(folder_name_generated)
 
         rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', {
             'attribute_representation': str(attribute)

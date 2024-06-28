@@ -56,7 +56,6 @@ class FineGranularAttributesAgent(Agent):
 
     def generateAllPrompts(self, type_index):
         folder_name_generated = 'applications/' + self.gpterminator.application_name + '/generated'
-        generateFolderIfNotExists(folder_name_generated)
 
         with open('applications/' + self.gpterminator.application_name + '/types-high-level.json', 'r') as file:
             types_high_level = json.load(file)

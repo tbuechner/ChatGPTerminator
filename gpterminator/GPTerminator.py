@@ -27,7 +27,7 @@ from gpterminator.HighLevelAgent import HighLevelAgent
 from gpterminator.PkgGeneration import generatePackage
 from gpterminator.SummarizeAttributeAgent import SummarizeAttributeAgent
 from gpterminator.SummarizeTypeAgent import SummarizeTypeAgent
-from gpterminator.Utils import pretty_print_xml, get_parent_map, remove_tags
+from gpterminator.Utils import pretty_print_xml, get_parent_map, remove_tags, generateFolderIfNotExists
 
 
 class GPTerminator:
@@ -153,6 +153,8 @@ class GPTerminator:
             elif cmd == "set-application" or cmd == "app":
                 application_name = args[0]
                 self.application_name = application_name
+                folder_name_generated = 'applications/' + self.application_name + '/generated'
+                generateFolderIfNotExists(folder_name_generated)
                 print(f"Application set to: {application_name}")
             elif cmd == "set-agent" or cmd == "agent":
                 agent_name = args[0]
