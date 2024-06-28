@@ -59,7 +59,7 @@
           "items": {
             "type": "string"
           },
-          "description": "The internal type name of the entity that is referenced by the attribute."
+          "description": "The internal type names of the target of the reference. These might be multiple types. The type names must be names of existing types. If the target is a Person or Group - keep the array empty."
         },
         "targetEntityClass": {
           "type": "string",

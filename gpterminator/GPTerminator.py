@@ -224,7 +224,12 @@ class GPTerminator:
                 if not hasattr(self, "application_name"):
                     self.printError("application not set")
                 else:
-                    self.generatePackage()
+                    if len(args) == 0:
+                        pkg_version = "1"
+                    else:
+                        pkg_version = args[0]
+                    print(f"Pacakge version set to: {pkg_version}")
+                    self.generatePackage(pkg_version)
         else:
             self.printError(
                 f"!{cmd} in not in the list of commands, type !help"
@@ -294,7 +299,7 @@ class GPTerminator:
             print("Fine-granular attributes agent was successful")
             return True
 
-    def generatePackage(self):
+    def generatePackage(self, pkg_version):
         types_detailed_file_name = 'applications/' + self.application_name + '/types-detailed.json'
         with open(types_detailed_file_name, 'r') as file:
             types_detailed = json.load(file)
@@ -307,6 +312,17 @@ class GPTerminator:
             types_rewritten['types'].append({
                 'typeDef': type_
             })
+
+            type_name = type_['internalName']
+            type_['name'] = type_name
+            del type_['internalName']
+            type_['appliesTo'] = {
+                'key': 'page'
+            }
+            type_['localizedPageNamesMode'] = {
+                'key': 'none'
+            }
+
             new_attributes = []
             for attribute in type_['attributes']:
                 new_attributes.append({
@@ -315,6 +331,10 @@ class GPTerminator:
 
                 multiplicity = attribute['multiplicity']
                 del attribute['multiplicity']
+
+                internal_name = attribute['internalName']
+                attribute['name'] = internal_name
+                del attribute['internalName']
 
                 constraint = attribute['constraint']
                 attribute_type = constraint['attributeType']
@@ -329,28 +349,28 @@ class GPTerminator:
                 if 'string' == attribute_type:
                     constraint_factory_type = 'stringConstraint'
                     attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleStringAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiStringAttributeDef')
-                if 'longText' == attribute_type:
+                elif 'longText' == attribute_type:
                     constraint_factory_type = 'longConstraint'
                     attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleStringAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiStringAttributeDef')
-                if 'textEnumeration' == attribute_type:
+                elif 'textEnumeration' == attribute_type:
                     constraint_factory_type = 'textEnumerationConstraint'
                     attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleStringAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiStringAttributeDef')
-                if 'numberEnumeration' == attribute_type:
+                elif 'numberEnumeration' == attribute_type:
                     constraint_factory_type = 'numberEnumerationConstraint'
                     attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleNumberAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiNumberAttributeDef')
-                if 'reference' == attribute_type:
+                elif 'reference' == attribute_type:
                     constraint_factory_type = 'referenceConstraint'
                     attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleReferenceAttributeDef$SingleCustomReferenceAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiReferenceAttributeDef$MultiCustomReferenceAttributeDef')
-                if 'date' == attribute_type:
+                elif 'date' == attribute_type:
                     constraint_factory_type = 'dateConstraint'
                     attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleDateAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiDateAttributeDef')
-                if 'number' == attribute_type:
+                elif 'number' == attribute_type:
                     constraint_factory_type = 'numberConstraint'
                     attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleNumberAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiNumberAttributeDef')
-                if 'boolean' == attribute_type:
+                elif 'boolean' == attribute_type:
                     constraint_factory_type = 'booleanConstraint'
                     attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleBooleanAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiBooleanAttributeDef')
-                if 'richString' == attribute_type:
+                elif 'richString' == attribute_type:
                     constraint_factory_type = 'richStringConstraint'
                     attribute_def_class = getAttributeDefClass(multiplicity, 'cf.cplace.platform.assets.custom.def.SingleRichStringAttributeDef', 'cf.cplace.platform.assets.custom.def.MultiRichStringAttributeDef')
 
@@ -435,7 +455,7 @@ class GPTerminator:
             "xmlVersion": "1.8",
             "package": {
                 "internalName": "cf.cplace.template.okr",
-                "version": "10",
+                "version": pkg_version,
                 "name": {
                     "de": "Solution Template - Objectives & Key Results",
                     "en": "Solution Template - Objectives & Key Results"
@@ -451,7 +471,7 @@ class GPTerminator:
                         },
                         "workspace": {
                             "name": "OKR",
-                            "apps": ["cf.cplace.platform"],
+                            "apps": "[\"cf.cplace.platform\"]",
                             "rootPage": {
                                 "page": {
                                     "name": "Root Page",
