@@ -29,6 +29,24 @@ from gpterminator.SummarizeTypeAgent import SummarizeTypeAgent
 from gpterminator.Utils import pretty_print_xml, get_parent_map, remove_tags
 
 
+def rewrite_items_to_elemnts(root_elem, identifier, item_tag_name, element_name):
+    parent_map = get_parent_map(root_elem)
+    for each in root_elem.findall(identifier):
+        # find child tags with tag 'item'
+        names = []
+        items = each.findall(item_tag_name)
+        for item in items:
+            names.append(item.text)
+
+        constraint_factory = parent_map[each]
+        constraint_factory.remove(each)
+
+        for name_ in names:
+            # add a new child tag with tag 'targetInternalTypeName' and text name_
+            new_element = ET.SubElement(constraint_factory, element_name)
+            new_element.text = name_
+
+
 class GPTerminator:
     def __init__(self):
         self.config_path = ""
@@ -384,8 +402,11 @@ class GPTerminator:
                         localizations = []
                         for key in localized_name.keys():
                             localizations.append({
-                                'language': key,
-                                'value': localized_name[key]
+                                'key': key,
+                                'value': {
+                                    'value': localized_name[key],
+                                    'language': key
+                                }
                             })
 
                         localized_names.append({
@@ -422,21 +443,14 @@ class GPTerminator:
             cf.set('type', cf_type)
             cf.remove(type_element)
 
-        parent_map = get_parent_map(root_elem)
-        for each in root_elem.findall('.//constraintFactory/typeNames'):
-            # find child tags with tag 'item'
-            names = []
-            items = each.findall('item')
-            for item in items:
-                names.append(item.text)
+        rewrite_items_to_elemnts(root_elem, './/constraintFactory/typeNames', 'item', 'typeNames')
+        rewrite_items_to_elemnts(root_elem, './/constraintFactory/elements', 'item', 'elements')
 
-            constraint_factory = parent_map[each]
-            constraint_factory.remove(each)
+        for each in root_elem.findall('.//element2localizedLabel/item'):
+            each.tag = 'entry'
 
-            for name_ in names:
-                # add a new child tag with tag 'targetInternalTypeName' and text name_
-                new_element = ET.SubElement(constraint_factory, 'typeNames')
-                new_element.text = name_
+        for each in root_elem.findall('.//localizations/item'):
+            each.tag = 'entry'
 
         pretty_print_xml(root_elem)
 
