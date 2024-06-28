@@ -15,8 +15,4 @@ path/to/venv/
 gpterminator/applications/*/generated/
 gpterminator/applications/*/types-summarized-high-level.json
 gpterminator/applications/*/types-detailed.json
-gpterminator/applications/*/types-detailed-rewritten.json
-gpterminator/applications/*/types-detailed.xml
 gpterminator/applications/*/types-high-level.json
-gpterminator/applications/*/export.xml
-gpterminator/applications/*/package.zip
