@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM python:3.12.3-slim
 WORKDIR /root
 COPY . .
 RUN mkdir -p /root/.config/gpterminator
