@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from gpterminator.Utils import get_file_name
+from Utils import get_file_name
 
 
 class Choice:

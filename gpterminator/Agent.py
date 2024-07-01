@@ -2,9 +2,9 @@ import json
 import os
 import jsonschema
 
-from gpterminator import Choice
-from gpterminator.Choice import getFunctionCalls
-from gpterminator.Utils import renderTemplate
+import Choice
+from Choice import getFunctionCalls
+from Utils import renderTemplate
 
 
 class Agent:

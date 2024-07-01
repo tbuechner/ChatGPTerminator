@@ -19,15 +19,15 @@ from dicttoxml import dicttoxml
 
 from openai.lib.azure import AzureOpenAI
 
-from gpterminator.Choice import FunctionCall, Textual, addTextualChoice, addFunctionCall
-from gpterminator.CompareAgent import CompareAgent
-from gpterminator.FineGranularAttributesAgent import FineGranularAttributesAgent
-from gpterminator.FineGranularTypesAgent import FineGranularTypesAgent
-from gpterminator.HighLevelAgent import HighLevelAgent
-from gpterminator.PkgGeneration import generatePackage
-from gpterminator.SummarizeAttributeAgent import SummarizeAttributeAgent
-from gpterminator.SummarizeTypeAgent import SummarizeTypeAgent
-from gpterminator.Utils import pretty_print_xml, get_parent_map, remove_tags, generateFolderIfNotExists
+from Choice import FunctionCall, Textual, addTextualChoice, addFunctionCall
+from CompareAgent import CompareAgent
+from FineGranularAttributesAgent import FineGranularAttributesAgent
+from FineGranularTypesAgent import FineGranularTypesAgent
+from HighLevelAgent import HighLevelAgent
+from PkgGeneration import generatePackage
+from SummarizeAttributeAgent import SummarizeAttributeAgent
+from SummarizeTypeAgent import SummarizeTypeAgent
+from Utils import pretty_print_xml, get_parent_map, remove_tags, generateFolderIfNotExists
 
 
 class GPTerminator:

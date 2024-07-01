@@ -1,9 +1,9 @@
 import json
 import os
 
-from gpterminator import Choice
-from gpterminator.Agent import Agent
-from gpterminator.Utils import renderTemplate, generateFolderIfNotExists
+import Choice
+from Agent import Agent
+from Utils import renderTemplate, generateFolderIfNotExists
 
 
 class SummarizeAttributeAgent(Agent):

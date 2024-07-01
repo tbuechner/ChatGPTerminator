@@ -1,9 +1,8 @@
 import json
 import os
 
-from gpterminator import Choice
-from gpterminator.Agent import Agent
-from gpterminator.Utils import renderTemplate, generateFolderIfNotExists
+from Agent import Agent
+from Utils import renderTemplate, generateFolderIfNotExists
 
 
 class CompareAgent(Agent):

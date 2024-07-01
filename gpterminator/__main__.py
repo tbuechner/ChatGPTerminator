@@ -1,6 +1,6 @@
 import sys
 
-from . import GPTerminator
+import GPTerminator
 
 
 def main():

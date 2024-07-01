@@ -4,7 +4,7 @@ import os
 from dicttoxml import dicttoxml
 import xml.etree.ElementTree as ET
 
-from gpterminator.Utils import get_parent_map, pretty_print_xml, remove_tags
+from Utils import get_parent_map, pretty_print_xml, remove_tags
 
 
 def generatePackage(application_name, pkg_version):

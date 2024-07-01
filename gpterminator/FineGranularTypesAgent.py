@@ -3,9 +3,9 @@ import os
 
 import jsonschema
 
-from gpterminator import Choice
-from gpterminator.Agent import Agent
-from gpterminator.Utils import renderTemplate, generateFolderIfNotExists, createEmptyFileIfNotExists
+import Choice
+from Agent import Agent
+from Utils import renderTemplate, generateFolderIfNotExists, createEmptyFileIfNotExists
 
 
 class FineGranularTypesAgent(Agent):
