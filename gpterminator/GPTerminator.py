@@ -52,7 +52,6 @@ class GPTerminator:
             "compare-data-model": ["comp", "compare the high-level data models"],
             "generate-package": ["pkg", "generate a package"]
         }
-        self.api_key = ""
         self.prompt_count = 0
         self.save_path = ""
         self.console = Console()
@@ -438,10 +437,6 @@ class GPTerminator:
     def init(self):
         if not os.path.exists(self.save_path):
             os.makedirs(self.save_path)
-        self.api_key = os.getenv("OPENAI_API_KEY")
-        if self.api_key == None or self.api_key == "":
-            self.printError("the OPENAI_API_KEY environment variable is missing")
-            sys.exit()
 
         if(self.config_selected == "AZURE_CONFIG"):
             self.client = AzureOpenAI(

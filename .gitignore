@@ -11,6 +11,7 @@ build
 .DS_Store
 .ideapienv.sh
 
+applications_data/
 path/to/venv/
 gpterminator/applications/*/generated/
 gpterminator/applications/*/types-summarized-high-level.json
