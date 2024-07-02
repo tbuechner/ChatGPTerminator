@@ -35,9 +35,6 @@ class GPTerminator:
         self.config_path = ""
         self.config_selected = ""
         self.model = ""
-        self.temperature = ""
-        self.presence_penalty = ""
-        self.frequency_penalty = ""
         self.msg_hist = []
         self.cmds = {
             "quit": ["q", "quits the program"],
@@ -75,10 +72,7 @@ class GPTerminator:
         self.config.read(self.config_path)
 
         self.save_path = self.config["COMMON"]["SavePath"]
-        self.temperature = self.config["COMMON"]["Temperature"]
-        self.presence_penalty = self.config["COMMON"]["PresencePenalty"]
-        self.frequency_penalty = self.config["COMMON"]["FrequencyPenalty"]
-        self.code_theme = self.config["COMMON"]["CodeTheme"]
+        self.code_theme = "monokai"
 
         self.config_selected = self.config["SELECTED_CONFIG"]["ConfigName"]
         self.model = self.config[self.config_selected]["Model"]
@@ -351,9 +345,9 @@ class GPTerminator:
                 model=self.model,
                 messages=self.msg_hist,
                 stream=True,
-                temperature=float(self.temperature),
-                presence_penalty=float(self.presence_penalty),
-                frequency_penalty=float(self.frequency_penalty),
+                temperature=float(1),
+                presence_penalty=float(0),
+                frequency_penalty=float(0),
                 tools=self.tools
             )
         except openai.APITimeoutError as e:
