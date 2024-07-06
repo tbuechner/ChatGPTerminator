@@ -1,0 +1,31 @@
+cf.cplace.solution.okr.cycle
+	cf.cplace.solution.okr.year
+	cf.cplace.solution.okr.quarter
+	cf.cplace.solution.okr.status
+-	cf.cplace.solution.okr.cyclesDashboard
+	cf.cplace.solution.okr.start
+	cf.cplace.solution.okr.end
+-	cf.cplace.solution.okr.statusForNameGenerationPattern
+cf.cplace.solution.okr.keyResult
+	cf.cplace.solution.okr.number
+	cf.cplace.solution.okr.title
+-	cf.cplace.solution.okr.progressIndicator
+-	cf.cplace.solution.okr.confidenceLevel
+	cf.cplace.solution.okr.gradingForecast
+-	cf.cplace.solution.okr.smallSupport
+-	cf.cplace.solution.okr.bigSupport
+-	cf.cplace.solution.okr.giveBigSupport
+-	cf.cplace.solution.okr.receiveBigSupport
+	cf.cplace.solution.okr.objective
+-	cf.cplace.solution.okr.progress
+-	cf.cplace.solution.okr.set
+-	cf.cplace.solution.okr.cycle
+-	cf.cplace.solution.okr.organizationalUnit
+	cf.cplace.solution.okr.lastUpdate
+cf.cplace.solution.okr.objective
+	cf.cplace.solution.okr.number
+	cf.cplace.solution.okr.title
+-	cf.cplace.solution.okr.set
+	cf.cplace.solution.okr.accomplished
+-	cf.cplace.solution.okr.cycle
+	cf.cplace.solution.okr.description

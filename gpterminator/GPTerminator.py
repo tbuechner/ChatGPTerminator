@@ -28,6 +28,7 @@ from PkgGeneration import generatePackage
 from SummarizeAttributeAgent import SummarizeAttributeAgent
 from SummarizeTypeAgent import SummarizeTypeAgent
 from Utils import pretty_print_xml, get_parent_map, remove_tags, generateFolderIfNotExists
+from gpterminator.ProcessPackage import process_pkg
 
 
 class GPTerminator:
@@ -50,7 +51,8 @@ class GPTerminator:
             "data-model-full-process": ["dm-fp", "full data model creation process"],
             "summarize-data-model": ["sum", "summarize the data model"],
             "compare-data-model": ["comp", "compare the high-level data models"],
-            "generate-package": ["pkg", "generate a package"]
+            "generate-package": ["pkg", "generate a package"],
+            "process-package": ["pp", "process a package"],
         }
         self.prompt_count = 0
         self.save_path = ""
@@ -200,6 +202,12 @@ class GPTerminator:
                     print(f"Pacakge version set to: {pkg_version}")
                     generatePackage(self.application_name, pkg_version)
                     print("Package successfully generated")
+            elif cmd == "process-package" or cmd == "pp":
+                if not hasattr(self, "application_name"):
+                    self.printError("application not set")
+                else:
+                    process_pkg(self.application_name)
+                    print("Package successfully processed")
         else:
             self.printError(
                 f"!{cmd} in not in the list of commands, type !help"
