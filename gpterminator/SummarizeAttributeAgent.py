@@ -28,6 +28,7 @@ class SummarizeAttributeAgent(Agent):
         if attribute_and_type_index is not None:
             attribute = attribute_and_type_index[0]
             self.type_index = attribute_and_type_index[1]
+            self.attribute = attribute
 
             self.generateAllPrompts(attribute)
 
@@ -56,6 +57,7 @@ class SummarizeAttributeAgent(Agent):
             if attributes is None:
                 attributes = []
                 self.summarized_types[self.type_index]['attributes'] = attributes
+            argument_dict['internalAttributeName'] = self.attribute['internalName']
             attributes.append(argument_dict)
             return
 

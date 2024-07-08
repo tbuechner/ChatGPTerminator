@@ -27,6 +27,7 @@ class SummarizeTypeAgent(Agent):
     def runPrompt(self, type_=None):
         if type_:
             self.generateAllPrompts(type_)
+            self.type_ = type_
 
             with open('applications/' + self.gpterminator.application_name + '/generated/prompt.md', 'r') as file:
                 prompt = file.read()
@@ -49,6 +50,7 @@ class SummarizeTypeAgent(Agent):
 
     def handleFunction(self, function_name, argument_dict):
         if 'summarize_type' == function_name:
+            argument_dict['internalTypeName'] = self.type_['internalName']
             self.summarized_types.append(argument_dict)
             return
 
