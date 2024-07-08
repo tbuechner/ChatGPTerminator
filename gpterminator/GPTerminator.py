@@ -28,6 +28,7 @@ from PkgGeneration import generatePackage
 from SummarizeAttributeAgent import SummarizeAttributeAgent
 from SummarizeTypeAgent import SummarizeTypeAgent
 from Utils import pretty_print_xml, get_parent_map, remove_tags, generateFolderIfNotExists
+from gpterminator.ExamplePagesPropertiesAgent import ExamplePagesPropertiesAgent
 from gpterminator.ProcessPackage import process_pkg
 
 
@@ -43,13 +44,12 @@ class GPTerminator:
             "regen": ["re", "generates a new response from the last message"],
             "new": ["n", "removes chat history and starts a new session"],
             "copy": ["c", "copies all raw text from the previous response"],
-            "run": ["r", "run the types prompt of the agent"],
-            "set-agent": ["agent", "set the agent to use"],
             "set-application": ["app", "set the application to work on"],
             "data-model-high-level": ["dm-hl", "run the high-level data model creation process"],
             "data-model-fine-granular": ["dm-fg", "generate fine-granular data model from high-level data model"],
             "data-model-full-process": ["dm-fp", "full data model creation process"],
             "summarize-data-model": ["sum", "summarize the data model"],
+            "generate-example-pages-properties": ["gepp", "generate example pages - properties only"],
             "compare-data-model": ["comp", "compare the high-level data models"],
             "generate-package": ["pkg", "generate a package"],
             "process-package": ["pp", "process a package"],
@@ -140,29 +140,11 @@ class GPTerminator:
                 self.msg_hist = self.msg_hist[:1]
                 self.prompt_count = 0
                 self.printBanner()
-            elif cmd == "run" or cmd == "r":
-                if not (hasattr(self, "agent") or hasattr(self, "application_name")):
-                    self.printError("agent or application not set")
-                else:
-                    self.agent.runPrompt(args)
             elif cmd == "set-application" or cmd == "app":
                 application_name = args[0]
                 self.application_name = application_name
                 generateFolderIfNotExists('applications/' + self.application_name + '/generated')
                 print(f"Application set to: {application_name}")
-            elif cmd == "set-agent" or cmd == "agent":
-                agent_name = args[0]
-                if agent_name == "high-level":
-                    self.agent = HighLevelAgent(self)
-                    print(f"Agent set to: {agent_name}")
-                elif agent_name == "fine-granular-types":
-                    self.agent = FineGranularTypesAgent(self)
-                    print(f"Agent set to: {agent_name}")
-                elif agent_name == "fine-granular-attributes":
-                    self.agent = FineGranularAttributesAgent(self)
-                    print(f"Agent set to: {agent_name}")
-                else:
-                    self.printError(f"Agent {agent_name} not found")
             elif cmd == "data-model-full-process" or cmd == "dm-fp":
                 if not hasattr(self, "application_name"):
                     self.printError("application not set")
@@ -184,6 +166,11 @@ class GPTerminator:
                     self.printError("application not set")
                 else:
                     self.summarizeDataModel()
+            elif cmd == "generate-example-pages-properties" or cmd == "gepp":
+                if not hasattr(self, "application_name"):
+                    self.printError("application not set")
+                else:
+                    self.generateExamplePagesProperties()
             elif cmd == "compare-data-model" or cmd == "comp":
                 if not hasattr(self, "application_name"):
                     self.printError("application not set")
@@ -244,6 +231,16 @@ class GPTerminator:
                     print("Summarize type agent was successful")
 
         self.agent.saveSummary()
+
+
+    def generateExamplePagesProperties(self):
+        self.agent = ExamplePagesPropertiesAgent(self)
+        with open('applications/' + self.application_name + '/types-detailed.json', 'r') as file:
+            types_detailed = json.load(file)
+
+        for i in range(len(types_detailed)):
+            self.agent = ExamplePagesPropertiesAgent(self)
+            self.agent.runPrompt([i])
 
 
     def runHighLevelDataModelCreationProcess(self):

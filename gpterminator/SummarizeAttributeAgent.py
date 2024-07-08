@@ -25,7 +25,7 @@ class SummarizeAttributeAgent(Agent):
 
 
     def runPrompt(self, attribute_and_type_index=None):
-        if attribute_and_type_index:
+        if attribute_and_type_index is not None:
             attribute = attribute_and_type_index[0]
             self.type_index = attribute_and_type_index[1]
 

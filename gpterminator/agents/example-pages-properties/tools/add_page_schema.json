@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "typeInternalName": {
+      "type": "string",
+      "description": "The internal name of the page type. Must be unique within the space."
+    },
+    "pageName": {
+      "type": "string",
+      "description": "The name of the page. Must be unique within the space."
+    },
+    "attributes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the attribute. Must be unique within the page."
+          },
+          "dateValue": {
+            "type": "string",
+            "format": "date",
+            "description": "The value of the attribute if the attribute is a date attribute. Must be a valid date string in the format YYYY-MM-DD."
+          },
+          "dateValues": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "The values of the attribute if the attribute is a date attribute. Must be an array of valid date strings in the format YYYY-MM-DD."
+          },
+          "stringValue": {
+            "type": "string",
+            "description": "The value of the attribute if the attribute is a string attribute."
+          },
+          "stringValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The values of the attribute if the attribute is a string attribute."
+          },
+          "richStringValue": {
+            "type": "string",
+            "description": "The value of the attribute if the attribute is a rich string attribute. Contains HTML."
+          },
+          "richStringValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The values of the attribute if the attribute is a rich string attribute. Contains HTML."
+          },
+          "booleanValue": {
+            "type": "boolean",
+            "description": "The value of the attribute if the attribute is a boolean attribute."
+          },
+          "numberValue": {
+            "type": "number",
+            "description": "The value of the attribute if the attribute is a number attribute."
+          },
+          "numberValues": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "The values of the attribute if the attribute is a number attribute."
+          }
+        },
+        "required": ["name"],
+        "oneOf": [
+          {"required": ["dateValue"]},
+          {"required": ["dateValues"]},
+          {"required": ["stringValue"]},
+          {"required": ["stringValues"]},
+          {"required": ["richStringValue"]},
+          {"required": ["richStringValues"]},
+          {"required": ["booleanValue"]},
+          {"required": ["numberValue"]},
+          {"required": ["numberValues"]}
+        ]
+      }
+    }
+  },
+  "required": ["typeInternalName", "pageName", "attributes"]
+}

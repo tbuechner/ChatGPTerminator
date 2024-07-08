@@ -1,0 +1,29 @@
+[
+  {
+    "typeInternalName": "cf.cplace.solution.okr.keyResult",
+    "pages": [
+      {
+        "id": 0,
+        "pageName": "Customer Retention Q1",
+        "attributes": [
+          {
+            "name": "cf.cplace.title",
+            "stringValue": "Customer Retention Q1"
+          },
+          {
+            "name": "cf.cplace.metric",
+            "stringValue": "Customer Retention Rate"
+          },
+          {
+            "name": "cf.cplace.targetValue",
+            "numberValue": 85
+          },
+          {
+            "name": "cf.cplace.currentValue",
+            "numberValue": 80
+          }
+        ]
+      }
+    ]
+  }
+]

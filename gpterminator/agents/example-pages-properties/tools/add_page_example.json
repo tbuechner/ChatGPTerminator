@@ -1,0 +1,36 @@
+{
+  "typeInternalName": "cf.cplace.solution.okr.cycle",
+  "pageName": "Q1 2021",
+  "attributes": [
+    {
+      "name": "cf.cplace.startDate",
+      "dateValue": "2021-01-01"
+    },
+    {
+      "name": "cf.cplace.startDates",
+      "dateValues": ["2021-01-01", "2021-02-01", "2021-03-01"]
+    },
+    {
+      "name": "cf.cplace.title",
+      "stringValue": "Q1 2021"
+    },
+    {
+      "name": "cf.cplace.titles",
+      "stringValues": ["Q1 2021", "Q2 2021", "Q3 2021"]
+    },
+    {
+      "name": "cf.cplace.accomplished",
+      "booleanValue": true
+    },
+    {
+      "name": "cf.cplace.cost",
+      "numberValue": 1000
+    },
+    {
+      "name": "cf.cplace.costs",
+      "numberValues": [1000, 2000, 3000]
+    }
+
+
+  ]
+}
