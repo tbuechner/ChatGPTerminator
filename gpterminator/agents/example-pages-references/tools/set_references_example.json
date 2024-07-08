@@ -1,0 +1,15 @@
+{
+  "typeInternalName": "cf.cplace.solution.okr.objective",
+  "pageName": "Q1 2021",
+  "pageId": 1,
+  "attributes": [
+    {
+      "name": "cf.cplace.cycle",
+      "id": 4
+    },
+    {
+      "name": "risks",
+      "ids": [2, 0, 7]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "set_references",
+    "description": "Set reference attributes and link example pages together",
+    "parameters": {{ load_file('agents/example-pages-references/tools/set_references_schema.json') }}
+  }
+}

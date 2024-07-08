@@ -30,7 +30,7 @@
               "type": "string",
               "format": "date"
             },
-            "description": "The values of the attribute if the attribute is a date attribute. Must be an array of valid date strings in the format YYYY-MM-DD."
+            "description": "The values of the attribute if the attribute is a date attribute and multi-valued. Must be an array of valid date strings in the format YYYY-MM-DD."
           },
           "stringValue": {
             "type": "string",
@@ -52,7 +52,7 @@
             "items": {
               "type": "string"
             },
-            "description": "The values of the attribute if the attribute is a rich string attribute. Contains HTML."
+            "description": "The values of the attribute if the attribute is a rich string attribute and multi-valued. Contains HTML."
           },
           "booleanValue": {
             "type": "boolean",
@@ -67,7 +67,7 @@
             "items": {
               "type": "number"
             },
-            "description": "The values of the attribute if the attribute is a number attribute."
+            "description": "The values of the attribute if the attribute is a number attribute and multi-valued."
           }
         },
         "required": ["name"],

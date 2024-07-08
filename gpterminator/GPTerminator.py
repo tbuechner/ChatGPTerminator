@@ -29,6 +29,7 @@ from SummarizeAttributeAgent import SummarizeAttributeAgent
 from SummarizeTypeAgent import SummarizeTypeAgent
 from Utils import pretty_print_xml, get_parent_map, remove_tags, generateFolderIfNotExists
 from gpterminator.ExamplePagesPropertiesAgent import ExamplePagesPropertiesAgent
+from gpterminator.ExamplePagesReferencesAgent import ExamplePagesReferencesAgent
 from gpterminator.ProcessPackage import process_pkg
 
 
@@ -50,6 +51,7 @@ class GPTerminator:
             "data-model-full-process": ["dm-fp", "full data model creation process"],
             "summarize-data-model": ["sum", "summarize the data model"],
             "generate-example-pages-properties": ["gepp", "generate example pages - properties only"],
+            "generate-example-pages-references": ["gepr", "generate references between example pages"],
             "compare-data-model": ["comp", "compare the high-level data models"],
             "generate-package": ["pkg", "generate a package"],
             "process-package": ["pp", "process a package"],
@@ -171,6 +173,11 @@ class GPTerminator:
                     self.printError("application not set")
                 else:
                     self.generateExamplePagesProperties()
+            elif cmd == "generate-example-pages-references" or cmd == "gepr":
+                if not hasattr(self, "application_name"):
+                    self.printError("application not set")
+                else:
+                    self.generateExamplePagesReferences()
             elif cmd == "compare-data-model" or cmd == "comp":
                 if not hasattr(self, "application_name"):
                     self.printError("application not set")
@@ -234,13 +241,17 @@ class GPTerminator:
 
 
     def generateExamplePagesProperties(self):
-        self.agent = ExamplePagesPropertiesAgent(self)
         with open('applications/' + self.application_name + '/types-detailed.json', 'r') as file:
             types_detailed = json.load(file)
 
         for i in range(len(types_detailed)):
             self.agent = ExamplePagesPropertiesAgent(self)
             self.agent.runPrompt([i])
+
+
+    def generateExamplePagesReferences(self):
+        self.agent = ExamplePagesReferencesAgent(self)
+        self.agent.runPrompt()
 
 
     def runHighLevelDataModelCreationProcess(self):
