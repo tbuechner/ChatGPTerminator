@@ -53,7 +53,15 @@ class ExamplePagesReferencesAgent(Agent):
 
         for type_ in existing_pages:
             for page in type_['pages']:
-                del page['attributes']
+
+                original_list = page['attributes']
+
+                for x in original_list[:]:  # Iterate over a copy of the list
+                    if 'id' not in x and 'ids' not in x:
+                        original_list.remove(x)
+
+                if len(original_list) == 0:
+                    del page['attributes']
 
 
         rendered = renderTemplate(self.getPromptFolder() + '/prompt-template.md', {

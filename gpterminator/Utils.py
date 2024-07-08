@@ -1,6 +1,10 @@
 import json
 import os
 import re
+import random
+import string
+import datetime
+
 
 from jinja2 import Template
 
@@ -137,3 +141,16 @@ def remove_tags(element, tag_name, allowed_parent_tags):
             parent.remove(child)
         # Recursively apply the function to child elements
         remove_tags(child, tag_name, allowed_parent_tags)
+
+
+def generate_id(length=25):
+    characters = string.ascii_lowercase + string.digits
+    return ''.join(random.choice(characters) for _ in range(length))
+
+
+def yyyy_mm_dd_to_timestamp(yyyy_mm_dd):
+    # Parse the yyyy-mm-dd string to a datetime object
+    dt = datetime.datetime.strptime(yyyy_mm_dd, "%Y-%m-%d")
+    # Convert the datetime object to a timestamp
+    timestamp = dt.timestamp() * 1000
+    return timestamp

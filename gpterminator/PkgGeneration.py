@@ -4,10 +4,110 @@ import os
 from dicttoxml import dicttoxml
 import xml.etree.ElementTree as ET
 
-from Utils import get_parent_map, pretty_print_xml, remove_tags
+from Utils import get_parent_map, pretty_print_xml, remove_tags, generate_id, yyyy_mm_dd_to_timestamp
 
 
 def generatePackage(application_name, pkg_version):
+    example_pages_file_name = 'applications/' + application_name + '/example-pages.json'
+    if os.path.exists(example_pages_file_name):
+        with open(example_pages_file_name, 'r') as file:
+            example_pages = json.load(file)
+
+        id_to_cplaceId = {}
+
+        for type_ in example_pages:
+            for page in type_['pages']:
+                id = page['id']
+                cplaceId = generate_id()
+                id_to_cplaceId[id] = cplaceId
+                page['cplaceId'] = cplaceId
+
+        for type_ in example_pages:
+            for page in type_['pages']:
+                for attribute in page['attributes']:
+                    # if attribute has a key 'id', add a key 'cplaceId' with the value from id_to_cplaceId
+                    if 'id' in attribute:
+                        attribute['cplaceId'] = id_to_cplaceId[attribute['id']]
+                    if 'ids' in attribute:
+                        cplaceIds = []
+                        for id in attribute['ids']:
+                            cplaceIds.append(id_to_cplaceId[id])
+                        attribute['cplaceIds'] = cplaceIds
+
+
+        new_pages = []
+        for type_ in example_pages:
+            for page in type_['pages']:
+                new_attributes = []
+                new_page = {
+                    'page': {
+                        'name': page['pageName'],
+                        'id': page['cplaceId'],
+                        'custom': {
+                            'type': type_['typeInternalName'],
+                            'attributes': new_attributes
+                        },
+                        'widgetContainer': {
+                            'widgetsLayout': {},
+                            'widgets': {}
+                        }
+                    }
+                }
+                new_pages.append(new_page)
+                for attribute in page['attributes']:
+                    attribute_name = attribute['name']
+                    attribute_values = []
+                    if 'stringValue' in attribute:
+                        attribute_values.append("s" + attribute['stringValue'])
+                    if 'stringValues' in attribute:
+                        for value in attribute['stringValues']:
+                            attribute_values.append("s" + value)
+
+                    if 'numberValue' in attribute:
+                        attribute_values.append("d" + str(attribute['numberValue']))
+                    if 'numberValues' in attribute:
+                        for value in attribute['numberValues']:
+                            attribute_values.append("d" + str(value))
+
+                    if 'booleanValue' in attribute:
+                        attribute_values.append("b" + str(attribute['booleanValue']))
+                    if 'booleanValues' in attribute:
+                        for value in attribute['booleanValues']:
+                            attribute_values.append("b" + str(value))
+
+                    if 'dateValue' in attribute:
+                        yyyymmdd = attribute['dateValue']
+                        timestamp = yyyy_mm_dd_to_timestamp(yyyymmdd)
+                        attribute_values.append("a" + str(int(timestamp)))
+                    if 'dateValues' in attribute:
+                        for yyyymmdd in attribute['dateValues']:
+                            timestamp = yyyy_mm_dd_to_timestamp(yyyymmdd)
+                            attribute_values.append("a" + str(int(timestamp)))
+
+                    if 'id' in attribute:
+                        id = attribute['id']
+                        cplaceId = id_to_cplaceId[id]
+                        attribute_values.append("lpage/" + cplaceId)
+                    if 'ids' in attribute:
+                        for id in attribute['ids']:
+                            cplaceId = id_to_cplaceId[id]
+                            attribute_values.append("lpage/" + cplaceId)
+
+                    if 'richStringValue' in attribute:
+                        attribute_values.append("r" + attribute['richStringValue'])
+                    if 'richStringValues' in attribute:
+                        for value in attribute['richStringValues']:
+                            attribute_values.append("r" + value)
+
+                    new_attributes.append({
+                        'attribute': {
+                            'name': attribute_name,
+                            'values': attribute_values
+                        }
+                    })
+
+        # print (json.dumps(new_pages, indent=4))
+
     types_detailed_file_name = 'applications/' + application_name + '/types-detailed.json'
     with open(types_detailed_file_name, 'r') as file:
         types_detailed = json.load(file)
@@ -30,6 +130,7 @@ def generatePackage(application_name, pkg_version):
         type_['localizedPageNamesMode'] = {
             'key': 'none'
         }
+        type_['showInExplorer'] = True
 
         new_attributes = []
         for attribute in type_['attributes']:
@@ -200,6 +301,8 @@ def generatePackage(application_name, pkg_version):
         },
         "maps": {}
     }
+    if new_pages is not None:
+        new_root['package']['slots']['slot']['workspace']['pages'] = new_pages
 
     new_root['package']['slots']['slot']['workspace']['types'] = types_rewritten['types']
 
@@ -213,6 +316,11 @@ def generatePackage(application_name, pkg_version):
     remove_tags(root_elem, 'attributesWrapper', ['typeDef'])
     remove_tags(root_elem, 'item', ['types'])
     remove_tags(root_elem, 'item', ['typeDef'])
+    remove_tags(root_elem, 'item', ['pages'])
+    remove_tags(root_elem, 'item', ['attributes'])
+
+    for each in root_elem.findall('.//values/item'):
+        each.tag = 'value'
 
     rewrite_element_to_attribute(root_elem, './/constraintFactory', 'type', 'type')
 

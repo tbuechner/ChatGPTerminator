@@ -94,24 +94,20 @@ class ExamplePagesPropertiesAgent(Agent):
             return
 
         if 'add_page' == function_name:
+            max_id = self.findMaxId(pages)
+
             type_internal_name = argument_dict['typeInternalName']
             type_ = self.findType(type_internal_name, pages)
 
             existing_pages = type_['pages']
-            existing_ids = []
             if len(existing_pages) == 10:
                 print(f"Maximum number of pages reached for type {type_internal_name}")
                 return
             for existing_page in existing_pages:
-                existing_ids.append(existing_page['id'])
                 if existing_page['pageName'] == argument_dict['pageName']:
                     print(f"Page with name {argument_dict['internalName']} already exists")
                     return
             # find the max id in existing_ids
-            if len(existing_ids) == 0:
-                max_id = 0
-            else:
-                max_id = max(existing_ids)
             print(f"Adding page with name {argument_dict['pageName']} to type {type_internal_name}")
             existing_pages.append({
                 'id': max_id + 1,
@@ -120,6 +116,14 @@ class ExamplePagesPropertiesAgent(Agent):
             })
             return
 
+
+    def findMaxId(self, pages):
+        max_id = 0
+        for type_ in pages:
+            for page in type_['pages']:
+                if page['id'] > max_id:
+                    max_id = page['id']
+        return max_id
 
 
     def findType(self, type_internal_name, pages):

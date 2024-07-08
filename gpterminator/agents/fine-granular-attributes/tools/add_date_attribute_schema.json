@@ -67,29 +67,9 @@
         "dateFormat": {
           "type": "string",
           "enum": [
-            "YEAR_SHORT",
             "YEAR_LONG",
-            "QUARTER_SLASH_YEAR_SHORT",
-            "QUARTER_SLASH_YEAR_LONG",
-            "QUARTER_DOT_YEAR_SHORT",
-            "QUARTER_DOT_YEAR_LONG",
-            "MONTH_SHORT_YEAR_SHORT",
-            "MONTH_SHORT",
-            "MONTH_FULL",
-            "MONTH_LONG",
             "MONTH_SHORT_YEAR_LONG",
-            "MONTH_SHORT_YEAR_SHORT_UNIFORM",
-            "WEEK_YEAR_SHORT",
-            "WEEK_YEAR_LONG",
-            "DAY_ALL_SHORT",
-            "DAY_YEAR_LONG",
-            "DAY_MONTH_YEAR_LONG",
-            "DAY_NO_YEAR_UNIFORM",
-            "DAY_YEAR_SHORT_UNIFORM",
-            "DAY_YEAR_LONG_UNIFORM",
-            "ISO_8601",
-            "ISO_8601_RAW",
-            "DAY_WEEK_WEEKDAY_YEAR"
+            "DAY_MONTH_YEAR_LONG"
           ]
         }
       },
