@@ -13,13 +13,57 @@
     "multiplicity": {
       "type": "string",
       "description": "The multiplicity of the attribute, which means how many values can be stored in the attribute.",
-      "enum": ["one, optional", "one, mandatory", "many, mandatory", "many, optional"]
+      "enum": [
+        "one, optional",
+        "one, mandatory",
+        "many, mandatory",
+        "many, optional"
+      ]
     },
     "description": {
       "type": "string",
       "description": "Description of the attribute. Do not replicate information in the description field, which is already present in the type or multiplicity field."
+    },
+    "enumValues": {
+      "type": "array",
+      "description": "List of possible values for the attribute. Only required for attributes of type Text Enumeration or Number Enumeration.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the internal enumeration value."
+          }
+        },
+        "required": [
+          "value",
+          "description"]
+      }
+    },
+    "referenceTargetInternalTypeName": {
+      "type": "string",
+      "description": "The internal type name of the target of the reference. Only required for attributes of type Reference."
+    },
+    "referenceTargetLocalizedName": {
+      "type": "string",
+      "description": "The localized name of the target of the reference. Only required for attributes of type Reference."
     }
   },
-  "required": ["name", "type", "multiplicity", "description"],
+  "required": [
+    "name",
+    "type",
+    "multiplicity",
+    "description"
+  ],
   "additionalProperties": false
 }
