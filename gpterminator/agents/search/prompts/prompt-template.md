@@ -51,7 +51,7 @@ The search supports the following filter criteria:
 * Filter by certain attributes. This filter allows you to specify the attribute, the operator to be used, e.g., equals, greater than, less than, etc., and the value to compare the attribute to.
 * Filter by the type of the page.
 
-Filters can be combined with these logical operators: AND, OR, NOT.
+Filters can be combined with these logical operators: AND, OR, NOT. There are specific tools for these combinations. Make use of these tools.
 
 ## Task: Generate a search for a given human language search query
 
