@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "and",
+    "description": "combine two filters with an AND operation",
+    "parameters": {{ load_file('agents/search/tools/and_schema.json') }}
+  }
+}

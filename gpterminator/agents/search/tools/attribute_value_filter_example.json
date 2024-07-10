@@ -1,0 +1,5 @@
+{
+  "attributeName": "cf.cplace.risk.status",
+  "operator": "EQUALS",
+  "value": "active"
+}

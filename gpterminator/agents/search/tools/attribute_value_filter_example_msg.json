@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "attribute_value_filter",
+  "content": {{ load_file('agents/search/tools/attribute_value_filter_example.json') | tojson }}
+}

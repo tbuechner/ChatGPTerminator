@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "not",
+    "description": "negates another filter",
+    "parameters": {{ load_file('agents/search/tools/not_schema.json') }}
+  }
+}

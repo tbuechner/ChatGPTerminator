@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "attributeName": {
+      "type": "string",
+      "description": "The internal name of the attribute."
+    },
+    "operator": {
+      "type": "string",
+      "enum": ["equals", "less", "greater", "lessEquals", "greaterEquals", "begins", "in"],
+      "description": "The operator to be used to filter the attribute."
+    },
+    "value": {
+      "type": "string"
+    }
+  },
+  "required": ["attributeName", "operator", "value"]
+}

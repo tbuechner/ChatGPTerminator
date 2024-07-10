@@ -31,6 +31,7 @@ from Utils import pretty_print_xml, get_parent_map, remove_tags, generateFolderI
 from gpterminator.ExamplePagesPropertiesAgent import ExamplePagesPropertiesAgent
 from gpterminator.ExamplePagesReferencesAgent import ExamplePagesReferencesAgent
 from gpterminator.ProcessPackage import process_pkg
+from gpterminator.SearchAgent import SearchAgent
 
 
 class GPTerminator:
@@ -53,6 +54,7 @@ class GPTerminator:
             "generate-example-pages-properties": ["gepp", "generate example pages - properties only"],
             "generate-example-pages-references": ["gepr", "generate references between example pages"],
             "compare-data-model": ["comp", "compare the high-level data models"],
+            "search": ["sea", "generate a search"],
             "generate-package": ["pkg", "generate a package"],
             "process-package": ["pp", "process a package"],
         }
@@ -183,6 +185,13 @@ class GPTerminator:
                     self.printError("application not set")
                 else:
                     self.agent = CompareAgent(self)
+                    print(f"Agent set to: {self.agent.agent_name}")
+                    self.agent.runPrompt(args)
+            elif cmd == "search" or cmd == "sea":
+                if not hasattr(self, "application_name"):
+                    self.printError("application not set")
+                else:
+                    self.agent = SearchAgent(self)
                     print(f"Agent set to: {self.agent.agent_name}")
                     self.agent.runPrompt(args)
             elif cmd == "generate-package" or cmd == "pkg":

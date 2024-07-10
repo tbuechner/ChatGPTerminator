@@ -48,6 +48,9 @@ def process_pkg(application_name):
 
     widgets = find_all_widgets(root, parent_map)
 
+    searches = find_filter_strings(widgets)
+    write_json_to_file(folder_name_generated, "searches", searches)
+
     # print("Widgets: ", widgets)
     write_json_to_file(folder_name_generated, "widgets", widgets)
 
@@ -117,6 +120,49 @@ def process_pkg(application_name):
 
     # zip export.xml into package.zip
     os.system("zip -j " + folder_name_generated + "/package.zip " + folder_name_generated + "/export.xml")
+
+
+
+def find_filter_strings(arr):
+    result = []
+
+    def recursive_search(item):
+        if isinstance(item, str):
+            if item.startswith('{"filters":'):
+                as_json = json.loads(item)
+                result.append(as_json)
+        elif isinstance(item, (list, tuple)):
+            for element in item:
+                recursive_search(element)
+        elif isinstance(item, dict):
+            for value in item.values():
+                recursive_search(value)
+
+    for element in arr:
+        recursive_search(element)
+
+    return result
+
+def add_all_searches(element, searches):
+    # iterate transitive over all children of the element
+    for child in element:
+        child_value = element[child]
+        # if the child is a dictionary
+        if isinstance(child_value, dict):
+            add_all_searches(child_value, searches)
+        # if the child is an array
+        elif isinstance(child_value, list):
+            for child_child in child_value:
+                add_all_searches(child_child, searches)
+        # if the child is a string
+        elif isinstance(child_value, str) and child_value.startswith('s{"filters":'):
+            # add the child to searches - strip first character
+            search_as_text = child_value[1:]
+
+            search = json.loads(search_as_text)
+
+            searches.append(search["filters"])
+
 
 def get_slots_to_be_retained(folder_name):
     with open(folder_name + '/slots-to-be-retained.txt') as f:
