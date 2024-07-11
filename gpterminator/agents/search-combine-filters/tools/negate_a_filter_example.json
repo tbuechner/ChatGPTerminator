@@ -1,0 +1,7 @@
+{
+  "negatedFilter": {
+    "attributeName": "severity",
+    "operator": "greater",
+    "value": "50"
+  }
+}

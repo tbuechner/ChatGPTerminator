@@ -31,7 +31,8 @@ from Utils import pretty_print_xml, get_parent_map, remove_tags, generateFolderI
 from gpterminator.ExamplePagesPropertiesAgent import ExamplePagesPropertiesAgent
 from gpterminator.ExamplePagesReferencesAgent import ExamplePagesReferencesAgent
 from gpterminator.ProcessPackage import process_pkg
-from gpterminator.SearchAgent import SearchAgent
+from gpterminator.SearchCombineFiltersAgent import SearchCombineFiltersAgent
+from gpterminator.SearchIdentifyFiltersAgent import SearchIdentifyFiltersAgent
 
 
 class GPTerminator:
@@ -54,7 +55,8 @@ class GPTerminator:
             "generate-example-pages-properties": ["gepp", "generate example pages - properties only"],
             "generate-example-pages-references": ["gepr", "generate references between example pages"],
             "compare-data-model": ["comp", "compare the high-level data models"],
-            "search": ["sea", "generate a search"],
+            "search-identify-filters": ["sif", "generate a search - identify filters"],
+            "search-combine-filters": ["scf", "generate a search - combine filters"],
             "generate-package": ["pkg", "generate a package"],
             "process-package": ["pp", "process a package"],
         }
@@ -187,11 +189,18 @@ class GPTerminator:
                     self.agent = CompareAgent(self)
                     print(f"Agent set to: {self.agent.agent_name}")
                     self.agent.runPrompt(args)
-            elif cmd == "search" or cmd == "sea":
+            elif cmd == "search-identify-filters" or cmd == "sif":
                 if not hasattr(self, "application_name"):
                     self.printError("application not set")
                 else:
-                    self.agent = SearchAgent(self)
+                    self.agent = SearchIdentifyFiltersAgent(self)
+                    print(f"Agent set to: {self.agent.agent_name}")
+                    self.agent.runPrompt(args)
+            elif cmd == "search-combine-filters" or cmd == "scf":
+                if not hasattr(self, "application_name"):
+                    self.printError("application not set")
+                else:
+                    self.agent = SearchCombineFiltersAgent(self)
                     print(f"Agent set to: {self.agent.agent_name}")
                     self.agent.runPrompt(args)
             elif cmd == "generate-package" or cmd == "pkg":

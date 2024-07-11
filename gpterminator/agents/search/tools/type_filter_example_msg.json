@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "type_filter",
-  "content": {{ load_file('agents/search/tools/type_filter_example.json') | tojson }}
-}

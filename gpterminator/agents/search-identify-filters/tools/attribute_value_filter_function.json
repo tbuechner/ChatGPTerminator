@@ -3,6 +3,6 @@
   "function": {
     "name": "attribute_value_filter",
     "description": "define an filter which can be used to filter the search results based on the attribute value",
-    "parameters": {{ load_file('agents/search/tools/attribute_value_filter_schema.json') }}
+    "parameters": {{ load_file('agents/search-identify-filters/tools/attribute_value_filter_schema.json') }}
   }
 }

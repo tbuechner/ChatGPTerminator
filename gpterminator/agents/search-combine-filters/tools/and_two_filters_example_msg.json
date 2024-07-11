@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "and_two_filters",
+  "content": {{ load_file('agents/search-combine-filters/tools/and_two_filters_example.json') | tojson }}
+}

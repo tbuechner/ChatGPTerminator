@@ -1,0 +1,10 @@
+{
+  "leftHandFilter": {
+    "attributeName": "state",
+    "operator": "equals",
+    "value": "low"
+  },
+  "rightHandFilter": {
+    "internalTypeName": "cf.cplace.risk"
+  }
+}

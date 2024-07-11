@@ -3,6 +3,6 @@
   "function": {
     "name": "and_two_filters",
     "description": "combine two filters with an AND operation",
-    "parameters": {{ load_file('agents/search/tools/and_two_filters_schema.json') }}
+    "parameters": {{ load_file('agents/search-combine-filters/tools/and_two_filters_schema.json') }}
   }
 }

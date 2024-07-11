@@ -50,28 +50,13 @@ The search supports the following filter criteria:
 * Filter by certain attributes. This filter allows you to specify the attribute, the operator to be used, e.g., equals, greater than, less than, etc., and the value to compare the attribute to.
 * Filter by the type of the page.
 
-Filters can be combined with these logical operators: AND, OR, NOT. There are specific tools for these combinations. If you want to combine filters with logical operators, you can use these tools. These tools do not take any meaningful input but are used to combine filters.
+Filters can be combined in a later stage with these logical operators: AND, OR, NOT. This is done in a separate step after the filters have been defined.
 
-## Task: Generate a search for a given human language search query
+## Task: Identify all individual search filters for a given human language search query
 
-Your task is to generate using the given tools a search for a human language search query. Make sure, that all filter criteria in the search query are covered by the search.
-
-Give an eplanation of how to generate the search for the given human language search query.
+Your task is to identify individual filters that can are necessary to generate a search for a given human language search query. Make sure, that all filter criteria in the search query are covered by the filters provided by your answer. 
 
 Human language search query:
 ```
 Find all key results with a progress of 50% and belonging to a specific objective.
 ```
-
-This is a given answer to the task:
-
-```
-Applying function: type_filter
-Handling function: type_filter with argument: {'internalTypeName': 'cf.cplace.keyResult'}
-Applying function: attribute_value_filter
-Handling function: attribute_value_filter with argument: {'attributeName': 'Progress', 'operator': 'equals', 'value': '50'}
-Applying function: attribute_value_filter
-Handling function: attribute_value_filter with argument: {'attributeName': 'Objective', 'operator': 'equals', 'value': 'SPECIFIC_OBJECTIVE_ID'}
-```
-
-What do you think about this answer? Do you have any suggestions for improvement?

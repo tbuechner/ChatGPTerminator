@@ -2,14 +2,14 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-    "leftHand": {
-      "type": "string",
+    "leftHandFilter": {
+      "type": "object",
       "description": "the left hand side of the AND operation - a filter"
     },
-    "rightHand": {
-      "type": "string",
+    "rightHandFilter": {
+      "type": "object",
       "description": "the right hand side of the AND operation - a filter"
     }
   },
-  "required": ["leftHand", "rightHand"]
+  "required": ["leftHandFilter", "rightHandFilter"]
 }

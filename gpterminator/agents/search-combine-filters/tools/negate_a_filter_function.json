@@ -3,6 +3,6 @@
   "function": {
     "name": "negate_a_filter",
     "description": "negates another filter",
-    "parameters": {{ load_file('agents/search/tools/negate_a_filter_schema.json') }}
+    "parameters": {{ load_file('agents/search-combine-filters/tools/negate_a_filter_schema.json') }}
   }
 }

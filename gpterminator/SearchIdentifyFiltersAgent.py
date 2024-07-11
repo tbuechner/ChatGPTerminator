@@ -5,11 +5,11 @@ from Agent import Agent
 from Utils import renderTemplate, generateFolderIfNotExists
 
 
-class SearchAgent(Agent):
+class SearchIdentifyFiltersAgent(Agent):
 
     def __init__(self, gpterminator):
         super().__init__(gpterminator)
-        self.agent_name = 'search'
+        self.agent_name = 'search-identify-filters'
         self.setToolsAndExamples('agents/' + self.agent_name + '/tools')
         self.apply_function_handler = applyFunctionHandler
 

@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "or_two_filters",
-  "content": {{ load_file('agents/search/tools/or_two_filters_example.json') | tojson }}
-}

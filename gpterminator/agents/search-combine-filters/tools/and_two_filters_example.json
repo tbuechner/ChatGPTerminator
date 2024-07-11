@@ -1,0 +1,10 @@
+{
+  "leftHandFilter": {
+    "internalTypeName": "cf.cplace.keyResult"
+  },
+  "rightHandFilter": {
+    "attributeName": "progress",
+    "operator": "equals",
+    "value": "50"
+  }
+}
