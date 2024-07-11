@@ -61,5 +61,5 @@ Give an eplanation of how to generate the search for the given human language se
 
 Human language search query:
 ```
-Show me all key results which are at 50% progress and all objectives which started half a year ago.
+Show me all key results and all objectives.
 ```

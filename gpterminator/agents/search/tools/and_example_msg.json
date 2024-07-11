@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "and",
-  "content": {{ load_file('agents/search/tools/and_example.json') | tojson }}
-}

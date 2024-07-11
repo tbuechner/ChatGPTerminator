@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "not",
-  "content": {{ load_file('agents/search/tools/or_example.json') | tojson }}
-}

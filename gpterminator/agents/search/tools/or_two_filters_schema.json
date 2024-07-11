@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "leftHand": {
+      "type": "string",
+      "description": "the left hand side of the OR operation - a filter"
+    },
+    "rightHand": {
+      "type": "string",
+      "description": "the right hand side of the OR operation - a filter"
+    }
+  },
+  "required": ["leftHand", "rightHand"]
+}

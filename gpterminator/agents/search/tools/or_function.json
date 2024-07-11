@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "or",
-    "description": "combine two filters with an OR operation",
-    "parameters": {{ load_file('agents/search/tools/or_schema.json') }}
-  }
-}
