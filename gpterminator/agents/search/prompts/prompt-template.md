@@ -13,7 +13,6 @@ We do not need a dedicated tracking type for the progress. Instead, the progress
 
 Here is the detailed data model of the type for which you should generate example pages:
 
-
 ### Cycle
 | Attribute    | Type                  | Multiplicity    | Description                      |
 |--------------|-----------------------|--------------|----------------------------------|
@@ -51,7 +50,7 @@ The search supports the following filter criteria:
 * Filter by certain attributes. This filter allows you to specify the attribute, the operator to be used, e.g., equals, greater than, less than, etc., and the value to compare the attribute to.
 * Filter by the type of the page.
 
-Filters can be combined with these logical operators: AND, OR, NOT. There are specific tools for these combinations. Make use of these tools.
+Filters can be combined with these logical operators: AND, OR, NOT. There are specific tools for these combinations. If you want to combine filters with logical operators, you can use these tools. These tools do not take any meaningful input but are used to combine filters.
 
 ## Task: Generate a search for a given human language search query
 
@@ -61,5 +60,18 @@ Give an eplanation of how to generate the search for the given human language se
 
 Human language search query:
 ```
-Show me all key results and all objectives.
+Find all key results with a progress of 50% and belonging to a specific objective.
 ```
+
+This is a given answer to the task:
+
+```
+Applying function: type_filter
+Handling function: type_filter with argument: {'internalTypeName': 'cf.cplace.keyResult'}
+Applying function: attribute_value_filter
+Handling function: attribute_value_filter with argument: {'attributeName': 'Progress', 'operator': 'equals', 'value': '50'}
+Applying function: attribute_value_filter
+Handling function: attribute_value_filter with argument: {'attributeName': 'Objective', 'operator': 'equals', 'value': 'SPECIFIC_OBJECTIVE_ID'}
+```
+
+What do you think about this answer? Do you have any suggestions for improvement?
