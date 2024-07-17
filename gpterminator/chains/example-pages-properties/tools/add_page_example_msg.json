@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "add_page",
+  "content": {{ load_file('chains/example-pages-properties/tools/add_page_example.json') | tojson }}
+}

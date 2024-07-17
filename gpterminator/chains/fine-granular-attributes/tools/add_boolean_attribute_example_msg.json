@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "add_boolean_attribute",
+  "content": {{ load_file('chains/fine-granular-attributes/tools/add_boolean_attribute_example.json') | tojson }}
+}

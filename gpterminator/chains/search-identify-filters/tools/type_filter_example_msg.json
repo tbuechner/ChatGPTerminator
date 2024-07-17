@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "type_filter",
+  "content": {{ load_file('chains/search-identify-filters/tools/type_filter_example.json') | tojson }}
+}

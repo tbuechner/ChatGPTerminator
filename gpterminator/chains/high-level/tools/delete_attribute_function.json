@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "delete_attribute",
+    "description": "Deletes an attribute from an existing type. The function will fail if a type with the given name does not exist and if the attribute with the given name does not exist.",
+    "parameters": {{ load_file('chains/high-level/tools/delete_attribute_schema.json') }}
+  }
+}

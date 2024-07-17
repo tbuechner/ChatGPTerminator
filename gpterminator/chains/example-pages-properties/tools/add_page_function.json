@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "add_page",
+    "description": "Add a new example page.",
+    "parameters": {{ load_file('chains/example-pages-properties/tools/add_page_schema.json') }}
+  }
+}

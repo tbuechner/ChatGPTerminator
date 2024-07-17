@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "delete_attribute",
+  "content": {{ load_file('chains/high-level/tools/delete_attribute_example.json') | tojson }}
+}

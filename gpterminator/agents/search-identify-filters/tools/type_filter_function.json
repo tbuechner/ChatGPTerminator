@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "type_filter",
-    "description": "define an filter which filters the search results based on the type of the pages",
-    "parameters": {{ load_file('agents/search-identify-filters/tools/type_filter_schema.json') }}
-  }
-}

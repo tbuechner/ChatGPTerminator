@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "add_type",
-    "description": "Add a type to the data model.",
-    "parameters": {{ load_file('agents/high-level/tools/add_type_schema.json') }}
-  }
-}

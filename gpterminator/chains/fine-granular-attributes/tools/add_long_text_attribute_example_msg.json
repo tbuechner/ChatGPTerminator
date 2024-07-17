@@ -1,0 +1,5 @@
+{
+  "role": "function",
+  "name": "add_long_text_attribute",
+  "content": {{ load_file('chains/fine-granular-attributes/tools/add_long_text_attribute_example.json') | tojson }}
+}

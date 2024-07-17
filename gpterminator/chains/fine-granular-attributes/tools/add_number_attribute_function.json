@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "add_number_attribute",
+    "description": "Add a new number attribute to a type. Number attributes are used for numerical values.",
+    "parameters": {{ load_file('chains/fine-granular-attributes/tools/add_number_attribute_schema.json') }}
+  }
+}

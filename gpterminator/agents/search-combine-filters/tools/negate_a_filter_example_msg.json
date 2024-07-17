@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "negate_a_filter",
-  "content": {{ load_file('agents/search-combine-filters/tools/negate_a_filter_example.json') | tojson }}
-}

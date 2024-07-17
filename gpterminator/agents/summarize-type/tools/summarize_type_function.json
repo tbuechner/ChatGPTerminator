@@ -1,8 +1,0 @@
-{
-  "type": "function",
-  "function": {
-    "name": "summarize_type",
-    "description": "Summarize a fine granular representation of a type into just a human understandable name.",
-    "parameters": {{ load_file('agents/summarize-type/tools/summarize_type_schema.json') }}
-  }
-}

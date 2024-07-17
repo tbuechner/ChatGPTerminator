@@ -20,19 +20,19 @@ from dicttoxml import dicttoxml
 from openai.lib.azure import AzureOpenAI
 
 from Choice import FunctionCall, Textual, addTextualChoice, addFunctionCall
-from CompareAgent import CompareAgent
-from FineGranularAttributesAgent import FineGranularAttributesAgent
-from FineGranularTypesAgent import FineGranularTypesAgent
-from HighLevelAgent import HighLevelAgent
+from CompareChain import CompareChain
+from FineGranularAttributesChain import FineGranularAttributesChain
+from FineGranularTypesChain import FineGranularTypesChain
+from HighLevelChain import HighLevelChain
 from PkgGeneration import generatePackage
-from SummarizeAttributeAgent import SummarizeAttributeAgent
-from SummarizeTypeAgent import SummarizeTypeAgent
+from SummarizeAttributeChain import SummarizeAttributeChain
+from SummarizeTypeChain import SummarizeTypeChain
 from Utils import pretty_print_xml, get_parent_map, remove_tags, generateFolderIfNotExists
-from gpterminator.ExamplePagesPropertiesAgent import ExamplePagesPropertiesAgent
-from gpterminator.ExamplePagesReferencesAgent import ExamplePagesReferencesAgent
+from gpterminator.ExamplePagesPropertiesChain import ExamplePagesPropertiesChain
+from gpterminator.ExamplePagesReferencesChain import ExamplePagesReferencesChain
 from gpterminator.ProcessPackage import process_pkg
-from gpterminator.SearchCombineFiltersAgent import SearchCombineFiltersAgent
-from gpterminator.SearchIdentifyFiltersAgent import SearchIdentifyFiltersAgent
+from gpterminator.SearchCombineFiltersChain import SearchCombineFiltersChain
+from gpterminator.SearchIdentifyFiltersChain import SearchIdentifyFiltersChain
 
 
 class GPTerminator:
@@ -186,23 +186,23 @@ class GPTerminator:
                 if not hasattr(self, "application_name"):
                     self.printError("application not set")
                 else:
-                    self.agent = CompareAgent(self)
-                    print(f"Agent set to: {self.agent.agent_name}")
-                    self.agent.runPrompt(args)
+                    self.chain = CompareChain(self)
+                    print(f"Chain set to: {self.chain.chain_name}")
+                    self.chain.runPrompt(args)
             elif cmd == "search-identify-filters" or cmd == "sif":
                 if not hasattr(self, "application_name"):
                     self.printError("application not set")
                 else:
-                    self.agent = SearchIdentifyFiltersAgent(self)
-                    print(f"Agent set to: {self.agent.agent_name}")
-                    self.agent.runPrompt(args)
+                    self.chain = SearchIdentifyFiltersChain(self)
+                    print(f"Chain set to: {self.chain.chain_name}")
+                    self.chain.runPrompt(args)
             elif cmd == "search-combine-filters" or cmd == "scf":
                 if not hasattr(self, "application_name"):
                     self.printError("application not set")
                 else:
-                    self.agent = SearchCombineFiltersAgent(self)
-                    print(f"Agent set to: {self.agent.agent_name}")
-                    self.agent.runPrompt(args)
+                    self.chain = SearchCombineFiltersChain(self)
+                    print(f"Chain set to: {self.chain.chain_name}")
+                    self.chain.runPrompt(args)
             elif cmd == "generate-package" or cmd == "pkg":
                 if not hasattr(self, "application_name"):
                     self.printError("application not set")
@@ -227,7 +227,7 @@ class GPTerminator:
 
 
     def summarizeDataModel(self):
-        self.agent = SummarizeTypeAgent(self)
+        self.chain = SummarizeTypeChain(self)
         with open('applications/' + self.application_name + '/types-detailed.json', 'r') as file:
             types_detailed = json.load(file)
             # create a deep copy of types_detailed
@@ -237,25 +237,25 @@ class GPTerminator:
             type_ = types_detailed[i]
             # remove the attribute 'attributes' from type_
             type_.pop('attributes', None)
-            self.agent.runPrompt(type_)
-            if not self.agent.wasSuccessful():
-                print("Summarize type agent was not successful")
+            self.chain.runPrompt(type_)
+            if not self.chain.wasSuccessful():
+                print("Summarize type chain was not successful")
             else:
-                print("Summarize type agent was successful")
+                print("Summarize type chain was successful")
 
-        self.agent = SummarizeAttributeAgent(self, self.agent.summarized_types)
+        self.chain = SummarizeAttributeChain(self, self.chain.summarized_types)
 
         for i in range(len(types_detailed_attributes)):
             type_ = types_detailed_attributes[i]
             for attribute in type_['attributes']:
-                self.agent.runPrompt([attribute, i])
-                if not self.agent.wasSuccessful():
-                    print("Summarize attribute agent was not successful")
+                self.chain.runPrompt([attribute, i])
+                if not self.chain.wasSuccessful():
+                    print("Summarize attribute chain was not successful")
                     return
                 else:
-                    print("Summarize type agent was successful")
+                    print("Summarize type chain was successful")
 
-        self.agent.saveSummary()
+        self.chain.saveSummary()
 
 
     def generateExamplePagesProperties(self):
@@ -263,44 +263,44 @@ class GPTerminator:
             types_detailed = json.load(file)
 
         for i in range(len(types_detailed)):
-            self.agent = ExamplePagesPropertiesAgent(self)
-            self.agent.runPrompt([i])
+            self.chain = ExamplePagesPropertiesChain(self)
+            self.chain.runPrompt([i])
 
 
     def generateExamplePagesReferences(self):
-        self.agent = ExamplePagesReferencesAgent(self)
-        self.agent.runPrompt()
+        self.chain = ExamplePagesReferencesChain(self)
+        self.chain.runPrompt()
 
 
     def runHighLevelDataModelCreationProcess(self):
-        self.agent = HighLevelAgent(self)
-        print(f"Agent set to: {self.agent.agent_name}")
-        self.agent.runPrompt()
-        if not self.agent.wasSuccessful():
-            print("High-level agent was not successful")
+        self.chain = HighLevelChain(self)
+        print(f"Chain set to: {self.chain.chain_name}")
+        self.chain.runPrompt()
+        if not self.chain.wasSuccessful():
+            print("High-level chain was not successful")
         else:
-            print("High-level agent was successful")
-        return self.agent.wasSuccessful()
+            print("High-level chain was successful")
+        return self.chain.wasSuccessful()
 
 
     def runFineGranularDataModelCreationProcess(self):
-        self.agent = FineGranularTypesAgent(self)
-        print(f"Agent set to: {self.agent.agent_name}")
-        self.agent.runPrompt()
-        if not self.agent.wasSuccessful():
-            print("Fine-granular types agent was not successful")
+        self.chain = FineGranularTypesChain(self)
+        print(f"Chain set to: {self.chain.chain_name}")
+        self.chain.runPrompt()
+        if not self.chain.wasSuccessful():
+            print("Fine-granular types chain was not successful")
             return False
         else:
-            self.agent = FineGranularAttributesAgent(self)
-            print(f"Agent set to: {self.agent.agent_name}")
-            number_of_types = self.agent.getNumberOfTypes()
+            self.chain = FineGranularAttributesChain(self)
+            print(f"Chain set to: {self.chain.chain_name}")
+            number_of_types = self.chain.getNumberOfTypes()
             for i in range(number_of_types):
-                print(f"Running agent on type {i}")
+                print(f"Running chain on type {i}")
                 args = [str(i)]
-                self.agent.runPrompt(args)
-                if not self.agent.wasSuccessful():
+                self.chain.runPrompt(args)
+                if not self.chain.wasSuccessful():
                     return False
-            print("Fine-granular attributes agent was successful")
+            print("Fine-granular attributes chain was successful")
             return True
 
 
@@ -465,8 +465,8 @@ class GPTerminator:
         for choice in self.choices:
             self.msg_hist.append(choice.getMsgForHistory())
 
-        if self.agent is not None:
-            self.agent.applyFunctionCalls()
+        if self.chain is not None:
+            self.chain.applyFunctionCalls()
 
     def init(self):
         if not os.path.exists(self.save_path):

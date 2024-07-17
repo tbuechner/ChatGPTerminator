@@ -1,0 +1,8 @@
+{
+  "type": "function",
+  "function": {
+    "name": "add_string_attribute",
+    "description": "Add a new string attribute to a type.",
+    "parameters": {{ load_file('chains/fine-granular-attributes/tools/add_string_attribute_schema.json') }}
+  }
+}

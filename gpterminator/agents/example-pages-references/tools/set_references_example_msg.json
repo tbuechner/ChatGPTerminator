@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "add_page",
-  "content": {{ load_file('agents/example-pages-references/tools/set_references_example.json') | tojson }}
-}

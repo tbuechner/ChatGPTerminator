@@ -1,5 +1,0 @@
-{
-  "role": "function",
-  "name": "add_number_attribute",
-  "content": {{ load_file('agents/fine-granular-attributes/tools/add_number_attribute_example.json') | tojson }}
-}
