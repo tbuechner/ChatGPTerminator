@@ -58,5 +58,5 @@ Your task is to identify individual filters that can are necessary to generate a
 
 Human language search query:
 ```
-Find all key results with a progress of 50% and belonging to a specific objective.
+Find all key results with a progress of 50% and 25%, but not 0% and belonging to a specific objective.
 ```

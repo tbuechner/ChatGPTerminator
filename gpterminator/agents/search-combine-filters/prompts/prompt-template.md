@@ -60,7 +60,7 @@ Give an eplanation of how to generate the search for the given human language se
 
 Human language search query:
 ```
-Find all key results with a progress of 50% and belonging to a specific objective.
+Find all key results with a progress of 50% and 25%, but not 0% and belonging to a specific objective.
 ```
 
 These are the individual filters that you can use to generate a search for the given human language search query:
@@ -73,8 +73,24 @@ These are the individual filters that you can use to generate a search for the g
 
 ```
 {
-    "attributeName": "progress",
-    "operator": "equals",
-    "value": "50"
+    "attributeName": "Progress",
+    "operator": "IN",
+    "value": "25,50"
+}
+```
+
+```
+{
+    "attributeName": "Progress",
+    "operator": "NOT IN",
+    "value": "0"
+}
+```
+
+```
+{
+    "attributeName": "Objective",
+    "operator": "EQUALS",
+    "value": "<specific_objective_id>"
 }
 ```
